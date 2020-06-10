@@ -1,0 +1,3 @@
+[submodule "Cyc"]
+	path = Cyc
+	url = https://github.com/alex1392/Cyc/
