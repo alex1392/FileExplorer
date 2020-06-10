@@ -1,0 +1,115 @@
+﻿<Window x:Class="FileExplorer.MainWindow"
+				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+				xmlns:local="clr-namespace:FileExplorer"
+				xmlns:converter="clr-namespace:FileExplorer.Converters"
+				xmlns:model="clr-namespace:FileExplorer.Models"
+				mc:Ignorable="d"
+				Title="MainWindow"
+				Height="450"
+				Width="800">
+	<Window.Resources>
+		
+		
+	</Window.Resources>
+	<Grid Name="mainGrid"
+				d:DataContext="{d:DesignInstance Type=local:MainWindow, IsDesignTimeCreatable=True}">
+		<DockPanel>
+			<TreeView DockPanel.Dock="Left"
+								ItemsSource="{Binding TreeItems}"
+								Width="150">
+				<TreeView.ItemTemplate>
+					<HierarchicalDataTemplate DataType="{x:Type model:FolderItem}"
+																		ItemsSource="{Binding SubFolders}">
+						<StackPanel Orientation="Horizontal">
+							<Image Source="{Binding .,Converter={converter:IconConverter}}"
+										 Width="18" />
+							<TextBlock Text="{Binding Name}"
+												 VerticalAlignment="Center"
+												 Margin="3" />
+						</StackPanel>
+					</HierarchicalDataTemplate>
+				</TreeView.ItemTemplate>
+				<TreeView.ItemContainerStyle>
+					<Style TargetType="TreeViewItem">
+						<EventSetter Event="Selected"
+												 Handler="TreeViewItem_Selected" />
+						<EventSetter Event="Expanded"
+												 Handler="TreeViewItem_Expanded" />
+					</Style>
+				</TreeView.ItemContainerStyle>
+			</TreeView>
+			<ListBox ItemsSource="{Binding PathItems}"
+							 DockPanel.Dock="Top"
+							 Height="30">
+				<ListBox.ItemTemplate>
+					<DataTemplate DataType="{x:Type model:Item}">
+						<StackPanel Orientation="Horizontal">
+							<Image Source="{Binding .,Converter={converter:IconConverter}}"
+										 Height="20" />
+							<TextBlock Text="{Binding Name}"
+												 VerticalAlignment="Center"
+												 Margin="3" />
+						</StackPanel>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+				<ListBox.ItemContainerStyle>
+					<Style TargetType="ListBoxItem">
+						<EventSetter Event="Selected"
+												 Handler="ListBoxItem_Selected" />
+					</Style>
+				</ListBox.ItemContainerStyle>
+				<ListBox.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel Orientation="Horizontal" />
+					</ItemsPanelTemplate>
+				</ListBox.ItemsPanel>
+			</ListBox>
+			<ListView ItemsSource="{Binding CurrentItems}">
+				<ListView.View>
+					<GridView>
+						<GridViewColumn Header="Name"
+														Width="Auto">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate DataType="{x:Type model:Item}">
+									<StackPanel Orientation="Horizontal">
+										<Image Source="{Binding .,Converter={converter:IconConverter}}"
+													 Width="32" />
+										<TextBlock Text="{Binding Name}"
+															 VerticalAlignment="Center"
+															 Margin="3" />
+									</StackPanel>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</GridViewColumn>
+						<GridViewColumn Header="Date"
+														Width="Auto"
+														DisplayMemberBinding="{Binding LastModifiedTime, Converter={converter:TimeConverter}}" />
+						<GridViewColumn Header="Type"
+														Width="Auto"
+														DisplayMemberBinding="{Binding ., Converter={converter:FileTypeConverter}}" />
+						<GridViewColumn Header="Size"
+														Width="100">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate DataType="{x:Type model:FileItem}">
+									<TextBlock Text="{Binding Size, Converter={converter:SizeConverter}}"
+														 TextAlignment="Right" />
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</GridViewColumn>
+					</GridView>
+				</ListView.View>
+				<ListView.ItemContainerStyle>
+					<Style TargetType="ListViewItem">
+						<EventSetter Event="Selected"
+												 Handler="ListViewItem_Selected" />
+						<Setter Property="HorizontalContentAlignment"
+										Value="Stretch" />
+					</Style>
+				</ListView.ItemContainerStyle>
+			</ListView>
+		</DockPanel>
+	</Grid>
+</Window>
