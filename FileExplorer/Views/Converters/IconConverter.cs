@@ -24,7 +24,7 @@ namespace FileExplorer.Converters {
 			if (value is FileItem fileItem) {
 				var icon = Icon.ExtractAssociatedIcon(fileItem.Path);
 				return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-			} else if (value is FolderItem folderItem) {
+			} else if (value is TreeFolderItem folderItem) {
 				return folderItem.Icon ?? new BitmapImage(new Uri(Path.Combine(App.PackUri, "Resources/Folder.ico")));
 			} else {
 				return null;

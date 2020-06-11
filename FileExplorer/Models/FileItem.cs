@@ -11,7 +11,7 @@ namespace FileExplorer.Models {
 		/// <summary>
 		/// Child constructor
 		/// </summary>
-		public FileItem(string path, FolderItem parent) : base(path, parent)
+		public FileItem(string path, TreeFolderItem parent) : base(path, parent)
 		{
 			var info = fileProvider.GetFileInfo(path);
 			Size = info.Length;
