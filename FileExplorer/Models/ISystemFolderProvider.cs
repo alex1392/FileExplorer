@@ -1,5 +1,5 @@
 ﻿namespace FileExplorer.Models {
-	internal interface ISystemFolderProvider {
+	public interface ISystemFolderProvider {
 		string[] GetLogicalDrives();
 		string GetRecentFolder();
 	}

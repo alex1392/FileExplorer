@@ -11,7 +11,7 @@ namespace FileExplorer.Models {
 		public string Path { get; private set; }
 		public string Name { get; private set; }
 		public DateTimeOffset LastModifiedTime { get; set; }
-		public FolderItem Parent { get; private set; }
+		public TreeFolderItem Parent { get; private set; }
 		/// <summary>
 		/// Allow customized icon
 		/// </summary>
@@ -26,7 +26,7 @@ namespace FileExplorer.Models {
 			LastModifiedTime = new DateTimeOffset(info.LastWriteTimeUtc);
 		}
 
-		public Item(string path, FolderItem parent) : this(path, parent.fileProvider)
+		public Item(string path, TreeFolderItem parent) : this(path, parent.fileProvider)
 		{
 			Parent = parent;
 		}

@@ -17,7 +17,7 @@ namespace FileExplorer.Converters {
 		{
 			if (value is FileItem fileItem) {
 				return GetFileTypeDescription(fileItem.Name);
-			} else if (value is FolderItem folderItem) {
+			} else if (value is TreeFolderItem folderItem) {
 				return GetFolderTypeDescription(folderItem.Path);
 			} else {
 				return null;
