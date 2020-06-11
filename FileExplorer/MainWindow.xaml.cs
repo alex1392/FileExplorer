@@ -1,29 +1,17 @@
-﻿using FileExplorer.DataVirtualization;
+﻿using Cyc.FluentDesign;
 using FileExplorer.Models;
 using FileExplorer.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Threading;
 
-namespace FileExplorer {
+namespace FileExplorer.Views {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window {
+	public partial class MainWindow : RevealWindow {
 		private readonly MainWindowViewModel vm;
 
 		public MainWindow()
@@ -33,6 +21,16 @@ namespace FileExplorer {
 			var systemFolderProvider = new SystemFolderProvider();
 			vm = new MainWindowViewModel(fileProvider, systemFolderProvider);
 			DataContext = vm;
+		}
+
+		protected override void BrowseBack(object sender, ExecutedRoutedEventArgs e)
+		{
+			base.BrowseBack(sender, e);
+		}
+
+		protected override void BrowseForward(object sender, ExecutedRoutedEventArgs e)
+		{
+			base.BrowseForward(sender, e);
 		}
 
 		private void TreeViewItem_Selected(object sender, RoutedEventArgs e)
@@ -54,7 +52,6 @@ namespace FileExplorer {
 			}
 			folderItem.LoadSubFolders();
 		}
-
 		private void ListViewItem_Selected(object sender, RoutedEventArgs e)
 		{
 			if (!((sender as ListViewItem)?.DataContext is FolderItem folderItem)) {
@@ -66,7 +63,6 @@ namespace FileExplorer {
 				vm.CurrentFolder = folderItem;
 			}));
 		}
-
 		private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
 		{
 			if (!((sender as ListBoxItem)?.DataContext is FolderItem folderItem)) {

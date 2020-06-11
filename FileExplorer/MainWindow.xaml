@@ -1,21 +1,20 @@
-﻿<Window x:Class="FileExplorer.MainWindow"
-				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-				xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-				xmlns:local="clr-namespace:FileExplorer"
-				xmlns:converter="clr-namespace:FileExplorer.Converters"
-				xmlns:model="clr-namespace:FileExplorer.Models"
-				mc:Ignorable="d"
-				Title="MainWindow"
-				Height="450"
-				Width="800">
-	<Window.Resources>
-		
-		
-	</Window.Resources>
-	<Grid Name="mainGrid"
-				d:DataContext="{d:DesignInstance Type=local:MainWindow, IsDesignTimeCreatable=True}">
+﻿<fd:RevealWindow x:Class="FileExplorer.Views.MainWindow"
+								 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+								 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+								 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+								 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+								 xmlns:local="clr-namespace:FileExplorer.Views"
+								 xmlns:converter="clr-namespace:FileExplorer.Converters"
+								 xmlns:model="clr-namespace:FileExplorer.Models"
+								 xmlns:vm="clr-namespace:FileExplorer.ViewModels"
+								 xmlns:fd="clr-namespace:Cyc.FluentDesign;assembly=Cyc.FluentDesign"
+								 mc:Ignorable="d"
+								 d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel, IsDesignTimeCreatable=True}"
+								 Icon="Resources/Computer.ico"
+								 Title="MainWindow"
+								 Height="450"
+								 Width="800">
+	<Grid>
 		<DockPanel>
 			<TreeView DockPanel.Dock="Left"
 								ItemsSource="{Binding TreeItems}"
@@ -112,4 +111,4 @@
 			</ListView>
 		</DockPanel>
 	</Grid>
-</Window>
+</fd:RevealWindow>

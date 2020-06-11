@@ -45,6 +45,13 @@ namespace FileExplorer.ViewModels {
 			}
 		}
 
+		/// <summary>
+		/// for xaml designer
+		/// </summary>
+		public MainWindowViewModel()
+		{
+
+		}
 		public MainWindowViewModel(IFileProvider fileProvider, ISystemFolderProvider systemFolderProvider)
 		{
 			var drivePaths = systemFolderProvider.GetLogicalDrives();
