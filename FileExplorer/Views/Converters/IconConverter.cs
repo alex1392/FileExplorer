@@ -21,12 +21,15 @@ namespace FileExplorer.Converters {
 		private static readonly IconConverter instance = new IconConverter();
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (value is FileItem fileItem) {
+			if (value is ListFileItem fileItem) {
 				var icon = Icon.ExtractAssociatedIcon(fileItem.Path);
 				return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-			} else if (value is TreeFolderItem folderItem) {
-				return folderItem.Icon ?? new BitmapImage(new Uri(Path.Combine(App.PackUri, "Resources/Folder.ico")));
-			} else {
+			} else if (value is ListFolderItem listFolderItem) {
+				return new BitmapImage(new Uri(Path.Combine(App.PackUri, "Resources/Folder.ico")));
+			} else if (value is TreeFolderItem treeFolderItem) {
+				return treeFolderItem.Icon ?? new BitmapImage(new Uri(Path.Combine(App.PackUri, "Resources/Folder.ico")));
+			}
+			else {
 				return null;
 			}
 

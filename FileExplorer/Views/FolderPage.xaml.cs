@@ -21,20 +21,30 @@ namespace FileExplorer.Views {
 	/// </summary>
 	public partial class FolderPage : Page {
 		private readonly FolderPageViewModel vm;
+		private string path;
+
+		public string Path {
+			get => path;
+			set {
+				// can only be set once
+				if (path != null || path == value) {
+					return;
+				}
+				path = value;
+				vm.Path = value; // property injection
+			}
+		}
 
 		public FolderPage()
 		{
 			InitializeComponent();
-			vm = new FolderPageViewModel();
+		}
+
+		public FolderPage(FolderPageViewModel vm) : this()
+		{
+			this.vm = vm;
 			DataContext = vm;
 		}
-
-		public FolderPage(TreeFolderItem folderItem) : this()
-		{
-			CurrentFolder = folderItem;
-		}
-
-		public TreeFolderItem CurrentFolder { get; }
 
 		private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
 		{

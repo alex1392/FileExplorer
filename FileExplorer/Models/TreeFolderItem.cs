@@ -47,35 +47,5 @@ namespace FileExplorer.Models {
 			SubFolders.AddRange(folderPaths.Select(path => new TreeFolderItem(path, this)));
 			HasExpanded = true;
 		}
-
-		//private void LoadChildrenPaths()
-		//{
-		//	if (IsChildrenPathsLoaded) {
-		//		return;
-		//	}
-		//	folderPaths = fileProvider.GetDirectories(Path);
-		//	filePaths = fileProvider.GetFiles(Path);
-		//	IsChildrenPathsLoaded = true;
-		//}
-
-		//public int FetchCount()
-		//{
-		//	LoadChildrenPaths();
-		//	return folderPaths?.Length + filePaths?.Length ?? 0;
-		//}
-
-		//public IList<Item> FetchRange(int startIndex, int count)
-		//{
-		//	LoadChildrenPaths();
-
-		//	startIndex = Math.Max(0, startIndex);
-		//	return folderPaths.Skip(startIndex)
-		//	   .Take(count)
-		//	   .Select(path => new TreeFolderItem(path, this) as Item)
-		//	   .Concat(filePaths.Skip(Math.Max(startIndex - folderPaths.Length, 0))
-		//			   .Take(count - Math.Max(folderPaths.Length - startIndex, 0))
-		//			   .Select(path => new FileItem(path, this)))
-		//	   .ToList();
-		//}
 	}
 }

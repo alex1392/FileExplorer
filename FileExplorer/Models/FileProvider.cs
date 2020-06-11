@@ -3,6 +3,7 @@ using System.IO;
 
 namespace FileExplorer.Models {
 	class FileProvider : IFileProvider {
+
 		public FileSystemInfo GetFileSystemInfo(string path)
 		{
 			FileSystemInfo info;

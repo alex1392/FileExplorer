@@ -77,8 +77,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\ListFolderItem.cs" />
     <Compile Include="ViewModels\FolderPageViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Views\Converters\DebugConverter.cs" />
     <Compile Include="Views\Converters\FileTypeConverter.cs" />
     <Compile Include="Views\Converters\SizeConverter.cs" />
     <Compile Include="Views\Converters\TimeConverter.cs" />
@@ -97,7 +99,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataVirtualization\IItemsProvider.cs" />
-    <Compile Include="Models\FileItem.cs" />
+    <Compile Include="Models\ListFileItem.cs" />
     <Compile Include="Models\FileProvider.cs" />
     <Compile Include="Models\TreeFolderItem.cs" />
     <Compile Include="Views\Converters\IconConverter.cs" />

@@ -37,6 +37,12 @@ namespace FileExplorer {
 			serviceCollection.AddSingleton<ISystemFolderProvider, SystemFolderProvider>();
 			serviceCollection.AddSingleton<MainWindowViewModel>();
 			serviceCollection.AddSingleton<MainWindow>();
+
+			serviceCollection.AddSingleton<IServiceProvider>(sp => sp);
+			
+			serviceCollection.AddTransient<FolderPage>();
+			serviceCollection.AddTransient<FolderPageViewModel>();
+			serviceCollection.AddTransient<FolderChildrenProvider>();
 		}
 	}
 }

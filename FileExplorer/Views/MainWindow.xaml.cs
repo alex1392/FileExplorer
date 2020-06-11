@@ -1,6 +1,7 @@
 ﻿using Cyc.FluentDesign;
 using FileExplorer.Models;
 using FileExplorer.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,15 +14,18 @@ namespace FileExplorer.Views {
 	/// </summary>
 	public partial class MainWindow : RevealWindow {
 		private readonly MainWindowViewModel vm;
+		private readonly IServiceProvider sp;
 
 		public MainWindow()
 		{
 			InitializeComponent();
 		}
 
-		public MainWindow(MainWindowViewModel vm) : this()
+		public MainWindow(MainWindowViewModel vm, IServiceProvider sp) : this()
 		{
 			this.vm = vm;
+			this.sp = sp;
+			DataContext = vm;
 		}
 
 		private void TreeViewItem_Selected(object sender, RoutedEventArgs e)
@@ -32,7 +36,9 @@ namespace FileExplorer.Views {
 			// load the subfolders for the tree view item to expand
 			folderItem.LoadSubFolders();
 			// Navigate to the selected folder
-			//FolderFrame.Navigate();
+			var page = sp.GetService<FolderPage>();
+			page.Path = folderItem.Path; // property injection
+			FolderFrame.Navigate(page);
 
 			// avoid recursive event propagation
 			if (e != null) {

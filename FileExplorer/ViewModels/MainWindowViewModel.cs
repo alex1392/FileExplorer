@@ -12,38 +12,12 @@ using System.Windows.Media.Imaging;
 
 namespace FileExplorer.ViewModels {
 	public class MainWindowViewModel : INotifyPropertyChanged {
+		private readonly IFileProvider fileProvider;
+		private readonly ISystemFolderProvider systemFolderProvider;
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		public ObservableCollection<TreeFolderItem> TreeItems { get; set; } = new ObservableCollection<TreeFolderItem>();
-
-		//private TreeFolderItem currentFolder;
-		//public TreeFolderItem CurrentFolder {
-		//	get => currentFolder;
-		//	set {
-		//		if (currentFolder != value) {
-		//			currentFolder = value;
-		//			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentFolder)));
-		//			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentItems)));
-		//			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PathItems)));
-		//		}
-		//	}
-		//}
-
-		//public VirtualizingCollection<Item> CurrentItems => CurrentFolder?.Children;
-
-		//public List<TreeFolderItem> PathItems {
-		//	get {
-		//		var list = new List<TreeFolderItem>();
-		//		var folder = currentFolder;
-		//		while (folder != null) {
-		//			list.Add(folder);
-		//			folder = folder.Parent;
-		//		}
-		//		list.Reverse();
-		//		return list;
-		//	}
-		//}
 
 		/// <summary>
 		/// for xaml designer
@@ -54,6 +28,9 @@ namespace FileExplorer.ViewModels {
 		}
 		public MainWindowViewModel(IFileProvider fileProvider, ISystemFolderProvider systemFolderProvider)
 		{
+			this.fileProvider = fileProvider;
+			this.systemFolderProvider = systemFolderProvider;
+
 			var drivePaths = systemFolderProvider.GetLogicalDrives();
 			var driveIcon = new BitmapImage(new Uri(Path.Combine(App.PackUri, "Resources/Drive.ico")));
 			foreach (var drivePath in drivePaths) {

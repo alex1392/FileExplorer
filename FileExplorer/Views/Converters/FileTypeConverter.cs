@@ -15,7 +15,7 @@ namespace FileExplorer.Converters {
 		private static readonly FileTypeConverter instance = new FileTypeConverter();
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (value is FileItem fileItem) {
+			if (value is ListFileItem fileItem) {
 				return GetFileTypeDescription(fileItem.Name);
 			} else if (value is TreeFolderItem folderItem) {
 				return GetFolderTypeDescription(folderItem.Path);
