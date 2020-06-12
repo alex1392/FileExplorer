@@ -4,8 +4,10 @@ using FileExplorer.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace FileExplorer.Views {
@@ -66,6 +68,8 @@ namespace FileExplorer.Views {
 		private void FolderPage_Loaded(object sender, RoutedEventArgs e)
 		{
 			DataContext = Vm;
+			var collectionView = CollectionViewSource.GetDefaultView(ItemsListView.ItemsSource) as CollectionView;
+			//var groupDescription = new GroupDescription
 		}
 
 		private void ListBoxItem_Selected(object sender, RoutedEventArgs e)

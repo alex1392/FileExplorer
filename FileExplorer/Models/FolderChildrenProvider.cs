@@ -1,5 +1,5 @@
 ﻿using FileExplorer.DataVirtualization;
-
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +11,7 @@ namespace FileExplorer.Models {
 		#region Private Fields
 
 		private readonly IFileProvider fileProvider;
+		private readonly IServiceProvider serviceProvider;
 		private string[] filePaths;
 		private string[] folderPaths;
 		private bool IsChildrenPathsLoaded;
@@ -35,9 +36,10 @@ namespace FileExplorer.Models {
 
 		#region Public Constructors
 
-		public FolderChildrenProvider(IFileProvider fileProvider)
+		public FolderChildrenProvider(IFileProvider fileProvider, IServiceProvider serviceProvider)
 		{
 			this.fileProvider = fileProvider;
+			this.serviceProvider = serviceProvider;
 		}
 
 		#endregion Public Constructors
@@ -56,11 +58,21 @@ namespace FileExplorer.Models {
 			startIndex = Math.Max(0, startIndex);
 			return folderPaths.Skip(startIndex)
 			   .Take(count)
-			   .Select(path => new ListFolderItem(path, fileProvider))
+			   .Select(path => 
+			   {
+				   var folderItem = serviceProvider.GetService<ListFolderItem>();
+				   folderItem.Path = path;
+				   return folderItem;
+			   })
 			   .Cast<ListItem>()
 			   .Concat(filePaths.Skip(Math.Max(startIndex - folderPaths.Length, 0))
 					   .Take(count - Math.Max(folderPaths.Length - startIndex, 0))
-					   .Select(path => new ListFileItem(path, fileProvider)))
+					   .Select(path => 
+					   {
+						   var fileItem = serviceProvider.GetService<ListFileItem>();
+						   fileItem.Path = path;
+						   return fileItem;
+					   }))
 			   .ToList();
 		}
 

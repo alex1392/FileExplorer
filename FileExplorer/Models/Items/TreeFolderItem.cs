@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
 
@@ -10,15 +12,16 @@ namespace FileExplorer.Models {
 
 		private string[] folderPaths;
 		private bool HasExpanded = false;
+		private readonly IServiceProvider serviceProvider;
 
 		#endregion Private Fields
 
 		#region Public Properties
 
 		/// <summary>
-		/// Allow customized icon
+		/// customized icon property injection
 		/// </summary>
-		public virtual ImageSource Icon { get; protected set; }
+		public ImageSource Icon { get; set; }
 
 		public List<Item> SubFolders { get; set; } = new List<Item>
 		{
@@ -29,19 +32,9 @@ namespace FileExplorer.Models {
 
 		#region Public Constructors
 
-		/// <summary>
-		/// Root constructor
-		/// </summary>
-		public TreeFolderItem(string path, IFileProvider fileProvider) : base(path, fileProvider)
+		public TreeFolderItem(IFileProvider fileProvider, IServiceProvider serviceProvider) : base(fileProvider)
 		{
-		}
-
-		/// <summary>
-		/// Root Constructor with icon
-		/// </summary>
-		public TreeFolderItem(string path, IFileProvider fileProvider, ImageSource icon) : this(path, fileProvider)
-		{
-			Icon = icon;
+			this.serviceProvider = serviceProvider;
 		}
 
 		#endregion Public Constructors
@@ -55,7 +48,12 @@ namespace FileExplorer.Models {
 			}
 			SubFolders.Clear();
 			folderPaths = fileProvider.GetDirectories(Path);
-			SubFolders.AddRange(folderPaths.Select(path => new TreeFolderItem(path, fileProvider)));
+			SubFolders.AddRange(folderPaths.Select(path => 
+			{
+				var item = serviceProvider.GetService<TreeFolderItem>();
+				item.Path = path;
+				return item;
+			}));
 			HasExpanded = true;
 		}
 

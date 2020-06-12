@@ -55,6 +55,12 @@ namespace FileExplorer {
 			serviceCollection.AddSingleton<IFolderNavigationService, FolderNavigationService>();
 
 			serviceCollection.AddSingleton<IDialogService, DialogService>();
+			serviceCollection.AddSingleton<ITypeDescriptionProvider, TypeDescriptionProvider>();
+
+			serviceCollection.AddTransient<Item>();
+			serviceCollection.AddTransient<ListFileItem>();
+			serviceCollection.AddTransient<ListFolderItem>();
+			serviceCollection.AddTransient<TreeFolderItem>();
 		}
 
 		#endregion Private Methods

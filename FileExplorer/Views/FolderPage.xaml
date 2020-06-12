@@ -69,7 +69,7 @@
 													DisplayMemberBinding="{Binding LastModifiedTime, Converter={converter:TimeConverter}}" />
 					<GridViewColumn Header="Type"
 													Width="Auto"
-													DisplayMemberBinding="{Binding ., Converter={converter:FileTypeConverter}}" />
+													DisplayMemberBinding="{Binding TypeDescription}" />
 					<GridViewColumn Header="Size"
 													Width="100">
 						<GridViewColumn.CellTemplate>

@@ -1,5 +1,6 @@
 ﻿using FileExplorer.DataVirtualization;
 using FileExplorer.Models;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,6 +19,7 @@ namespace FileExplorer.ViewModels {
 		private readonly IFileProvider fileProvider;
 		private readonly FolderChildrenProvider folderChildrenProvider;
 		private readonly IFolderNavigationService folderNavigationService;
+		private readonly IServiceProvider serviceProvider;
 		private string path;
 
 		#endregion Private Fields
@@ -65,10 +67,14 @@ namespace FileExplorer.ViewModels {
 		{
 			var (folderPaths, filePaths) = fileProvider.GetChildren(path);
 			foreach (var folderPath in folderPaths) {
-				ListItems.Add(new ListFolderItem(folderPath, fileProvider));
+				var folderItem = serviceProvider.GetService<ListFolderItem>();
+				folderItem.Path = folderPath;
+				ListItems.Add(folderItem);
 			}
 			foreach (var filePath in filePaths) {
-				ListItems.Add(new ListFileItem(filePath, fileProvider));
+				var folderItem = serviceProvider.GetService<ListFileItem>();
+				folderItem.Path = filePath;
+				ListItems.Add(folderItem);
 			}
 		}
 
@@ -86,11 +92,12 @@ namespace FileExplorer.ViewModels {
 		{
 		}
 
-		public FolderPageViewModel(FolderChildrenProvider folderChildrenProvider, IFileProvider fileProvider, IFolderNavigationService folderNavigationService)
+		public FolderPageViewModel(FolderChildrenProvider folderChildrenProvider, IFileProvider fileProvider, IFolderNavigationService folderNavigationService, IServiceProvider serviceProvider)
 		{
 			this.folderChildrenProvider = folderChildrenProvider;
 			this.fileProvider = fileProvider;
 			this.folderNavigationService = folderNavigationService;
+			this.serviceProvider = serviceProvider;
 		}
 
 		#endregion Public Constructors
@@ -123,7 +130,11 @@ namespace FileExplorer.ViewModels {
 			for (var i = 0; i < parents.Count; i++) {
 				paths[i] = string.Join(IO::Path.DirectorySeparatorChar.ToString(), parents.Take(i + 1));
 			}
-			return paths.Select(path => new Item(path, fileProvider));
+			return paths.Select(path => {
+				var item = serviceProvider.GetService<Item>();
+				item.Path = path;
+				return item;
+			});
 		}
 
 		#endregion Private Methods

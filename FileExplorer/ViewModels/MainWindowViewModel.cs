@@ -1,5 +1,5 @@
 ﻿using FileExplorer.Models;
-
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -14,6 +14,7 @@ namespace FileExplorer.ViewModels {
 
 		private readonly IFileProvider fileProvider;
 		private readonly IFolderNavigationService folderNavigationService;
+		private readonly IServiceProvider serviceProvider;
 		private readonly ISystemFolderProvider systemFolderProvider;
 
 		#endregion Private Fields
@@ -39,21 +40,28 @@ namespace FileExplorer.ViewModels {
 		{
 		}
 
-		public MainWindowViewModel(IFileProvider fileProvider, ISystemFolderProvider systemFolderProvider, IFolderNavigationService folderNavigationService)
+		public MainWindowViewModel(IFileProvider fileProvider, ISystemFolderProvider systemFolderProvider, IFolderNavigationService folderNavigationService, IServiceProvider serviceProvider)
 		{
 			this.fileProvider = fileProvider;
 			this.systemFolderProvider = systemFolderProvider;
 			this.folderNavigationService = folderNavigationService;
+			this.serviceProvider = serviceProvider;
 
 			var drivePaths = systemFolderProvider.GetLogicalDrives();
 			var driveIcon = new BitmapImage(new Uri(Path.Combine(App.PackUri, "Resources/Drive.ico")));
 			foreach (var drivePath in drivePaths) {
-				TreeItems.Add(new TreeFolderItem(drivePath, fileProvider, driveIcon));
+				var driveItem = serviceProvider.GetService<TreeFolderItem>();
+				driveItem.Path = drivePath;
+				driveItem.Icon = driveIcon;
+				TreeItems.Add(driveItem);
 			}
 
 			var recentPath = systemFolderProvider.GetRecentFolder();
 			var recentIcon = new BitmapImage(new Uri(Path.Combine(App.PackUri, "Resources/Favorites.ico")));
-			TreeItems.Add(new TreeFolderItem(recentPath, fileProvider, recentIcon));
+			var recentItem = serviceProvider.GetService<TreeFolderItem>();
+			recentItem.Path = recentPath;
+			recentItem.Icon = recentIcon;
+			TreeItems.Add(recentItem);
 		}
 
 		#endregion Public Constructors

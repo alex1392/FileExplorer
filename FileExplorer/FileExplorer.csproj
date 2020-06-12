@@ -85,11 +85,12 @@
     <Compile Include="Models\Items\ListFolderItem.cs" />
     <Compile Include="Models\Items\ListItem.cs" />
     <Compile Include="Models\FolderChildrenProvider.cs" />
+    <Compile Include="Models\Interfaces\ITypeDescriptionProvider.cs" />
     <Compile Include="ViewModels\FolderPageViewModel.cs" />
     <Compile Include="Models\Interfaces\INavigationService.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\Converters\DebugConverter.cs" />
-    <Compile Include="Views\Converters\FileTypeConverter.cs" />
+    <Compile Include="Models\TypeDescriptionProvider.cs" />
     <Compile Include="Views\Converters\SizeConverter.cs" />
     <Compile Include="Views\Converters\TimeConverter.cs" />
     <Compile Include="DataVirtualization\VirtualizingCollection.cs" />

@@ -7,28 +7,41 @@ namespace FileExplorer.Models {
 		#region Protected Fields
 
 		protected IFileProvider fileProvider;
+		private string path;
 
 		#endregion Protected Fields
 
 		#region Public Properties
 
 		public string Name { get; private set; }
-		public string Path { get; private set; }
+		/// <summary>
+		/// Property Injection
+		/// </summary>
+		public virtual string Path {
+			get => path; 
+			set {
+				// can only be set once
+				if (path != null || value == path) {
+					return;
+				}
+				path = value;
+				// fix drive path
+				if (path.Last() == ':') {
+					path += System.IO.Path.DirectorySeparatorChar;
+				}
+				var info = fileProvider.GetFileSystemInfo(path);
+				Name = info.Name;
+				path = info.FullName;
+			}
+		}
 
 		#endregion Public Properties
 
 		#region Public Constructors
 
-		public Item(string path, IFileProvider fileProvider)
+		public Item(IFileProvider fileProvider)
 		{
 			this.fileProvider = fileProvider;
-			// fix drive path
-			if (path.Last() == ':') {
-				path += System.IO.Path.DirectorySeparatorChar;
-			}
-			var info = fileProvider.GetFileSystemInfo(path);
-			Name = info.Name;
-			Path = info.FullName;
 		}
 
 		#endregion Public Constructors
