@@ -76,14 +76,6 @@ namespace FileExplorer.Views {
 			Vm.Navigate(item);
 		}
 
-		private void ListViewItem_Selected(object sender, RoutedEventArgs e)
-		{
-			if (!((sender as ListViewItem)?.DataContext is ListFolderItem folderItem)) {
-				return;
-			}
-			Vm.Navigate(folderItem);
-		}
-
 		private void PathListBox_MouseDown(object sender, MouseButtonEventArgs e)
 		{
 			if (e.ChangedButton == MouseButton.Left) {
@@ -98,6 +90,15 @@ namespace FileExplorer.Views {
 			if (e.Key == Key.Enter) {
 				Vm.Navigate(PathTextBox.Text);
 			}
+		}
+
+
+		private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			if (!((sender as ListViewItem)?.DataContext is ListFolderItem folderItem)) {
+				return;
+			}
+			Vm.Navigate(folderItem);
 		}
 
 		#endregion Private Methods

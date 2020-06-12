@@ -80,6 +80,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DataVirtualization\AsyncVirtualizingCollection.cs" />
     <Compile Include="Models\Interfaces\IDialogService.cs" />
     <Compile Include="Models\Items\ListFolderItem.cs" />
     <Compile Include="Models\Items\ListItem.cs" />
