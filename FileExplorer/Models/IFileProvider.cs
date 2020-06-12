@@ -6,5 +6,6 @@ namespace FileExplorer.Models {
 		string[] GetDirectories(string path);
 		FileSystemInfo GetFileSystemInfo(string path);
 		FileInfo GetFileInfo(string path);
+		(string[], string[]) GetChildren(string path);
 	}
 }

@@ -16,21 +16,27 @@ namespace FileExplorer.Views {
 		private MainWindowViewModel vm;
 		private readonly IServiceProvider serviceProvider;
 
+		public MainWindowViewModel Vm { 
+			get {
+				return vm ?? (vm = serviceProvider.GetService<MainWindowViewModel>()); 
+			} 
+		}
+
 		public MainWindow()
 		{
 			InitializeComponent();
 			this.Loaded += MainWindow_Loaded;
 		}
+
 		public MainWindow(IServiceProvider serviceProvider) : this()
 		{
+			// always load dependencies of an object outside of its constructor if it is possible, this way circular dependency can be avoided
 			this.serviceProvider = serviceProvider;
 		}
 
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
 		{
-			// always load dependencies of an object outside of its constructor if it is possible, this way circular dependency can be avoided
-			vm = serviceProvider.GetService<MainWindowViewModel>();
-			DataContext = vm;
+			DataContext = Vm;
 		}
 
 
@@ -42,7 +48,7 @@ namespace FileExplorer.Views {
 			// load the subfolders for the tree view item to expand
 			folderItem.LoadSubFolders();
 			// Navigate to the selected folder
-			vm.Navigate(folderItem);
+			Vm.Navigate(folderItem);
 			// avoid recursive event propagation
 			if (e != null) {
 				e.Handled = true;

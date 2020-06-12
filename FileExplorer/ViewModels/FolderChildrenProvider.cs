@@ -36,8 +36,7 @@ namespace FileExplorer.ViewModels {
 			if (IsChildrenPathsLoaded) {
 				return;
 			}
-			folderPaths = fileProvider.GetDirectories(Path);
-			filePaths = fileProvider.GetFiles(Path);
+			(folderPaths, filePaths) = fileProvider.GetChildren(path);
 			IsChildrenPathsLoaded = true;
 		}
 

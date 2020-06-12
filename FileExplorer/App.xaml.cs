@@ -44,6 +44,8 @@ namespace FileExplorer {
 			serviceCollection.AddTransient<FolderPageViewModel>();
 			serviceCollection.AddTransient<FolderChildrenProvider>();
 			serviceCollection.AddSingleton<IFolderNavigationService, FolderNavigationService>();
+
+			serviceCollection.AddSingleton<IDialogService, DialogService>();
 		}
 	}
 }

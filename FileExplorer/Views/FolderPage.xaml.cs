@@ -22,7 +22,14 @@ namespace FileExplorer.Views {
 					return;
 				}
 				path = value;
-				vm.Path = value; // property injection
+				Vm.Path = value; // property injection
+			}
+		}
+
+		public FolderPageViewModel Vm {
+			get {
+				// lazy loading dependency
+				return vm ?? (vm = serviceProvider.GetService<FolderPageViewModel>());
 			}
 		}
 
@@ -32,15 +39,15 @@ namespace FileExplorer.Views {
 			this.Loaded += FolderPage_Loaded;
 		}
 
-		private void FolderPage_Loaded(object sender, RoutedEventArgs e)
-		{
-			this.vm = serviceProvider.GetService<FolderPageViewModel>();
-			DataContext = vm;
-		}
 
 		public FolderPage(IServiceProvider serviceProvider) : this()
 		{
 			this.serviceProvider = serviceProvider;
+		}
+
+		private void FolderPage_Loaded(object sender, RoutedEventArgs e)
+		{
+			DataContext = Vm;
 		}
 
 		private void ListViewItem_Selected(object sender, RoutedEventArgs e)
@@ -48,7 +55,7 @@ namespace FileExplorer.Views {
 			if (!((sender as ListViewItem)?.DataContext is ListFolderItem folderItem)) {
 				return;
 			}
-			vm.Navigate(folderItem);
+			Vm.Navigate(folderItem);
 		}
 
 		private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
@@ -56,7 +63,7 @@ namespace FileExplorer.Views {
 			if (!((sender as ListBoxItem)?.DataContext is string path)) {
 				return;
 			}
-			vm.Navigate(path);
+			Vm.Navigate(path);
 		}
 	}
 }

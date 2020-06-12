@@ -164,7 +164,7 @@ namespace FileExplorer.DataVirtualization
 
                 // defensive check in case of async load
                 if (_pages[pageIndex] == null)
-                    return default(T);
+                    return default;
 
                 // return requested item
                 return _pages[pageIndex][pageOffset];
@@ -193,6 +193,7 @@ namespace FileExplorer.DataVirtualization
         /// </returns>
         public IEnumerator<T> GetEnumerator()
         {
+            // TODO: fix bug when count == 0
             for (var i = 0; i < Count; i++)
             {
                 yield return this[i];
