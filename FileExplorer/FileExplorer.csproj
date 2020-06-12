@@ -86,6 +86,7 @@
     <Compile Include="Models\Items\ListItem.cs" />
     <Compile Include="Models\FolderChildrenProvider.cs" />
     <Compile Include="Models\Interfaces\ITypeDescriptionProvider.cs" />
+    <Compile Include="Utilities\GridViewSort.cs" />
     <Compile Include="ViewModels\FolderPageViewModel.cs" />
     <Compile Include="Models\Interfaces\INavigationService.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />

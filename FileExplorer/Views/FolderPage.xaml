@@ -7,12 +7,12 @@
 			xmlns:converter="clr-namespace:FileExplorer.Converters"
 			xmlns:model="clr-namespace:FileExplorer.Models"
 			xmlns:vm="clr-namespace:FileExplorer.ViewModels"
+			xmlns:util="clr-namespace:FileExplorer.Utilities"
 			mc:Ignorable="d"
 			d:DataContext="{d:DesignInstance Type=vm:FolderPageViewModel, IsDesignTimeCreatable=True}"
 			d:DesignHeight="450"
 			d:DesignWidth="800"
 			Title="FolderPage">
-
 	<DockPanel>
 		<Grid DockPanel.Dock="Top">
 			<ListBox Name="PathListBox"
@@ -47,16 +47,19 @@
 							 KeyUp="PathTextBox_KeyUp" />
 		</Grid>
 		<ListView Name="ItemsListView"
-							ItemsSource="{Binding ListItems}">
+							ItemsSource="{Binding ListItems}"
+							util:GridViewSort.AutoSort="True"
+							VirtualizingPanel.IsVirtualizingWhenGrouping="True">
 			<ListView.View>
 				<GridView>
 					<GridViewColumn Header="Name"
-													Width="Auto">
+													Width="Auto"
+													util:GridViewSort.PropertyName="Name">
 						<GridViewColumn.CellTemplate>
 							<DataTemplate DataType="{x:Type model:Item}">
 								<StackPanel Orientation="Horizontal">
 									<Image Source="{Binding .,Converter={converter:IconConverter}}"
-												 Width="32" />
+												 Width="18" />
 									<TextBlock Text="{Binding Name}"
 														 VerticalAlignment="Center"
 														 Margin="3" />
@@ -66,12 +69,15 @@
 					</GridViewColumn>
 					<GridViewColumn Header="Date"
 													Width="Auto"
-													DisplayMemberBinding="{Binding LastModifiedTime, Converter={converter:TimeConverter}}" />
+													DisplayMemberBinding="{Binding LastModifiedTime, Converter={converter:TimeConverter}}"
+													util:GridViewSort.PropertyName="LastModifiedTime" />
 					<GridViewColumn Header="Type"
 													Width="Auto"
-													DisplayMemberBinding="{Binding TypeDescription}" />
+													DisplayMemberBinding="{Binding TypeDescription}"
+													util:GridViewSort.PropertyName="TypeDescription" />
 					<GridViewColumn Header="Size"
-													Width="100">
+													Width="Auto"
+													util:GridViewSort.PropertyName="Size">
 						<GridViewColumn.CellTemplate>
 							<DataTemplate DataType="{x:Type model:ListFileItem}">
 								<TextBlock Text="{Binding Size, Converter={converter:SizeConverter}}"
@@ -89,11 +95,44 @@
 									Value="Stretch" />
 				</Style>
 			</ListView.ItemContainerStyle>
-			<!--<ListView.ItemsPanel>
-					<ItemsPanelTemplate>
-						<WrapPanel />
-					</ItemsPanelTemplate>
-				</ListView.ItemsPanel>-->
+			<ListView.GroupStyle>
+				<GroupStyle>
+					<GroupStyle.ContainerStyle>
+						<Style TargetType="{x:Type GroupItem}">
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate>
+										<Expander IsExpanded="True">
+											<Expander.Header>
+												<StackPanel Orientation="Horizontal">
+													<TextBlock Text="{Binding Name}"
+																		 FontWeight="Bold"
+																		 Foreground="Gray"
+																		 FontSize="22"
+																		 VerticalAlignment="Bottom" />
+													<TextBlock Text="{Binding ItemCount}"
+																		 FontSize="22"
+																		 Foreground="Green"
+																		 FontWeight="Bold"
+																		 FontStyle="Italic"
+																		 Margin="10,0,0,0"
+																		 VerticalAlignment="Bottom" />
+													<TextBlock Text=" item(s)"
+																		 FontSize="22"
+																		 Foreground="Silver"
+																		 FontStyle="Italic"
+																		 VerticalAlignment="Bottom" />
+												</StackPanel>
+											</Expander.Header>
+											<ItemsPresenter />
+										</Expander>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</GroupStyle.ContainerStyle>
+				</GroupStyle>
+			</ListView.GroupStyle>
 		</ListView>
 	</DockPanel>
 </Page>

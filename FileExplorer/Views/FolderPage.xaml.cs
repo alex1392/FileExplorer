@@ -5,10 +5,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace FileExplorer.Views {
 
@@ -53,8 +55,9 @@ namespace FileExplorer.Views {
 		public FolderPage()
 		{
 			InitializeComponent();
-			this.Loaded += FolderPage_Loaded;
+			Loaded += FolderPage_Loaded;
 		}
+
 
 		public FolderPage(IServiceProvider serviceProvider) : this()
 		{
@@ -68,8 +71,11 @@ namespace FileExplorer.Views {
 		private void FolderPage_Loaded(object sender, RoutedEventArgs e)
 		{
 			DataContext = Vm;
-			var collectionView = CollectionViewSource.GetDefaultView(ItemsListView.ItemsSource) as CollectionView;
-			//var groupDescription = new GroupDescription
+			//Dispatcher.Invoke(() => {
+			//	collectionView = CollectionViewSource.GetDefaultView(ItemsDataGrid.ItemsSource) as CollectionView;
+			//	groupDescription = new PropertyGroupDescription(nameof(ListItem.TypeDescription));
+			//	collectionView.GroupDescriptions.Add(groupDescription);
+			//}, DispatcherPriority.Loaded); // priority need to be less than Render
 		}
 
 		private void ListBoxItem_Selected(object sender, RoutedEventArgs e)

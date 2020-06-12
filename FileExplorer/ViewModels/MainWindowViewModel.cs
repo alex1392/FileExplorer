@@ -12,10 +12,7 @@ namespace FileExplorer.ViewModels {
 
 		#region Private Fields
 
-		private readonly IFileProvider fileProvider;
 		private readonly IFolderNavigationService folderNavigationService;
-		private readonly IServiceProvider serviceProvider;
-		private readonly ISystemFolderProvider systemFolderProvider;
 
 		#endregion Private Fields
 
@@ -40,12 +37,9 @@ namespace FileExplorer.ViewModels {
 		{
 		}
 
-		public MainWindowViewModel(IFileProvider fileProvider, ISystemFolderProvider systemFolderProvider, IFolderNavigationService folderNavigationService, IServiceProvider serviceProvider)
+		public MainWindowViewModel(ISystemFolderProvider systemFolderProvider, IFolderNavigationService folderNavigationService, IServiceProvider serviceProvider)
 		{
-			this.fileProvider = fileProvider;
-			this.systemFolderProvider = systemFolderProvider;
 			this.folderNavigationService = folderNavigationService;
-			this.serviceProvider = serviceProvider;
 
 			var drivePaths = systemFolderProvider.GetLogicalDrives();
 			var driveIcon = new BitmapImage(new Uri(Path.Combine(App.PackUri, "Resources/Drive.ico")));
