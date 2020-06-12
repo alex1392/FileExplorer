@@ -49,7 +49,7 @@ namespace FileExplorer.Models {
 			try {
 				return (Directory.GetDirectories(path), Directory.GetFiles(path));
 			} catch (UnauthorizedAccessException ex) {
-				// TODO: wht the fuck a messageBox can cause error???
+				// TODO: why the fuck a messageBox can cause error???
 				//dialogService.ShowMessage(ex.Message);
 				return (null, null);
 			}
