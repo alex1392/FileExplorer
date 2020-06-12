@@ -31,7 +31,7 @@ namespace FileExplorer.Models {
 				return Directory.GetDirectories(path);
 			} catch (UnauthorizedAccessException ex) {
 				dialogService.ShowMessage(ex.Message);
-				return new string[0];
+				return null;
 			}
 		}
 		public string[] GetFiles(string path)
@@ -41,7 +41,7 @@ namespace FileExplorer.Models {
 
 			} catch (UnauthorizedAccessException ex) {
 				dialogService.ShowMessage(ex.Message);
-				return new string[0];
+				return null;
 			}
 		}
 		public (string[], string[]) GetChildren(string path)
@@ -50,7 +50,7 @@ namespace FileExplorer.Models {
 				return (Directory.GetDirectories(path), Directory.GetFiles(path));
 			} catch (UnauthorizedAccessException ex) {
 				dialogService.ShowMessage(ex.Message);
-				return (new string[0], new string[0]);
+				return (null, null);
 			}
 		}
 	}
