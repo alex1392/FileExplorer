@@ -78,7 +78,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\ListFolderItem.cs" />
+    <Compile Include="ViewModels\FolderChildrenProvider.cs" />
     <Compile Include="ViewModels\FolderPageViewModel.cs" />
+    <Compile Include="Models\INavigationService.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\Converters\DebugConverter.cs" />
     <Compile Include="Views\Converters\FileTypeConverter.cs" />
@@ -87,9 +89,14 @@
     <Compile Include="DataVirtualization\VirtualizingCollection.cs" />
     <Compile Include="Models\ISystemFolderProvider.cs" />
     <Compile Include="Models\SystemFolderProvider.cs" />
+    <Compile Include="Views\FolderNavigationService.cs" />
     <Compile Include="Views\FolderPage.xaml.cs">
       <DependentUpon>FolderPage.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\HomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -105,6 +112,9 @@
     <Compile Include="Views\Converters\IconConverter.cs" />
     <Compile Include="Models\IFileProvider.cs" />
     <Compile Include="Models\Item.cs" />
+    <Compile Include="Views\HomePage.xaml.cs">
+      <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

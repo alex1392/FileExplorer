@@ -14,17 +14,19 @@ namespace FileExplorer.Views {
 	/// </summary>
 	public partial class MainWindow : RevealWindow {
 		private readonly MainWindowViewModel vm;
-		private readonly IServiceProvider sp;
+		private readonly FolderNavigationService folderNavigationService;
 
 		public MainWindow()
 		{
 			InitializeComponent();
 		}
 
-		public MainWindow(MainWindowViewModel vm, IServiceProvider sp) : this()
+		public MainWindow(MainWindowViewModel vm, IFolderNavigationService folderNavigationService) : this()
 		{
 			this.vm = vm;
-			this.sp = sp;
+			this.folderNavigationService = folderNavigationService as FolderNavigationService;
+			// inject navigation service 
+			this.folderNavigationService.NavigationService = FolderFrame.NavigationService;
 			DataContext = vm;
 		}
 
@@ -36,10 +38,7 @@ namespace FileExplorer.Views {
 			// load the subfolders for the tree view item to expand
 			folderItem.LoadSubFolders();
 			// Navigate to the selected folder
-			var page = sp.GetService<FolderPage>();
-			page.Path = folderItem.Path; // property injection
-			FolderFrame.Navigate(page);
-
+			vm.Navigate(folderItem);
 			// avoid recursive event propagation
 			if (e != null) {
 				e.Handled = true;
@@ -52,24 +51,6 @@ namespace FileExplorer.Views {
 			}
 			folderItem.LoadSubFolders();
 		}
-		//private void ListViewItem_Selected(object sender, RoutedEventArgs e)
-		//{
-		//	if (!((sender as ListViewItem)?.DataContext is TreeFolderItem folderItem)) {
-		//		return;
-		//	}
-		//	// Cannot change CurrentFolder when ListViewItem's event hasn't finished
-		//	Dispatcher.BeginInvoke(new Action(() => {
-		//		folderItem.LoadSubFolders();
-		//		//vm.CurrentFolder = folderItem;
-		//	}));
-		//}
-		//private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
-		//{
-		//	if (!((sender as ListBoxItem)?.DataContext is TreeFolderItem folderItem)) {
-		//		return;
-		//	}
-		//	folderItem.LoadSubFolders();
-		//	//vm.CurrentFolder = folderItem;
-		//}
+		
 	}
 }

@@ -3,70 +3,14 @@ using FileExplorer.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileExplorer.ViewModels {
-	public class FolderChildrenProvider : IItemsProvider<Item> {
-		private string[] folderPaths;
-		private string[] filePaths;
-		private bool IsChildrenPathsLoaded;
-		private string path;
-		private readonly IFileProvider fileProvider;
-
-		public string Path {
-			get => path;
-			set {
-				// can only be set once
-				if (path != null || path == value) {
-					return;
-				}
-				path = value;
-			}
-		}
-
-		public FolderChildrenProvider(IFileProvider fileProvider)
-		{
-			this.fileProvider = fileProvider;
-		}
-
-		private void LoadChildrenPaths()
-		{
-			if (path == null) {
-				throw new InvalidOperationException("Folder Path has not been set.");
-			}
-			if (IsChildrenPathsLoaded) {
-				return;
-			}
-			folderPaths = fileProvider.GetDirectories(Path);
-			filePaths = fileProvider.GetFiles(Path);
-			IsChildrenPathsLoaded = true;
-		}
-
-		public int FetchCount()
-		{
-			LoadChildrenPaths();
-			return folderPaths?.Length + filePaths?.Length ?? 0;
-		}
-
-		public IList<Item> FetchRange(int startIndex, int count)
-		{
-			LoadChildrenPaths();
-			startIndex = Math.Max(0, startIndex);
-			return folderPaths.Skip(startIndex)
-			   .Take(count)
-			   .Select(path => new ListFolderItem(path, fileProvider) as Item)
-			   .Concat(filePaths.Skip(Math.Max(startIndex - folderPaths.Length, 0))
-					   .Take(count - Math.Max(folderPaths.Length - startIndex, 0))
-					   .Select(path => new ListFileItem(path, fileProvider)))
-			   .ToList();
-		}
-	}
 
 	public class FolderPageViewModel : INotifyPropertyChanged {
 		private readonly FolderChildrenProvider folderChildrenProvider;
+		private readonly IFileProvider fileProvider;
+		private readonly IFolderNavigationService folderNavigationService;
 		private string path;
 
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -91,10 +35,17 @@ namespace FileExplorer.ViewModels {
 				ListItems = new VirtualizingCollection<Item>(folderChildrenProvider, 20);
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ListItems)));
 
+				// TODO: set full path for each pathItems
 				PathItems = path.Split(System.IO.Path.DirectorySeparatorChar).Where(s => !string.IsNullOrEmpty(s));
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PathItems)));
+
+				var info = fileProvider.GetFileSystemInfo(path);
+				Title = info.Name;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Title)));
 			}
 		}
+
+		public string Title { get; set; }
 
 		/// <summary>
 		/// for xaml designer
@@ -103,11 +54,23 @@ namespace FileExplorer.ViewModels {
 		{
 
 		}
-		public FolderPageViewModel(FolderChildrenProvider folderChildrenProvider)
+
+		public FolderPageViewModel(FolderChildrenProvider folderChildrenProvider, IFileProvider fileProvider, IFolderNavigationService folderNavigationService)
 		{
 			this.folderChildrenProvider = folderChildrenProvider;
+			this.fileProvider = fileProvider;
+			this.folderNavigationService = folderNavigationService;
 		}
 
+		public void Navigate(ListFolderItem folderItem)
+		{
+			folderNavigationService.Navigate(folderItem.Path);
+		}
+
+		public void Navigate(string path)
+		{
+			folderNavigationService.Navigate(path);
+		}
 
 	}
 }

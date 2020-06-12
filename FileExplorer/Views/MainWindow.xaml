@@ -40,7 +40,8 @@
 					</Style>
 				</TreeView.ItemContainerStyle>
 			</TreeView>
-			<Frame Name="FolderFrame" />
+			<Frame Name="FolderFrame"
+						 Source="/FileExplorer;component/Views/HomePage.xaml" />
 		</DockPanel>
 	</Grid>
 </fd:RevealWindow>

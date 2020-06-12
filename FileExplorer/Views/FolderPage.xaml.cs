@@ -46,14 +46,20 @@ namespace FileExplorer.Views {
 			DataContext = vm;
 		}
 
-		private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
-		{
-
-		}
-
 		private void ListViewItem_Selected(object sender, RoutedEventArgs e)
 		{
+			if (!((sender as ListViewItem)?.DataContext is ListFolderItem folderItem)) {
+				return;
+			}
+			vm.Navigate(folderItem);
+		}
 
+		private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
+		{
+			if (!((sender as ListBoxItem)?.DataContext is string path)) {
+				return;
+			}
+			vm.Navigate(path);
 		}
 	}
 }

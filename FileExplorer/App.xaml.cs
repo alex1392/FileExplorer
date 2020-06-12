@@ -43,6 +43,7 @@ namespace FileExplorer {
 			serviceCollection.AddTransient<FolderPage>();
 			serviceCollection.AddTransient<FolderPageViewModel>();
 			serviceCollection.AddTransient<FolderChildrenProvider>();
+			serviceCollection.AddSingleton<IFolderNavigationService, FolderNavigationService>();
 		}
 	}
 }
