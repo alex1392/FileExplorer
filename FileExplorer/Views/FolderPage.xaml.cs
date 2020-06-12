@@ -1,26 +1,17 @@
 ﻿using FileExplorer.Models;
 using FileExplorer.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace FileExplorer.Views {
 	/// <summary>
 	/// Interaction logic for FolderPage.xaml
 	/// </summary>
 	public partial class FolderPage : Page {
-		private readonly FolderPageViewModel vm;
+		private FolderPageViewModel vm;
+		private readonly IServiceProvider serviceProvider;
 		private string path;
 
 		public string Path {
@@ -38,12 +29,18 @@ namespace FileExplorer.Views {
 		public FolderPage()
 		{
 			InitializeComponent();
+			this.Loaded += FolderPage_Loaded;
 		}
 
-		public FolderPage(FolderPageViewModel vm) : this()
+		private void FolderPage_Loaded(object sender, RoutedEventArgs e)
 		{
-			this.vm = vm;
+			this.vm = serviceProvider.GetService<FolderPageViewModel>();
 			DataContext = vm;
+		}
+
+		public FolderPage(IServiceProvider serviceProvider) : this()
+		{
+			this.serviceProvider = serviceProvider;
 		}
 
 		private void ListViewItem_Selected(object sender, RoutedEventArgs e)

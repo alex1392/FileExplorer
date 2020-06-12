@@ -10,10 +10,12 @@ using System.Windows.Navigation;
 namespace FileExplorer.Views {
 	public class FolderNavigationService : IFolderNavigationService {
 		private readonly IServiceProvider serviceProvider;
-		/// <summary>
-		/// Property Injection
-		/// </summary>
-		public NavigationService NavigationService { get; set; }
+		private NavigationService navigationService;
+
+		// set navigation service when the first time you get it
+		public NavigationService NavigationService => 
+			navigationService ?? 
+			(navigationService = serviceProvider.GetService<MainWindow>().FolderFrame.NavigationService);
 
 		public FolderNavigationService(IServiceProvider serviceProvider)
 		{
@@ -42,7 +44,10 @@ namespace FileExplorer.Views {
 				NavigationService.GoForward();
 			}
 		}
-
+		/// <summary>
+		/// TODO: change to (string pageKey, object parameter)
+		/// </summary>
+		/// <param name="key"></param>
 		public void Navigate(string key)
 		{
 			EnsureServiceInjected();

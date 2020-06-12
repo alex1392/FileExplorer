@@ -13,22 +13,26 @@ namespace FileExplorer.Views {
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
 	public partial class MainWindow : RevealWindow {
-		private readonly MainWindowViewModel vm;
-		private readonly FolderNavigationService folderNavigationService;
+		private MainWindowViewModel vm;
+		private readonly IServiceProvider serviceProvider;
 
 		public MainWindow()
 		{
 			InitializeComponent();
+			this.Loaded += MainWindow_Loaded;
+		}
+		public MainWindow(IServiceProvider serviceProvider) : this()
+		{
+			this.serviceProvider = serviceProvider;
 		}
 
-		public MainWindow(MainWindowViewModel vm, IFolderNavigationService folderNavigationService) : this()
+		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
 		{
-			this.vm = vm;
-			this.folderNavigationService = folderNavigationService as FolderNavigationService;
-			// inject navigation service 
-			this.folderNavigationService.NavigationService = FolderFrame.NavigationService;
+			// always load dependencies of an object outside of its constructor if it is possible, this way circular dependency can be avoided
+			vm = serviceProvider.GetService<MainWindowViewModel>();
 			DataContext = vm;
 		}
+
 
 		private void TreeViewItem_Selected(object sender, RoutedEventArgs e)
 		{

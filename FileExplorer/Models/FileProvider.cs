@@ -25,6 +25,7 @@ namespace FileExplorer.Models {
 			try {
 				return Directory.GetDirectories(path);
 			} catch (UnauthorizedAccessException) {
+				// TODO: show message
 				return null;
 			}
 		}
