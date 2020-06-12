@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace FileExplorer.Models {
 
-	public class FolderChildrenProvider : IItemsProvider<Item> {
+	public class FolderChildrenProvider : IItemsProvider<ListItem> {
 
 		#region Private Fields
 
@@ -50,13 +50,14 @@ namespace FileExplorer.Models {
 			return folderPaths?.Length + filePaths?.Length ?? 0;
 		}
 
-		public IList<Item> FetchRange(int startIndex, int count)
+		public IList<ListItem> FetchRange(int startIndex, int count)
 		{
 			LoadChildrenPaths();
 			startIndex = Math.Max(0, startIndex);
 			return folderPaths.Skip(startIndex)
 			   .Take(count)
-			   .Select(path => new ListFolderItem(path, fileProvider) as Item)
+			   .Select(path => new ListFolderItem(path, fileProvider))
+			   .Cast<ListItem>()
 			   .Concat(filePaths.Skip(Math.Max(startIndex - folderPaths.Length, 0))
 					   .Take(count - Math.Max(folderPaths.Length - startIndex, 0))
 					   .Select(path => new ListFileItem(path, fileProvider)))

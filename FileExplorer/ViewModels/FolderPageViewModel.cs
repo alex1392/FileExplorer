@@ -1,8 +1,10 @@
 ﻿using FileExplorer.DataVirtualization;
 using FileExplorer.Models;
-
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 
 using IO = System.IO;
@@ -28,7 +30,9 @@ namespace FileExplorer.ViewModels {
 
 		#region Public Properties
 
-		public VirtualizingCollection<Item> ListItems { get; private set; }
+		//public VirtualizingCollection<ListItem> VirtualListItems { get; private set; }
+
+		public ObservableCollection<ListItem> ListItems { get; } = new ObservableCollection<ListItem>();
 
 		/// <summary>
 		/// Property injection
@@ -42,9 +46,11 @@ namespace FileExplorer.ViewModels {
 				}
 				path = value;
 
-				folderChildrenProvider.Path = path;
-				ListItems = new VirtualizingCollection<Item>(folderChildrenProvider, 20);
-				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ListItems)));
+				//folderChildrenProvider.Path = path;
+				//VirtualListItems = new VirtualizingCollection<ListItem>(folderChildrenProvider, 20);
+				//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(VirtualListItems)));
+
+				SetupListItems(path);
 
 				PathItems = GetPathItems(path);
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PathItems)));
@@ -52,6 +58,17 @@ namespace FileExplorer.ViewModels {
 				var info = fileProvider.GetFileSystemInfo(path);
 				Title = info.Name;
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Title)));
+			}
+		}
+
+		private void SetupListItems(string path)
+		{
+			var (folderPaths, filePaths) = fileProvider.GetChildren(path);
+			foreach (var folderPath in folderPaths) {
+				ListItems.Add(new ListFolderItem(folderPath, fileProvider));
+			}
+			foreach (var filePath in filePaths) {
+				ListItems.Add(new ListFileItem(filePath, fileProvider));
 			}
 		}
 
