@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace FileExplorer.Views {
 	/// <summary>
@@ -64,6 +65,21 @@ namespace FileExplorer.Views {
 				return;
 			}
 			Vm.Navigate(item);
+		}
+
+		private void PathListBox_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			if (e.ChangedButton == MouseButton.Left) {
+				PathTextBox.Visibility = Visibility.Visible;
+			}
+		}
+
+		private void PathTextBox_KeyUp(object sender, KeyEventArgs e)
+		{
+			// TODO: remove focus 
+			if (e.Key == Key.Enter) {
+				Vm.Navigate(PathTextBox.Text);
+			}
 		}
 	}
 }

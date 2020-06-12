@@ -14,31 +14,40 @@
 			Title="FolderPage">
 
 	<DockPanel>
-		<ListBox ItemsSource="{Binding PathItems}"
-						 DockPanel.Dock="Top"
-						 Height="32">
-			<ListBox.ItemTemplate>
-				<DataTemplate DataType="{x:Type model:Item}">
-					<StackPanel Orientation="Horizontal">
-						<TextBlock Text="{Binding Name}"
-											 VerticalAlignment="Center"
-											 Margin="3" />
-					</StackPanel>
-				</DataTemplate>
-			</ListBox.ItemTemplate>
-			<ListBox.ItemContainerStyle>
-				<Style TargetType="ListBoxItem">
-					<EventSetter Event="Selected"
-											 Handler="ListBoxItem_Selected" />
-				</Style>
-			</ListBox.ItemContainerStyle>
-			<ListBox.ItemsPanel>
-				<ItemsPanelTemplate>
-					<StackPanel Orientation="Horizontal" />
-				</ItemsPanelTemplate>
-			</ListBox.ItemsPanel>
-		</ListBox>
-		<ListView ItemsSource="{Binding ListItems}">
+		<Grid DockPanel.Dock="Top">
+			<ListBox Name="PathListBox" 
+							 ItemsSource="{Binding PathItems}"
+							 Height="32"
+							 MouseDown="PathListBox_MouseDown">
+				<ListBox.ItemTemplate>
+					<DataTemplate DataType="{x:Type model:Item}">
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="{Binding Name}"
+												 VerticalAlignment="Center"
+												 Margin="3" />
+						</StackPanel>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+				<ListBox.ItemContainerStyle>
+					<Style TargetType="ListBoxItem">
+						<EventSetter Event="Selected"
+												 Handler="ListBoxItem_Selected" />
+					</Style>
+				</ListBox.ItemContainerStyle>
+				<ListBox.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel Orientation="Horizontal" />
+					</ItemsPanelTemplate>
+				</ListBox.ItemsPanel>
+			</ListBox>
+			<TextBox Name="PathTextBox"
+							 Height="{Binding ElementName=PathListBox, Path=Height}"
+							 Text="{Binding Path, Mode=OneWay}"
+							 Visibility="Hidden"
+							 KeyUp="PathTextBox_KeyUp"/>
+		</Grid>
+		<ListView Name="ItemsListView" 
+							ItemsSource="{Binding ListItems}">
 			<ListView.View>
 				<GridView>
 					<GridViewColumn Header="Name"

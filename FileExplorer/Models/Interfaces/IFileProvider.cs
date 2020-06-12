@@ -7,5 +7,7 @@ namespace FileExplorer.Models {
 		FileSystemInfo GetFileSystemInfo(string path);
 		FileInfo GetFileInfo(string path);
 		(string[], string[]) GetChildren(string path);
+		bool IsFileExists(string path);
+		bool IsDirectoryExists(string path);
 	}
 }

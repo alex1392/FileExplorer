@@ -9,6 +9,14 @@ namespace FileExplorer.Models {
 		{
 			this.dialogService = dialogService;
 		}
+		public bool IsDirectoryExists(string path)
+		{
+			return Directory.Exists(path);
+		}
+		public bool IsFileExists(string path)
+		{
+			return File.Exists(path);
+		}
 		public FileSystemInfo GetFileSystemInfo(string path)
 		{
 			FileSystemInfo info;

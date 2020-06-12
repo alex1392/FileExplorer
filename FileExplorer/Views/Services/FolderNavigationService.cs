@@ -52,7 +52,14 @@ namespace FileExplorer.Views {
 				"FolderPage" => serviceProvider.GetService<FolderPage>(),
 				_ => throw new InvalidOperationException("Cannot recognize given pageKey.")
 			};
-			page.Path = parameter.ToString();
+			// check if destination path is exist
+			var destPath = parameter.ToString();
+			var fileProvider = serviceProvider.GetService<IFileProvider>();
+			if (!fileProvider.IsDirectoryExists(destPath)) {
+				serviceProvider.GetService<IDialogService>().ShowMessage("Specified folder path does not exist.");
+				return;
+			}
+			page.Path = destPath;
 			NavigationService.Navigate(page);
 		}
 	}
