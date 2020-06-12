@@ -1,19 +1,29 @@
 ﻿using FileExplorer.Models;
 using FileExplorer.ViewModels;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace FileExplorer.Views {
+
 	/// <summary>
 	/// Interaction logic for FolderPage.xaml
 	/// </summary>
 	public partial class FolderPage : Page {
-		private FolderPageViewModel vm;
+
+		#region Private Fields
+
 		private readonly IServiceProvider serviceProvider;
 		private string path;
+		private FolderPageViewModel vm;
+
+		#endregion Private Fields
+
+		#region Public Properties
 
 		public string Path {
 			get => path;
@@ -34,29 +44,28 @@ namespace FileExplorer.Views {
 			}
 		}
 
+		#endregion Public Properties
+
+		#region Public Constructors
+
 		public FolderPage()
 		{
 			InitializeComponent();
 			this.Loaded += FolderPage_Loaded;
 		}
 
-
 		public FolderPage(IServiceProvider serviceProvider) : this()
 		{
 			this.serviceProvider = serviceProvider;
 		}
 
+		#endregion Public Constructors
+
+		#region Private Methods
+
 		private void FolderPage_Loaded(object sender, RoutedEventArgs e)
 		{
 			DataContext = Vm;
-		}
-
-		private void ListViewItem_Selected(object sender, RoutedEventArgs e)
-		{
-			if (!((sender as ListViewItem)?.DataContext is ListFolderItem folderItem)) {
-				return;
-			}
-			Vm.Navigate(folderItem);
 		}
 
 		private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
@@ -67,19 +76,30 @@ namespace FileExplorer.Views {
 			Vm.Navigate(item);
 		}
 
+		private void ListViewItem_Selected(object sender, RoutedEventArgs e)
+		{
+			if (!((sender as ListViewItem)?.DataContext is ListFolderItem folderItem)) {
+				return;
+			}
+			Vm.Navigate(folderItem);
+		}
+
 		private void PathListBox_MouseDown(object sender, MouseButtonEventArgs e)
 		{
 			if (e.ChangedButton == MouseButton.Left) {
 				PathTextBox.Visibility = Visibility.Visible;
 			}
+			// TODO: remove focus when mouse click on any other area
 		}
 
 		private void PathTextBox_KeyUp(object sender, KeyEventArgs e)
 		{
-			// TODO: remove focus 
+			// TODO: prevent this event when pressing enter on the message box
 			if (e.Key == Key.Enter) {
 				Vm.Navigate(PathTextBox.Text);
 			}
 		}
+
+		#endregion Private Methods
 	}
 }

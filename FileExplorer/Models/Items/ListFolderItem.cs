@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace FileExplorer.Models {
 
-namespace FileExplorer.Models {
 	public class ListFolderItem : ListItem {
+
+		#region Public Constructors
+
 		public ListFolderItem(string path, IFileProvider fileProvider) : base(path, fileProvider)
 		{
-
 		}
+
+		#endregion Public Constructors
 	}
 }

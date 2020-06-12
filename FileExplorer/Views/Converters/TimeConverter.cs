@@ -1,15 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Markup;
 
 namespace FileExplorer.Converters {
-	class TimeConverter : MarkupExtension, IValueConverter {
+
+	internal class TimeConverter : MarkupExtension, IValueConverter {
+
+		#region Private Fields
+
 		private static readonly TimeConverter instance = new TimeConverter();
+
+		#endregion Private Fields
+
+		#region Public Methods
+
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (value is DateTimeOffset dateTimeOffset) {
@@ -27,5 +32,7 @@ namespace FileExplorer.Converters {
 		{
 			return instance;
 		}
+
+		#endregion Public Methods
 	}
 }

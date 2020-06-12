@@ -15,7 +15,7 @@
 
 	<DockPanel>
 		<Grid DockPanel.Dock="Top">
-			<ListBox Name="PathListBox" 
+			<ListBox Name="PathListBox"
 							 ItemsSource="{Binding PathItems}"
 							 Height="32"
 							 MouseDown="PathListBox_MouseDown">
@@ -44,9 +44,9 @@
 							 Height="{Binding ElementName=PathListBox, Path=Height}"
 							 Text="{Binding Path, Mode=OneWay}"
 							 Visibility="Hidden"
-							 KeyUp="PathTextBox_KeyUp"/>
+							 KeyUp="PathTextBox_KeyUp" />
 		</Grid>
-		<ListView Name="ItemsListView" 
+		<ListView Name="ItemsListView"
 							ItemsSource="{Binding ListItems}">
 			<ListView.View>
 				<GridView>

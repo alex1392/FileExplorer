@@ -1,16 +1,24 @@
-﻿using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
+﻿using System.Linq;
 
 namespace FileExplorer.Models {
+
 	public class Item {
+
+		#region Protected Fields
+
 		protected IFileProvider fileProvider;
-		public string Path { get; private set; }
+
+		#endregion Protected Fields
+
+		#region Public Properties
+
 		public string Name { get; private set; }
-		
+		public string Path { get; private set; }
+
+		#endregion Public Properties
+
+		#region Public Constructors
+
 		public Item(string path, IFileProvider fileProvider)
 		{
 			this.fileProvider = fileProvider;
@@ -22,5 +30,7 @@ namespace FileExplorer.Models {
 			Name = info.Name;
 			Path = info.FullName;
 		}
+
+		#endregion Public Constructors
 	}
 }

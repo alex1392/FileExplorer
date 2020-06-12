@@ -1,19 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Markup;
 
 namespace FileExplorer.Converters {
-	class SizeConverter : MarkupExtension, IValueConverter {
+
+	internal class SizeConverter : MarkupExtension, IValueConverter {
+
+		#region Private Fields
+
 		private static readonly SizeConverter instance = new SizeConverter();
+
 		private static readonly string[] Units = new string[]
 		{
 			"Byte", "KB", "MB", "GB", "TB"
 		};
+
+		#endregion Private Fields
+
+		#region Public Methods
+
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			double size = (long)value;
@@ -34,5 +40,7 @@ namespace FileExplorer.Converters {
 		{
 			return instance;
 		}
+
+		#endregion Public Methods
 	}
 }

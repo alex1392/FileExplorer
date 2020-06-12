@@ -1,19 +1,21 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+﻿namespace FileExplorer.Models {
 
-namespace FileExplorer.Models {
 	public class ListFileItem : ListItem {
+
+		#region Public Properties
+
 		public long Size { get; set; }
-		public string Extension { get; set; }
+
+		#endregion Public Properties
+
+		#region Public Constructors
 
 		public ListFileItem(string path, IFileProvider fileProvider) : base(path, fileProvider)
 		{
 			var info = fileProvider.GetFileInfo(path);
 			Size = info.Length;
-			Extension = info.Extension;
 		}
+
+		#endregion Public Constructors
 	}
 }

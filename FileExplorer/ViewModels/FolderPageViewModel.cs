@@ -1,23 +1,34 @@
 ﻿using FileExplorer.DataVirtualization;
 using FileExplorer.Models;
-using System;
+
 using System.Collections.Generic;
 using System.ComponentModel;
-using IO = System.IO;
 using System.Linq;
 
+using IO = System.IO;
+
 namespace FileExplorer.ViewModels {
+
 	public class FolderPageViewModel : INotifyPropertyChanged {
-		private readonly FolderChildrenProvider folderChildrenProvider;
+
+		#region Private Fields
+
 		private readonly IFileProvider fileProvider;
+		private readonly FolderChildrenProvider folderChildrenProvider;
 		private readonly IFolderNavigationService folderNavigationService;
 		private string path;
 
+		#endregion Private Fields
+
+		#region Public Events
+
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		public VirtualizingCollection<Item> ListItems { get; private set; }
+		#endregion Public Events
 
-		public IEnumerable<Item> PathItems { get; private set; }
+		#region Public Properties
+
+		public VirtualizingCollection<Item> ListItems { get; private set; }
 
 		/// <summary>
 		/// Property injection
@@ -44,14 +55,18 @@ namespace FileExplorer.ViewModels {
 			}
 		}
 
+		public IEnumerable<Item> PathItems { get; private set; }
 		public string Title { get; set; }
+
+		#endregion Public Properties
+
+		#region Public Constructors
 
 		/// <summary>
 		/// for xaml designer
 		/// </summary>
 		public FolderPageViewModel()
 		{
-
 		}
 
 		public FolderPageViewModel(FolderChildrenProvider folderChildrenProvider, IFileProvider fileProvider, IFolderNavigationService folderNavigationService)
@@ -60,6 +75,10 @@ namespace FileExplorer.ViewModels {
 			this.fileProvider = fileProvider;
 			this.folderNavigationService = folderNavigationService;
 		}
+
+		#endregion Public Constructors
+
+		#region Public Methods
 
 		public void Navigate(ListFolderItem folderItem)
 		{
@@ -75,6 +94,11 @@ namespace FileExplorer.ViewModels {
 		{
 			folderNavigationService.Navigate("FolderPage", path);
 		}
+
+		#endregion Public Methods
+
+		#region Private Methods
+
 		private IEnumerable<Item> GetPathItems(string path)
 		{
 			var parents = path.Split(IO::Path.DirectorySeparatorChar).Where(s => !string.IsNullOrEmpty(s)).ToList();
@@ -85,5 +109,6 @@ namespace FileExplorer.ViewModels {
 			return paths.Select(path => new Item(path, fileProvider));
 		}
 
+		#endregion Private Methods
 	}
 }

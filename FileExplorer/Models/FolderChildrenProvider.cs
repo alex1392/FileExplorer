@@ -1,15 +1,24 @@
 ﻿using FileExplorer.DataVirtualization;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace FileExplorer.Models {
+
 	public class FolderChildrenProvider : IItemsProvider<Item> {
-		private string[] folderPaths;
+
+		#region Private Fields
+
+		private readonly IFileProvider fileProvider;
 		private string[] filePaths;
+		private string[] folderPaths;
 		private bool IsChildrenPathsLoaded;
 		private string path;
-		private readonly IFileProvider fileProvider;
+
+		#endregion Private Fields
+
+		#region Public Properties
 
 		public string Path {
 			get => path;
@@ -22,22 +31,18 @@ namespace FileExplorer.Models {
 			}
 		}
 
+		#endregion Public Properties
+
+		#region Public Constructors
+
 		public FolderChildrenProvider(IFileProvider fileProvider)
 		{
 			this.fileProvider = fileProvider;
 		}
 
-		private void LoadChildrenPaths()
-		{
-			if (path == null) {
-				throw new InvalidOperationException("Folder Path has not been set.");
-			}
-			if (IsChildrenPathsLoaded) {
-				return;
-			}
-			(folderPaths, filePaths) = fileProvider.GetChildren(path);
-			IsChildrenPathsLoaded = true;
-		}
+		#endregion Public Constructors
+
+		#region Public Methods
 
 		public int FetchCount()
 		{
@@ -57,5 +62,23 @@ namespace FileExplorer.Models {
 					   .Select(path => new ListFileItem(path, fileProvider)))
 			   .ToList();
 		}
+
+		#endregion Public Methods
+
+		#region Private Methods
+
+		private void LoadChildrenPaths()
+		{
+			if (path == null) {
+				throw new InvalidOperationException("Folder Path has not been set.");
+			}
+			if (IsChildrenPathsLoaded) {
+				return;
+			}
+			(folderPaths, filePaths) = fileProvider.GetChildren(path);
+			IsChildrenPathsLoaded = true;
+		}
+
+		#endregion Private Methods
 	}
 }

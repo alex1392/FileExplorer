@@ -2,21 +2,62 @@
 using System.IO;
 
 namespace FileExplorer.Models {
-	class FileProvider : IFileProvider {
+
+	internal class FileProvider : IFileProvider {
+
+		#region Private Fields
+
 		private readonly IDialogService dialogService;
+
+		#endregion Private Fields
+
+		#region Public Constructors
 
 		public FileProvider(IDialogService dialogService)
 		{
 			this.dialogService = dialogService;
 		}
-		public bool IsDirectoryExists(string path)
+
+		#endregion Public Constructors
+
+		#region Public Methods
+
+		public (string[], string[]) GetChildren(string path)
 		{
-			return Directory.Exists(path);
+			try {
+				return (Directory.GetDirectories(path), Directory.GetFiles(path));
+			} catch (UnauthorizedAccessException ex) {
+				// TODO: why the fuck a messageBox can cause error???
+				//dialogService.ShowMessage(ex.Message);
+				return (null, null);
+			}
 		}
-		public bool IsFileExists(string path)
+
+		public string[] GetDirectories(string path)
 		{
-			return File.Exists(path);
+			try {
+				return Directory.GetDirectories(path);
+			} catch (UnauthorizedAccessException ex) {
+				//dialogService.ShowMessage(ex.Message);
+				return null;
+			}
 		}
+
+		public FileInfo GetFileInfo(string path)
+		{
+			return new FileInfo(path);
+		}
+
+		public string[] GetFiles(string path)
+		{
+			try {
+				return Directory.GetFiles(path);
+			} catch (UnauthorizedAccessException ex) {
+				//dialogService.ShowMessage(ex.Message);
+				return null;
+			}
+		}
+
 		public FileSystemInfo GetFileSystemInfo(string path)
 		{
 			FileSystemInfo info;
@@ -29,38 +70,17 @@ namespace FileExplorer.Models {
 			}
 			return info;
 		}
-		public FileInfo GetFileInfo(string path)
-		{
-			return new FileInfo(path);
-		}
-		public string[] GetDirectories(string path)
-		{
-			try {
-				return Directory.GetDirectories(path);
-			} catch (UnauthorizedAccessException ex) {
-				//dialogService.ShowMessage(ex.Message);
-				return null;
-			}
-		}
-		public string[] GetFiles(string path)
-		{
-			try {
-				return Directory.GetFiles(path);
 
-			} catch (UnauthorizedAccessException ex) {
-				//dialogService.ShowMessage(ex.Message);
-				return null;
-			}
-		}
-		public (string[], string[]) GetChildren(string path)
+		public bool IsDirectoryExists(string path)
 		{
-			try {
-				return (Directory.GetDirectories(path), Directory.GetFiles(path));
-			} catch (UnauthorizedAccessException ex) {
-				// TODO: why the fuck a messageBox can cause error???
-				//dialogService.ShowMessage(ex.Message);
-				return (null, null);
-			}
+			return Directory.Exists(path);
 		}
+
+		public bool IsFileExists(string path)
+		{
+			return File.Exists(path);
+		}
+
+		#endregion Public Methods
 	}
 }

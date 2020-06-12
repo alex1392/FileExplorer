@@ -1,33 +1,40 @@
 ﻿using FileExplorer.Models;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Navigation;
 
 namespace FileExplorer.Views {
+
 	public class FolderNavigationService : IFolderNavigationService {
+
+		#region Private Fields
+
 		private readonly IServiceProvider serviceProvider;
 		private NavigationService navigationService;
 
+		#endregion Private Fields
+
+		#region Public Properties
+
 		// set navigation service when the first time you get it
-		public NavigationService NavigationService => 
-			navigationService ?? 
+		public NavigationService NavigationService =>
+			navigationService ??
 			(navigationService = serviceProvider.GetService<MainWindow>().FolderFrame.NavigationService);
+
+		#endregion Public Properties
+
+		#region Public Constructors
 
 		public FolderNavigationService(IServiceProvider serviceProvider)
 		{
 			this.serviceProvider = serviceProvider;
 		}
 
-		private void EnsureServiceInjected()
-		{
-			if (NavigationService == null) {
-				throw new InvalidOperationException("Navigation service has not been set.");
-			}
-		}
+		#endregion Public Constructors
+
+		#region Public Methods
 
 		public void GoBack()
 		{
@@ -48,7 +55,8 @@ namespace FileExplorer.Views {
 		public void Navigate(string pageKey, object parameter)
 		{
 			EnsureServiceInjected();
-			var page = pageKey switch {
+			var page = pageKey switch
+			{
 				"FolderPage" => serviceProvider.GetService<FolderPage>(),
 				_ => throw new InvalidOperationException("Cannot recognize given pageKey.")
 			};
@@ -62,5 +70,18 @@ namespace FileExplorer.Views {
 			page.Path = destPath;
 			NavigationService.Navigate(page);
 		}
+
+		#endregion Public Methods
+
+		#region Private Methods
+
+		private void EnsureServiceInjected()
+		{
+			if (NavigationService == null) {
+				throw new InvalidOperationException("Navigation service has not been set.");
+			}
+		}
+
+		#endregion Private Methods
 	}
 }

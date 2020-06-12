@@ -1,16 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Markup;
 
 namespace FileExplorer.Converters {
+
 	public class DebugConverter : MarkupExtension, IValueConverter {
+
+		#region Private Fields
+
 		private static readonly DebugConverter instance = new DebugConverter();
+
+		#endregion Private Fields
+
+		#region Public Methods
+
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			Debugger.Break();
@@ -27,5 +32,7 @@ namespace FileExplorer.Converters {
 		{
 			return instance;
 		}
+
+		#endregion Public Methods
 	}
 }

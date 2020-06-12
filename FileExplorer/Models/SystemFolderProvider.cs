@@ -2,15 +2,21 @@
 using System.IO;
 
 namespace FileExplorer.Models {
-	class SystemFolderProvider : ISystemFolderProvider {
+
+	internal class SystemFolderProvider : ISystemFolderProvider {
+
+		#region Public Methods
+
+		public string[] GetLogicalDrives()
+		{
+			return Directory.GetLogicalDrives();
+		}
 
 		public string GetRecentFolder()
 		{
 			return Environment.GetFolderPath(Environment.SpecialFolder.Recent);
 		}
-		public string[] GetLogicalDrives()
-		{
-			return Directory.GetLogicalDrives();
-		}
+
+		#endregion Public Methods
 	}
 }

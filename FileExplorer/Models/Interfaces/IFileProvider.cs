@@ -1,13 +1,25 @@
 ﻿using System.IO;
 
 namespace FileExplorer.Models {
+
 	public interface IFileProvider {
-		string[] GetFiles(string path);
-		string[] GetDirectories(string path);
-		FileSystemInfo GetFileSystemInfo(string path);
-		FileInfo GetFileInfo(string path);
+
+		#region Public Methods
+
 		(string[], string[]) GetChildren(string path);
-		bool IsFileExists(string path);
+
+		string[] GetDirectories(string path);
+
+		FileInfo GetFileInfo(string path);
+
+		string[] GetFiles(string path);
+
+		FileSystemInfo GetFileSystemInfo(string path);
+
 		bool IsDirectoryExists(string path);
+
+		bool IsFileExists(string path);
+
+		#endregion Public Methods
 	}
 }
