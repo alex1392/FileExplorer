@@ -3,10 +3,10 @@ using FileExplorer.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using IO = System.IO;
 using System.Linq;
 
 namespace FileExplorer.ViewModels {
-
 	public class FolderPageViewModel : INotifyPropertyChanged {
 		private readonly FolderChildrenProvider folderChildrenProvider;
 		private readonly IFileProvider fileProvider;
@@ -17,7 +17,7 @@ namespace FileExplorer.ViewModels {
 
 		public VirtualizingCollection<Item> ListItems { get; private set; }
 
-		public IEnumerable<string> PathItems { get; private set; }
+		public IEnumerable<Item> PathItems { get; private set; }
 
 		/// <summary>
 		/// Property injection
@@ -35,8 +35,7 @@ namespace FileExplorer.ViewModels {
 				ListItems = new VirtualizingCollection<Item>(folderChildrenProvider, 20);
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ListItems)));
 
-				// TODO: set full path for each pathItems
-				PathItems = path.Split(System.IO.Path.DirectorySeparatorChar).Where(s => !string.IsNullOrEmpty(s));
+				PathItems = GetPathItems(path);
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PathItems)));
 
 				var info = fileProvider.GetFileSystemInfo(path);
@@ -67,9 +66,23 @@ namespace FileExplorer.ViewModels {
 			folderNavigationService.Navigate("FolderPage", folderItem.Path);
 		}
 
+		public void Navigate(Item pathItem)
+		{
+			folderNavigationService.Navigate("FolderPage", pathItem.Path);
+		}
+
 		public void Navigate(string path)
 		{
 			folderNavigationService.Navigate("FolderPage", path);
+		}
+		private IEnumerable<Item> GetPathItems(string path)
+		{
+			var parents = path.Split(IO::Path.DirectorySeparatorChar).Where(s => !string.IsNullOrEmpty(s)).ToList();
+			var paths = new string[parents.Count];
+			for (var i = 0; i < parents.Count; i++) {
+				paths[i] = string.Join(IO::Path.DirectorySeparatorChar.ToString(), parents.Take(i + 1));
+			}
+			return paths.Select(path => new Item(path, fileProvider));
 		}
 
 	}

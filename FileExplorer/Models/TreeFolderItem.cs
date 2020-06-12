@@ -16,6 +16,11 @@ namespace FileExplorer.Models {
 		};
 
 		/// <summary>
+		/// Allow customized icon
+		/// </summary>
+		public virtual ImageSource Icon { get; protected set; }
+
+		/// <summary>
 		/// Root constructor
 		/// </summary>
 		public TreeFolderItem(string path, IFileProvider fileProvider) : base(path, fileProvider)
@@ -30,12 +35,6 @@ namespace FileExplorer.Models {
 		{
 			Icon = icon;
 		}
-		/// <summary>
-		/// Child constructor
-		/// </summary>
-		public TreeFolderItem(string path, TreeFolderItem parent) : base(path, parent)
-		{
-		}
 
 		public void LoadSubFolders()
 		{
@@ -44,7 +43,7 @@ namespace FileExplorer.Models {
 			}
 			SubFolders.Clear();
 			folderPaths = fileProvider.GetDirectories(Path);
-			SubFolders.AddRange(folderPaths.Select(path => new TreeFolderItem(path, this)));
+			SubFolders.AddRange(folderPaths.Select(path => new TreeFolderItem(path, fileProvider)));
 			HasExpanded = true;
 		}
 	}

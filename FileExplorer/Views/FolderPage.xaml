@@ -18,10 +18,9 @@
 						 DockPanel.Dock="Top"
 						 Height="32">
 			<ListBox.ItemTemplate>
-				<DataTemplate>
+				<DataTemplate DataType="{x:Type model:Item}">
 					<StackPanel Orientation="Horizontal">
-						<!--TODO: pathItem path name converter-->
-						<TextBlock Text="{Binding }"
+						<TextBlock Text="{Binding Name}"
 											 VerticalAlignment="Center"
 											 Margin="3" />
 					</StackPanel>

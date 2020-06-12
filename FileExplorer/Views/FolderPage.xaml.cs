@@ -60,10 +60,10 @@ namespace FileExplorer.Views {
 
 		private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
 		{
-			if (!((sender as ListBoxItem)?.DataContext is string path)) {
+			if (!((sender as ListBoxItem)?.DataContext is Item item)) {
 				return;
 			}
-			Vm.Navigate(path);
+			Vm.Navigate(item);
 		}
 	}
 }
