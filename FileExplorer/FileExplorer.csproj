@@ -80,22 +80,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Models\IDialogService.cs" />
-    <Compile Include="Models\ListFolderItem.cs" />
-    <Compile Include="Models\ListItem.cs" />
-    <Compile Include="ViewModels\FolderChildrenProvider.cs" />
+    <Compile Include="Models\Interfaces\IDialogService.cs" />
+    <Compile Include="Models\Items\ListFolderItem.cs" />
+    <Compile Include="Models\Items\ListItem.cs" />
+    <Compile Include="Models\FolderChildrenProvider.cs" />
     <Compile Include="ViewModels\FolderPageViewModel.cs" />
-    <Compile Include="Models\INavigationService.cs" />
+    <Compile Include="Models\Interfaces\INavigationService.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\Converters\DebugConverter.cs" />
     <Compile Include="Views\Converters\FileTypeConverter.cs" />
     <Compile Include="Views\Converters\SizeConverter.cs" />
     <Compile Include="Views\Converters\TimeConverter.cs" />
     <Compile Include="DataVirtualization\VirtualizingCollection.cs" />
-    <Compile Include="Models\ISystemFolderProvider.cs" />
+    <Compile Include="Models\Interfaces\ISystemFolderProvider.cs" />
     <Compile Include="Models\SystemFolderProvider.cs" />
-    <Compile Include="Views\DialogService.cs" />
-    <Compile Include="Views\FolderNavigationService.cs" />
+    <Compile Include="Views\Services\DialogService.cs" />
+    <Compile Include="Views\Services\FolderNavigationService.cs" />
     <Compile Include="Views\FolderPage.xaml.cs">
       <DependentUpon>FolderPage.xaml</DependentUpon>
     </Compile>
@@ -112,12 +112,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataVirtualization\IItemsProvider.cs" />
-    <Compile Include="Models\ListFileItem.cs" />
+    <Compile Include="Models\Items\ListFileItem.cs" />
     <Compile Include="Models\FileProvider.cs" />
-    <Compile Include="Models\TreeFolderItem.cs" />
+    <Compile Include="Models\Items\TreeFolderItem.cs" />
     <Compile Include="Views\Converters\IconConverter.cs" />
-    <Compile Include="Models\IFileProvider.cs" />
-    <Compile Include="Models\Item.cs" />
+    <Compile Include="Models\Interfaces\IFileProvider.cs" />
+    <Compile Include="Models\Items\Item.cs" />
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>

@@ -1,10 +1,9 @@
 ﻿using FileExplorer.DataVirtualization;
-using FileExplorer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FileExplorer.ViewModels {
+namespace FileExplorer.Models {
 	public class FolderChildrenProvider : IItemsProvider<Item> {
 		private string[] folderPaths;
 		private string[] filePaths;
