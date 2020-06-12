@@ -64,12 +64,12 @@ namespace FileExplorer.ViewModels {
 
 		public void Navigate(ListFolderItem folderItem)
 		{
-			folderNavigationService.Navigate(folderItem.Path);
+			folderNavigationService.Navigate("FolderPage", folderItem.Path);
 		}
 
 		public void Navigate(string path)
 		{
-			folderNavigationService.Navigate(path);
+			folderNavigationService.Navigate("FolderPage", path);
 		}
 
 	}

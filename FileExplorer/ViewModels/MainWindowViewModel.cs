@@ -43,7 +43,7 @@ namespace FileExplorer.ViewModels {
 
 		public void Navigate(TreeFolderItem folderItem)
 		{
-			folderNavigationService.Navigate(folderItem.Path);
+			folderNavigationService.Navigate("FolderPage", folderItem.Path);
 		}
 	}
 }

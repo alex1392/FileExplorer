@@ -44,15 +44,15 @@ namespace FileExplorer.Views {
 				NavigationService.GoForward();
 			}
 		}
-		/// <summary>
-		/// TODO: change to (string pageKey, object parameter)
-		/// </summary>
-		/// <param name="key"></param>
-		public void Navigate(string key)
+
+		public void Navigate(string pageKey, object parameter)
 		{
 			EnsureServiceInjected();
-			var page = serviceProvider.GetService<FolderPage>();
-			page.Path = key;
+			var page = pageKey switch {
+				"FolderPage" => serviceProvider.GetService<FolderPage>(),
+				_ => throw new InvalidOperationException("Cannot recognize given pageKey.")
+			};
+			page.Path = parameter.ToString();
 			NavigationService.Navigate(page);
 		}
 	}
