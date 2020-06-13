@@ -48,7 +48,7 @@ namespace FileExplorer.ViewModels {
 
 				SetupListItems(path);
 
-				// TODO: is title corrent??
+				// TODO: is title correct??
 				var info = fileProvider.GetFileSystemInfo(path);
 				Title = info.Name;
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Title)));

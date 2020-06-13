@@ -73,7 +73,7 @@
 				</TreeView.ItemContainerStyle>
 			</TreeView>
 			<Frame Name="FolderFrame"
-						 NavigationUIVisibility="Hidden"
+						 NavigationUIVisibility="Visible"
 						 Source="/FileExplorer;component/Views/HomePage.xaml" />
 		</DockPanel>
 	</Grid>
