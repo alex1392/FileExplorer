@@ -66,6 +66,9 @@ namespace FileExplorer.ViewModels {
 
 		private IEnumerable<Item> GetPathItems(string path)
 		{
+			if (path == null) {
+				return null;
+			}
 			var parents = path.Split(Path.DirectorySeparatorChar).Where(s => !string.IsNullOrEmpty(s)).ToList();
 			var paths = new string[parents.Count];
 			for (var i = 0; i < parents.Count; i++) {
