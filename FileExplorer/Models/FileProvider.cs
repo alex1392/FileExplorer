@@ -22,6 +22,11 @@ namespace FileExplorer.Models {
 
 		#region Public Methods
 
+		public string GetParent(string path)
+		{
+			return Path.GetDirectoryName(path);
+		}
+
 		public (string[], string[]) GetChildren(string path)
 		{
 			try {

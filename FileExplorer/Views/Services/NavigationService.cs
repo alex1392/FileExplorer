@@ -14,7 +14,8 @@ namespace FileExplorer.Views {
 		#region Private Fields
 
 		private readonly IServiceProvider serviceProvider;
-		private Navigation::NavigationService navigationService;
+		private readonly IFileProvider fileProvider;
+		private Navigation::NavigationService wpfNavigationService;
 
 		#endregion Private Fields
 
@@ -26,15 +27,15 @@ namespace FileExplorer.Views {
 		// set navigation service when the first time you get it
 		public Navigation::NavigationService WpfNavigationService {
 			get {
-				if (navigationService != null) {
-					return navigationService;
+				if (wpfNavigationService != null) {
+					return wpfNavigationService;
 				}
-				navigationService = serviceProvider.GetService<MainWindow>().FolderFrame.NavigationService;
+				wpfNavigationService = serviceProvider.GetService<MainWindow>().FolderFrame.NavigationService;
 				// propagate navigated event
-				navigationService.Navigated += (sender, e) => {
+				wpfNavigationService.Navigated += (sender, e) => {
 					Navigated?.Invoke(sender, (e.Content as FolderPage)?.Path);
 				};
-				return navigationService;
+				return wpfNavigationService;
 			}
 		}
 
@@ -50,31 +51,59 @@ namespace FileExplorer.Views {
 				WpfNavigationService.Content = value;
 			}
 		}
+		public bool CanGoBack => WpfNavigationService.CanGoBack;
+		public bool CanGoForward => WpfNavigationService.CanGoForward;
+
+		public bool CanGoUp {
+			get {
+				if (GetParentPath() == null) {
+					return false;
+				}
+				return true;
+			}
+		}
+
+		private string GetParentPath()
+		{
+			if (!(Content is FolderPage folderPage)) {
+				return null;
+			}
+			var path = folderPage.Path;
+			return fileProvider.GetParent(path);
+		}
+
 
 		#endregion Public Properties
 
 		#region Public Constructors
 
-		public NavigationService(IServiceProvider serviceProvider)
+		public NavigationService(IServiceProvider serviceProvider, IFileProvider fileProvider)
 		{
 			this.serviceProvider = serviceProvider;
+			this.fileProvider = fileProvider;
 		}
 
 		#endregion Public Constructors
 
 		#region Public Methods
+		public void Refresh()
+		{
+			WpfNavigationService.Refresh();
+		}
 		public void GoBack()
 		{
-			if (WpfNavigationService.CanGoBack) {
-				WpfNavigationService.GoBack();
+			if (!WpfNavigationService.CanGoBack) {
+				return;
 			}
+			WpfNavigationService.GoBack();
 		}
 
 		public void GoForward()
 		{
-			if (WpfNavigationService.CanGoForward) {
-				WpfNavigationService.GoForward();
+			if (!WpfNavigationService.CanGoForward) {
+				return;
 			}
+			WpfNavigationService.GoForward();
 		}
 
 		public void Navigate(string pageKey, string path)
@@ -93,6 +122,17 @@ namespace FileExplorer.Views {
 			}
 			page.Path = path;
 			WpfNavigationService.Navigate(page);
+		}
+
+		public void GoUp()
+		{
+			if (!CanGoUp) {
+				return;
+			}
+			var parentPath = GetParentPath();
+			var parentFolderPage = serviceProvider.GetService<FolderPage>();
+			parentFolderPage.Path = parentPath;
+			WpfNavigationService.Navigate(parentFolderPage);
 		}
 
 		#endregion Public Methods

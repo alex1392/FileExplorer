@@ -8,6 +8,7 @@
 								 xmlns:model="clr-namespace:FileExplorer.Models"
 								 xmlns:vm="clr-namespace:FileExplorer.ViewModels"
 								 xmlns:fd="clr-namespace:Cyc.FluentDesign;assembly=Cyc.FluentDesign"
+								 xmlns:fa="http://schemas.fontawesome.io/icons/"
 								 mc:Ignorable="d"
 								 d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel, IsDesignTimeCreatable=True}"
 								 Icon="/FileExplorer;component/Resources/Computer.ico"
@@ -16,38 +17,66 @@
 								 Width="800">
 	<Grid>
 		<DockPanel>
-			<Grid DockPanel.Dock="Top">
-				<ListBox Name="PathListBox"
-								 ItemsSource="{Binding PathItems}"
-								 Height="32"
-								 MouseDown="PathListBox_MouseDown">
-					<ListBox.ItemTemplate>
-						<DataTemplate DataType="{x:Type model:Item}">
-							<StackPanel Orientation="Horizontal">
-								<TextBlock Text="{Binding Name}"
-													 VerticalAlignment="Center"
-													 Margin="3" />
-							</StackPanel>
-						</DataTemplate>
-					</ListBox.ItemTemplate>
-					<ListBox.ItemContainerStyle>
-						<Style TargetType="ListBoxItem">
-							<EventSetter Event="Selected"
-													 Handler="ListBoxItem_Selected" />
-						</Style>
-					</ListBox.ItemContainerStyle>
-					<ListBox.ItemsPanel>
-						<ItemsPanelTemplate>
-							<StackPanel Orientation="Horizontal" />
-						</ItemsPanelTemplate>
-					</ListBox.ItemsPanel>
-				</ListBox>
-				<TextBox Name="PathTextBox"
-								 Height="{Binding ElementName=PathListBox, Path=Height}"
-								 Text="{Binding Path, Mode=OneWay}"
-								 Visibility="Hidden"
-								 KeyUp="PathTextBox_KeyUp" />
-			</Grid>
+			<StackPanel DockPanel.Dock="Top"
+									Orientation="Horizontal"
+									Background="White">
+				<Button Height="20"
+								Command="{Binding GoBackCommand}">
+					<fa:ImageAwesome Icon="ArrowLeft" />
+				</Button>
+				<Button Height="20"
+								Command="{Binding GoForwardCommand}">
+					<fa:ImageAwesome Icon="ArrowRight" />
+				</Button>
+				<Button Width="15"
+								Height="10"
+								Command="{Binding }">
+					<fa:ImageAwesome Icon="ChevronDown" />
+				</Button>
+				<Button Height="20"
+								Command="{Binding GoUpCommand}">
+					<fa:ImageAwesome Icon="ArrowUp" />
+				</Button>
+				<Button Height="20"
+								Command="{Binding RefreshCommand}">
+					<fa:ImageAwesome Icon="Refresh" />
+				</Button>
+
+				<Border BorderBrush="Black">
+					<Grid>
+						<ListBox Name="PathListBox"
+										 ItemsSource="{Binding PathItems}"
+										 Height="32"
+										 MouseDown="PathListBox_MouseDown">
+							<ListBox.ItemTemplate>
+								<DataTemplate DataType="{x:Type model:Item}">
+									<StackPanel Orientation="Horizontal">
+										<TextBlock Text="{Binding Name}"
+															 VerticalAlignment="Center"
+															 Margin="3" />
+									</StackPanel>
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+							<ListBox.ItemContainerStyle>
+								<Style TargetType="ListBoxItem">
+									<EventSetter Event="Selected"
+															 Handler="ListBoxItem_Selected" />
+								</Style>
+							</ListBox.ItemContainerStyle>
+							<ListBox.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Horizontal" />
+								</ItemsPanelTemplate>
+							</ListBox.ItemsPanel>
+						</ListBox>
+						<TextBox Name="PathTextBox"
+										 Height="{Binding ElementName=PathListBox, Path=Height}"
+										 Text="{Binding Path, Mode=OneWay}"
+										 Visibility="Hidden"
+										 KeyUp="PathTextBox_KeyUp" />
+					</Grid>
+				</Border>
+			</StackPanel>
 			<TreeView DockPanel.Dock="Left"
 								ItemsSource="{Binding TreeItems}"
 								Width="150">
@@ -73,7 +102,7 @@
 				</TreeView.ItemContainerStyle>
 			</TreeView>
 			<Frame Name="FolderFrame"
-						 NavigationUIVisibility="Visible"
+						 NavigationUIVisibility="Hidden"
 						 Source="/FileExplorer;component/Views/HomePage.xaml" />
 		</DockPanel>
 	</Grid>

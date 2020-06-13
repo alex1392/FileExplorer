@@ -15,7 +15,7 @@ namespace FileExplorer.Models {
 		string[] GetFiles(string path);
 
 		FileSystemInfo GetFileSystemInfo(string path);
-
+		string GetParent(string path);
 		bool IsDirectoryExists(string path);
 
 		bool IsFileExists(string path);

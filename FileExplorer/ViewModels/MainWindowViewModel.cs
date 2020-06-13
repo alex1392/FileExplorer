@@ -6,12 +6,14 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 
 namespace FileExplorer.ViewModels {
 
 	public class MainWindowViewModel : INotifyPropertyChanged {
+		private readonly ISystemFolderProvider systemFolderProvider;
 
 		#region Private Fields
 
@@ -30,6 +32,11 @@ namespace FileExplorer.ViewModels {
 
 		public ObservableCollection<TreeFolderItem> TreeItems { get; set; } = new ObservableCollection<TreeFolderItem>();
 
+		public ICommand	GoBackCommand { get; set; }
+		public ICommand	GoForwardCommand { get; set; }
+		public ICommand	GoUpCommand { get; set; }
+		public ICommand	RefreshCommand { get; set; }
+
 		#endregion Public Properties
 
 		#region Public Constructors
@@ -43,10 +50,20 @@ namespace FileExplorer.ViewModels {
 
 		public MainWindowViewModel(ISystemFolderProvider systemFolderProvider, INavigationService navigationService, IServiceProvider serviceProvider)
 		{
+			this.systemFolderProvider = systemFolderProvider;
 			this.navigationService = navigationService;
 			this.serviceProvider = serviceProvider;
 			navigationService.Navigated += NavigationService_Navigated;
 
+			GoBackCommand = new GoBackCommand(navigationService);
+			GoForwardCommand = new GoForwardCommand(navigationService);
+			RefreshCommand = new RefreshCommand(navigationService);
+			GoUpCommand = new GoUpCommand(navigationService);
+			SetupTreeItems();
+		}
+
+		private void SetupTreeItems()
+		{
 			var drivePaths = systemFolderProvider.GetLogicalDrives();
 			var driveIcon = new BitmapImage(new Uri(Path.Combine(App.PackUri, "Resources/Drive.ico")));
 			foreach (var drivePath in drivePaths) {
@@ -104,5 +121,98 @@ namespace FileExplorer.ViewModels {
 		}
 
 		#endregion Public Methods
+	}
+
+	internal class GoUpCommand : ICommand {
+		private INavigationService navigationService;
+
+		public GoUpCommand(INavigationService navigationService)
+		{
+			this.navigationService = navigationService;
+			navigationService.Navigated += (sender, e) => {
+				CanExecuteChanged?.Invoke(this, null);
+			};
+		}
+
+		public event EventHandler CanExecuteChanged;
+
+		public bool CanExecute(object parameter)
+		{
+			return navigationService.CanGoUp;
+		}
+
+		public void Execute(object parameter)
+		{
+			navigationService.GoUp();
+		}
+	}
+
+	internal class RefreshCommand : ICommand {
+		private INavigationService navigationService;
+
+		public RefreshCommand(INavigationService navigationService)
+		{
+			this.navigationService = navigationService;
+		}
+
+		public event EventHandler CanExecuteChanged;
+
+		public bool CanExecute(object parameter)
+		{
+			return true;
+		}
+
+		public void Execute(object parameter)
+		{
+			navigationService.Refresh();
+		}
+	}
+
+	internal class GoForwardCommand : ICommand {
+		private INavigationService navigationService;
+
+		public GoForwardCommand(INavigationService navigationService)
+		{
+			this.navigationService = navigationService;
+			navigationService.Navigated += (sender, e) => {
+				CanExecuteChanged?.Invoke(this, null);
+			};
+		}
+
+		public event EventHandler CanExecuteChanged;
+
+		public bool CanExecute(object parameter)
+		{
+			return navigationService.CanGoForward;
+		}
+
+		public void Execute(object parameter)
+		{
+			navigationService.GoForward();
+		}
+	}
+
+	internal class GoBackCommand : ICommand {
+		private readonly INavigationService navigationService;
+
+		public event EventHandler CanExecuteChanged;
+
+		public GoBackCommand(INavigationService navigationService)
+		{
+			this.navigationService = navigationService;
+			navigationService.Navigated += (sender, e) => {
+				CanExecuteChanged?.Invoke(this, null);
+			};
+		}
+
+		public bool CanExecute(object parameter)
+		{
+			return navigationService.CanGoBack;
+		}
+
+		public void Execute(object parameter)
+		{
+			navigationService.GoBack();
+		}
 	}
 }

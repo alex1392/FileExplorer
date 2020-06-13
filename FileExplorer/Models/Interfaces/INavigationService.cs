@@ -9,6 +9,9 @@ namespace FileExplorer.Models {
 		/// Get or set the current content.
 		/// </summary>
 		object Content { get; set; }
+		bool CanGoBack { get; }
+		bool CanGoForward { get; }
+		bool CanGoUp { get; }
 
 		/// <summary>
 		/// Raised when navigation process completed, pass the destination path as event argument.
@@ -27,6 +30,8 @@ namespace FileExplorer.Models {
 		/// <param name="pageKey">A string indicates which page will be navigated to.</param>
 		/// <param name="path">The folder path to be navigated.</param>
 		void Navigate(string pageKey, string path);
+		void Refresh();
+		void GoUp();
 
 		#endregion Public Methods
 	}
