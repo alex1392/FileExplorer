@@ -4,7 +4,7 @@ using System.Windows.Navigation;
 
 namespace FileExplorer.Models {
 
-	public interface IFolderNavigationService {
+	public interface INavigationService {
 		/// <summary>
 		/// Get or set the current content.
 		/// </summary>

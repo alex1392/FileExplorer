@@ -5,16 +5,16 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.ComponentModel;
 using System.Windows.Controls;
-using System.Windows.Navigation;
+using Navigation = System.Windows.Navigation;
 
 namespace FileExplorer.Views {
 
-	public class FolderNavigationService : IFolderNavigationService {
+	public class NavigationService : INavigationService {
 
 		#region Private Fields
 
 		private readonly IServiceProvider serviceProvider;
-		private NavigationService navigationService;
+		private Navigation::NavigationService navigationService;
 
 		#endregion Private Fields
 
@@ -22,8 +22,9 @@ namespace FileExplorer.Views {
 
 		#region Public Properties
 
+
 		// set navigation service when the first time you get it
-		public NavigationService NavigationService {
+		public Navigation::NavigationService WpfNavigationService {
 			get {
 				if (navigationService != null) {
 					return navigationService;
@@ -41,12 +42,12 @@ namespace FileExplorer.Views {
 		/// Get or set the current content
 		/// </summary>
 		public object Content {
-			get => NavigationService.Content;
+			get => WpfNavigationService.Content;
 			set {
-				if (NavigationService.Content == value) {
+				if (WpfNavigationService.Content == value) {
 					return;
 				}
-				NavigationService.Content = value;
+				WpfNavigationService.Content = value;
 			}
 		}
 
@@ -54,7 +55,7 @@ namespace FileExplorer.Views {
 
 		#region Public Constructors
 
-		public FolderNavigationService(IServiceProvider serviceProvider)
+		public NavigationService(IServiceProvider serviceProvider)
 		{
 			this.serviceProvider = serviceProvider;
 		}
@@ -64,15 +65,15 @@ namespace FileExplorer.Views {
 		#region Public Methods
 		public void GoBack()
 		{
-			if (NavigationService.CanGoBack) {
-				NavigationService.GoBack();
+			if (WpfNavigationService.CanGoBack) {
+				WpfNavigationService.GoBack();
 			}
 		}
 
 		public void GoForward()
 		{
-			if (NavigationService.CanGoForward) {
-				NavigationService.GoForward();
+			if (WpfNavigationService.CanGoForward) {
+				WpfNavigationService.GoForward();
 			}
 		}
 
@@ -80,7 +81,7 @@ namespace FileExplorer.Views {
 		{
 			var page = pageKey switch
 			{
-				// TODO: make a key registry
+				// TODO: make a key registry ??
 				"FolderPage" => serviceProvider.GetService<FolderPage>(),
 				_ => throw new InvalidOperationException("Cannot recognize given pageKey.")
 			};
@@ -91,7 +92,7 @@ namespace FileExplorer.Views {
 				return;
 			}
 			page.Path = path;
-			NavigationService.Navigate(page);
+			WpfNavigationService.Navigate(page);
 		}
 
 		#endregion Public Methods

@@ -98,7 +98,7 @@
     <Compile Include="Models\Interfaces\ISystemFolderProvider.cs" />
     <Compile Include="Models\SystemFolderProvider.cs" />
     <Compile Include="Views\Services\DialogService.cs" />
-    <Compile Include="Views\Services\FolderNavigationService.cs" />
+    <Compile Include="Views\Services\NavigationService.cs" />
     <Compile Include="Views\FolderPage.xaml.cs">
       <DependentUpon>FolderPage.xaml</DependentUpon>
     </Compile>

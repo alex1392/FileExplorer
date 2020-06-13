@@ -18,7 +18,7 @@ namespace FileExplorer.ViewModels {
 
 		private readonly IFileProvider fileProvider;
 		private readonly FolderChildrenProvider folderChildrenProvider;
-		private readonly IFolderNavigationService folderNavigationService;
+		private readonly INavigationService navigationService;
 		private readonly IServiceProvider serviceProvider;
 		private string path;
 
@@ -81,11 +81,11 @@ namespace FileExplorer.ViewModels {
 		{
 		}
 
-		public FolderPageViewModel(FolderChildrenProvider folderChildrenProvider, IFileProvider fileProvider, IFolderNavigationService folderNavigationService, IServiceProvider serviceProvider)
+		public FolderPageViewModel(FolderChildrenProvider folderChildrenProvider, IFileProvider fileProvider, INavigationService navigationService, IServiceProvider serviceProvider)
 		{
 			this.folderChildrenProvider = folderChildrenProvider;
 			this.fileProvider = fileProvider;
-			this.folderNavigationService = folderNavigationService;
+			this.navigationService = navigationService;
 			this.serviceProvider = serviceProvider;
 		}
 
@@ -95,17 +95,17 @@ namespace FileExplorer.ViewModels {
 
 		public void Navigate(ListFolderItem folderItem)
 		{
-			folderNavigationService.Navigate("FolderPage", folderItem.Path);
+			navigationService.Navigate("FolderPage", folderItem.Path);
 		}
 
 		public void Navigate(Item pathItem)
 		{
-			folderNavigationService.Navigate("FolderPage", pathItem.Path);
+			navigationService.Navigate("FolderPage", pathItem.Path);
 		}
 
 		public void Navigate(string path)
 		{
-			folderNavigationService.Navigate("FolderPage", path);
+			navigationService.Navigate("FolderPage", path);
 		}
 
 		#endregion Public Methods

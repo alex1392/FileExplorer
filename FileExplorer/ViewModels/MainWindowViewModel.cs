@@ -15,7 +15,7 @@ namespace FileExplorer.ViewModels {
 
 		#region Private Fields
 
-		private readonly IFolderNavigationService folderNavigationService;
+		private readonly INavigationService navigationService;
 		private readonly IServiceProvider serviceProvider;
 
 		#endregion Private Fields
@@ -41,11 +41,11 @@ namespace FileExplorer.ViewModels {
 		{
 		}
 
-		public MainWindowViewModel(ISystemFolderProvider systemFolderProvider, IFolderNavigationService folderNavigationService, IServiceProvider serviceProvider)
+		public MainWindowViewModel(ISystemFolderProvider systemFolderProvider, INavigationService navigationService, IServiceProvider serviceProvider)
 		{
-			this.folderNavigationService = folderNavigationService;
+			this.navigationService = navigationService;
 			this.serviceProvider = serviceProvider;
-			folderNavigationService.Navigated += FolderNavigationService_Navigated;
+			navigationService.Navigated += NavigationService_Navigated;
 
 			var drivePaths = systemFolderProvider.GetLogicalDrives();
 			var driveIcon = new BitmapImage(new Uri(Path.Combine(App.PackUri, "Resources/Drive.ico")));
@@ -83,7 +83,7 @@ namespace FileExplorer.ViewModels {
 
 		public IEnumerable<Item> PathItems { get; private set; }
 
-		private void FolderNavigationService_Navigated(object sender, string path)
+		private void NavigationService_Navigated(object sender, string path)
 		{
 			PathItems = GetPathItems(path);
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PathItems)));
@@ -95,12 +95,12 @@ namespace FileExplorer.ViewModels {
 
 		public void Navigate(Item item)
 		{
-			folderNavigationService.Navigate("FolderPage", item.Path);
+			navigationService.Navigate("FolderPage", item.Path);
 		}
 
 		public void Navigate(string path)
 		{
-			folderNavigationService.Navigate("FolderPage", path);
+			navigationService.Navigate("FolderPage", path);
 		}
 
 		#endregion Public Methods
