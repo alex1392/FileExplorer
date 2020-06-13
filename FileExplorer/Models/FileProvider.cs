@@ -22,11 +22,6 @@ namespace FileExplorer.Models {
 
 		#region Public Methods
 
-		public string GetParent(string path)
-		{
-			return Path.GetDirectoryName(path);
-		}
-
 		public (string[], string[]) GetChildren(string path)
 		{
 			try {
@@ -73,6 +68,11 @@ namespace FileExplorer.Models {
 				throw new InvalidOperationException("Given path is not exist.");
 			}
 			return info;
+		}
+
+		public string GetParent(string path)
+		{
+			return Path.GetDirectoryName(path);
 		}
 
 		public bool IsDirectoryExists(string path)

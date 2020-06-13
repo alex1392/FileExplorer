@@ -1,14 +1,10 @@
-﻿using FileExplorer.DataVirtualization;
-using FileExplorer.Models;
+﻿using FileExplorer.Models;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
-using System.Linq;
-
-using IO = System.IO;
 
 namespace FileExplorer.ViewModels {
 
@@ -54,20 +50,6 @@ namespace FileExplorer.ViewModels {
 			}
 		}
 
-		private void SetupListItems(string path)
-		{
-			var (folderPaths, filePaths) = fileProvider.GetChildren(path);
-			foreach (var folderPath in folderPaths) {
-				var folderItem = serviceProvider.GetService<ListFolderItem>();
-				folderItem.Path = folderPath;
-				ListItems.Add(folderItem);
-			}
-			foreach (var filePath in filePaths) {
-				var folderItem = serviceProvider.GetService<ListFileItem>();
-				folderItem.Path = filePath;
-				ListItems.Add(folderItem);
-			}
-		}
 		public string Title { get; set; }
 
 		#endregion Public Properties
@@ -112,7 +94,20 @@ namespace FileExplorer.ViewModels {
 
 		#region Private Methods
 
-		
+		private void SetupListItems(string path)
+		{
+			var (folderPaths, filePaths) = fileProvider.GetChildren(path);
+			foreach (var folderPath in folderPaths) {
+				var folderItem = serviceProvider.GetService<ListFolderItem>();
+				folderItem.Path = folderPath;
+				ListItems.Add(folderItem);
+			}
+			foreach (var filePath in filePaths) {
+				var folderItem = serviceProvider.GetService<ListFileItem>();
+				folderItem.Path = filePath;
+				ListItems.Add(folderItem);
+			}
+		}
 
 		#endregion Private Methods
 	}

@@ -7,18 +7,24 @@ namespace FileExplorer.Models {
 		#region Protected Fields
 
 		protected IFileProvider fileProvider;
-		private string path;
 
 		#endregion Protected Fields
+
+		#region Private Fields
+
+		private string path;
+
+		#endregion Private Fields
 
 		#region Public Properties
 
 		public string Name { get; private set; }
+
 		/// <summary>
 		/// Property Injection
 		/// </summary>
 		public virtual string Path {
-			get => path; 
+			get => path;
 			set {
 				// can only be set once
 				if (path != null || value == path) {

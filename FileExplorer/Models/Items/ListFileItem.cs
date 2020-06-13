@@ -1,13 +1,14 @@
-﻿using FileExplorer.Converters;
-
-namespace FileExplorer.Models {
+﻿namespace FileExplorer.Models {
 
 	public class ListFileItem : ListItem {
+
+		#region Private Fields
+
 		private readonly ITypeDescriptionProvider typeDescriptionProvider;
 
-		#region Public Properties
+		#endregion Private Fields
 
-		public long Size { get; set; }
+		#region Public Properties
 
 		public override string Path {
 			get => base.Path;
@@ -21,6 +22,8 @@ namespace FileExplorer.Models {
 				TypeDescription = typeDescriptionProvider.GetFileTypeDescription(base.Path);
 			}
 		}
+
+		public long Size { get; set; }
 
 		#endregion Public Properties
 

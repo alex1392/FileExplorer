@@ -5,7 +5,6 @@ namespace FileExplorer.Models {
 	public abstract class ListItem : Item {
 
 		#region Public Properties
-		public string TypeDescription { get; protected set; }
 
 		public DateTimeOffset LastModifiedTime { get; private set; }
 
@@ -25,13 +24,14 @@ namespace FileExplorer.Models {
 			}
 		}
 
+		public string TypeDescription { get; protected set; }
+
 		#endregion Public Properties
 
 		#region Public Constructors
 
 		public ListItem(IFileProvider fileProvider) : base(fileProvider)
 		{
-			
 		}
 
 		#endregion Public Constructors

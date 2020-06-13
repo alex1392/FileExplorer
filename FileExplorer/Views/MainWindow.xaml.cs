@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 
 namespace FileExplorer.Views {
@@ -53,9 +52,33 @@ namespace FileExplorer.Views {
 
 		#region Private Methods
 
+		private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
+		{
+			if (!((sender as ListBoxItem)?.DataContext is Item item)) {
+				return;
+			}
+			Vm.Navigate(item);
+		}
+
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
 		{
 			DataContext = Vm;
+		}
+
+		private void PathListBox_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			if (e.ChangedButton == MouseButton.Left) {
+				PathTextBox.Visibility = Visibility.Visible;
+			}
+			// TODO: remove focus when mouse click on any other area
+		}
+
+		private void PathTextBox_KeyUp(object sender, KeyEventArgs e)
+		{
+			// TODO: prevent this event when pressing enter on the message box
+			if (e.Key == Key.Enter) {
+				Vm.Navigate(PathTextBox.Text);
+			}
 		}
 
 		private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
@@ -82,29 +105,5 @@ namespace FileExplorer.Views {
 		}
 
 		#endregion Private Methods
-
-		private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
-		{
-			if (!((sender as ListBoxItem)?.DataContext is Item item)) {
-				return;
-			}
-			Vm.Navigate(item);
-		}
-
-		private void PathListBox_MouseDown(object sender, MouseButtonEventArgs e)
-		{
-			if (e.ChangedButton == MouseButton.Left) {
-				PathTextBox.Visibility = Visibility.Visible;
-			}
-			// TODO: remove focus when mouse click on any other area
-		}
-
-		private void PathTextBox_KeyUp(object sender, KeyEventArgs e)
-		{
-			// TODO: prevent this event when pressing enter on the message box
-			if (e.Key == Key.Enter) {
-				Vm.Navigate(PathTextBox.Text);
-			}
-		}
 	}
 }

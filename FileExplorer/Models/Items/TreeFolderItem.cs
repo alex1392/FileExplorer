@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,9 @@ namespace FileExplorer.Models {
 
 		#region Private Fields
 
+		private readonly IServiceProvider serviceProvider;
 		private string[] folderPaths;
 		private bool HasExpanded = false;
-		private readonly IServiceProvider serviceProvider;
 
 		#endregion Private Fields
 
@@ -48,8 +49,7 @@ namespace FileExplorer.Models {
 			}
 			SubFolders.Clear();
 			folderPaths = fileProvider.GetDirectories(Path);
-			SubFolders.AddRange(folderPaths.Select(path => 
-			{
+			SubFolders.AddRange(folderPaths.Select(path => {
 				var item = serviceProvider.GetService<TreeFolderItem>();
 				item.Path = path;
 				return item;

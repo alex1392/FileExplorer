@@ -4,13 +4,9 @@ using FileExplorer.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Threading;
 
 namespace FileExplorer.Views {
 
@@ -57,7 +53,6 @@ namespace FileExplorer.Views {
 			InitializeComponent();
 			Loaded += FolderPage_Loaded;
 		}
-
 
 		public FolderPage(IServiceProvider serviceProvider) : this()
 		{

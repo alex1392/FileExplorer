@@ -1,5 +1,7 @@
 ﻿using FileExplorer.DataVirtualization;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,8 +60,7 @@ namespace FileExplorer.Models {
 			startIndex = Math.Max(0, startIndex);
 			return folderPaths.Skip(startIndex)
 			   .Take(count)
-			   .Select(path => 
-			   {
+			   .Select(path => {
 				   var folderItem = serviceProvider.GetService<ListFolderItem>();
 				   folderItem.Path = path;
 				   return folderItem;
@@ -67,8 +68,7 @@ namespace FileExplorer.Models {
 			   .Cast<ListItem>()
 			   .Concat(filePaths.Skip(Math.Max(startIndex - folderPaths.Length, 0))
 					   .Take(count - Math.Max(folderPaths.Length - startIndex, 0))
-					   .Select(path => 
-					   {
+					   .Select(path => {
 						   var fileItem = serviceProvider.GetService<ListFileItem>();
 						   fileItem.Path = path;
 						   return fileItem;

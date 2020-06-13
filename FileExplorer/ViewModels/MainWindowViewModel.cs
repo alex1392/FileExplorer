@@ -1,5 +1,7 @@
 ﻿using FileExplorer.Models;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,17 +10,16 @@ using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 
 namespace FileExplorer.ViewModels {
 
 	public class MainWindowViewModel : INotifyPropertyChanged {
-		private readonly ISystemFolderProvider systemFolderProvider;
 
 		#region Private Fields
 
 		private readonly INavigationService navigationService;
 		private readonly IServiceProvider serviceProvider;
+		private readonly ISystemFolderProvider systemFolderProvider;
 
 		#endregion Private Fields
 
@@ -30,12 +31,12 @@ namespace FileExplorer.ViewModels {
 
 		#region Public Properties
 
+		public ICommand GoBackCommand { get; set; }
+		public ICommand GoForwardCommand { get; set; }
+		public ICommand GoUpCommand { get; set; }
+		public IEnumerable<Item> PathItems { get; private set; }
+		public ICommand RefreshCommand { get; set; }
 		public ObservableCollection<TreeFolderItem> TreeItems { get; set; } = new ObservableCollection<TreeFolderItem>();
-
-		public ICommand	GoBackCommand { get; set; }
-		public ICommand	GoForwardCommand { get; set; }
-		public ICommand	GoUpCommand { get; set; }
-		public ICommand	RefreshCommand { get; set; }
 
 		#endregion Public Properties
 
@@ -62,6 +63,47 @@ namespace FileExplorer.ViewModels {
 			SetupTreeItems();
 		}
 
+		#endregion Public Constructors
+
+		#region Public Methods
+
+		public void Navigate(Item item)
+		{
+			navigationService.Navigate("FolderPage", item.Path);
+		}
+
+		public void Navigate(string path)
+		{
+			navigationService.Navigate("FolderPage", path);
+		}
+
+		#endregion Public Methods
+
+		#region Private Methods
+
+		private IEnumerable<Item> GetPathItems(string path)
+		{
+			if (path == null) {
+				return null;
+			}
+			var parents = path.Split(Path.DirectorySeparatorChar).Where(s => !string.IsNullOrEmpty(s)).ToList();
+			var paths = new string[parents.Count];
+			for (var i = 0; i < parents.Count; i++) {
+				paths[i] = string.Join(Path.DirectorySeparatorChar.ToString(), parents.Take(i + 1));
+			}
+			return paths.Select(path => {
+				var item = serviceProvider.GetService<Item>();
+				item.Path = path;
+				return item;
+			});
+		}
+
+		private void NavigationService_Navigated(object sender, string path)
+		{
+			PathItems = GetPathItems(path);
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PathItems)));
+		}
+
 		private void SetupTreeItems()
 		{
 			var drivePaths = systemFolderProvider.GetLogicalDrives();
@@ -81,138 +123,6 @@ namespace FileExplorer.ViewModels {
 			TreeItems.Add(recentItem);
 		}
 
-		private IEnumerable<Item> GetPathItems(string path)
-		{
-			if (path == null) {
-				return null;
-			}
-			var parents = path.Split(Path.DirectorySeparatorChar).Where(s => !string.IsNullOrEmpty(s)).ToList();
-			var paths = new string[parents.Count];
-			for (var i = 0; i < parents.Count; i++) {
-				paths[i] = string.Join(Path.DirectorySeparatorChar.ToString(), parents.Take(i + 1));
-			}
-			return paths.Select(path => {
-				var item = serviceProvider.GetService<Item>();
-				item.Path = path;
-				return item;
-			});
-		}
-
-		public IEnumerable<Item> PathItems { get; private set; }
-
-		private void NavigationService_Navigated(object sender, string path)
-		{
-			PathItems = GetPathItems(path);
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PathItems)));
-		}
-
-		#endregion Public Constructors
-
-		#region Public Methods
-
-		public void Navigate(Item item)
-		{
-			navigationService.Navigate("FolderPage", item.Path);
-		}
-
-		public void Navigate(string path)
-		{
-			navigationService.Navigate("FolderPage", path);
-		}
-
-		#endregion Public Methods
-	}
-
-	internal class GoUpCommand : ICommand {
-		private INavigationService navigationService;
-
-		public GoUpCommand(INavigationService navigationService)
-		{
-			this.navigationService = navigationService;
-			navigationService.Navigated += (sender, e) => {
-				CanExecuteChanged?.Invoke(this, null);
-			};
-		}
-
-		public event EventHandler CanExecuteChanged;
-
-		public bool CanExecute(object parameter)
-		{
-			return navigationService.CanGoUp;
-		}
-
-		public void Execute(object parameter)
-		{
-			navigationService.GoUp();
-		}
-	}
-
-	internal class RefreshCommand : ICommand {
-		private INavigationService navigationService;
-
-		public RefreshCommand(INavigationService navigationService)
-		{
-			this.navigationService = navigationService;
-		}
-
-		public event EventHandler CanExecuteChanged;
-
-		public bool CanExecute(object parameter)
-		{
-			return true;
-		}
-
-		public void Execute(object parameter)
-		{
-			navigationService.Refresh();
-		}
-	}
-
-	internal class GoForwardCommand : ICommand {
-		private INavigationService navigationService;
-
-		public GoForwardCommand(INavigationService navigationService)
-		{
-			this.navigationService = navigationService;
-			navigationService.Navigated += (sender, e) => {
-				CanExecuteChanged?.Invoke(this, null);
-			};
-		}
-
-		public event EventHandler CanExecuteChanged;
-
-		public bool CanExecute(object parameter)
-		{
-			return navigationService.CanGoForward;
-		}
-
-		public void Execute(object parameter)
-		{
-			navigationService.GoForward();
-		}
-	}
-
-	internal class GoBackCommand : ICommand {
-		private readonly INavigationService navigationService;
-
-		public event EventHandler CanExecuteChanged;
-
-		public GoBackCommand(INavigationService navigationService)
-		{
-			this.navigationService = navigationService;
-			navigationService.Navigated += (sender, e) => {
-				CanExecuteChanged?.Invoke(this, null);
-			};
-		}
-
-		public bool CanExecute(object parameter)
-		{
-			return navigationService.CanGoBack;
-		}
-
-		public void Execute(object parameter)
-		{
-			navigationService.GoBack();
-		}
+		#endregion Private Methods
 	}
 }
