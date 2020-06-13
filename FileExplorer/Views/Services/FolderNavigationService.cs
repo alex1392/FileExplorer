@@ -31,7 +31,7 @@ namespace FileExplorer.Views {
 				navigationService = serviceProvider.GetService<MainWindow>().FolderFrame.NavigationService;
 				// propagate navigated event
 				navigationService.Navigated += (sender, e) => {
-					Navigated?.Invoke(sender, (e.Content as FolderPage).Path);
+					Navigated?.Invoke(sender, (e.Content as FolderPage)?.Path);
 				};
 				return navigationService;
 			}
@@ -64,7 +64,6 @@ namespace FileExplorer.Views {
 		#region Public Methods
 		public void GoBack()
 		{
-			EnsureServiceInjected();
 			if (NavigationService.CanGoBack) {
 				NavigationService.GoBack();
 			}
@@ -72,7 +71,6 @@ namespace FileExplorer.Views {
 
 		public void GoForward()
 		{
-			EnsureServiceInjected();
 			if (NavigationService.CanGoForward) {
 				NavigationService.GoForward();
 			}
@@ -80,7 +78,6 @@ namespace FileExplorer.Views {
 
 		public void Navigate(string pageKey, string path)
 		{
-			EnsureServiceInjected();
 			var page = pageKey switch
 			{
 				// TODO: make a key registry
@@ -99,17 +96,5 @@ namespace FileExplorer.Views {
 
 		#endregion Public Methods
 
-		#region Private Methods
-		/// <summary>
-		/// TODO: can be removed
-		/// </summary>
-		private void EnsureServiceInjected()
-		{
-			if (NavigationService == null) {
-				throw new InvalidOperationException("Navigation service has not been set.");
-			}
-		}
-
-		#endregion Private Methods
 	}
 }
