@@ -27,9 +27,8 @@ namespace FileExplorer.Models {
 			try {
 				return (Directory.GetDirectories(path), Directory.GetFiles(path));
 			} catch (UnauthorizedAccessException ex) {
-				// TODO: why the fuck a messageBox can cause error???
-				//dialogService.ShowMessage(ex.Message);
-				return (null, null);
+				dialogService.ShowMessage(ex.Message);
+				return (new string[0], new string[0]);
 			}
 		}
 
@@ -38,8 +37,8 @@ namespace FileExplorer.Models {
 			try {
 				return Directory.GetDirectories(path);
 			} catch (UnauthorizedAccessException ex) {
-				//dialogService.ShowMessage(ex.Message);
-				return null;
+				dialogService.ShowMessage(ex.Message);
+				return new string[0];
 			}
 		}
 
@@ -53,8 +52,8 @@ namespace FileExplorer.Models {
 			try {
 				return Directory.GetFiles(path);
 			} catch (UnauthorizedAccessException ex) {
-				//dialogService.ShowMessage(ex.Message);
-				return null;
+				dialogService.ShowMessage(ex.Message);
+				return new string[0];
 			}
 		}
 
