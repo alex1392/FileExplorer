@@ -32,8 +32,6 @@ namespace FileExplorer.ViewModels {
 
 		#region Public Properties
 
-		//public VirtualizingCollection<ListItem> VirtualListItems { get; private set; }
-
 		public ObservableCollection<ListItem> ListItems { get; } = new ObservableCollection<ListItem>();
 
 		/// <summary>
@@ -48,15 +46,9 @@ namespace FileExplorer.ViewModels {
 				}
 				path = value;
 
-				//folderChildrenProvider.Path = path;
-				//VirtualListItems = new VirtualizingCollection<ListItem>(folderChildrenProvider, 20);
-				//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(VirtualListItems)));
-
 				SetupListItems(path);
 
-				PathItems = GetPathItems(path);
-				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PathItems)));
-
+				// TODO: is title corrent??
 				var info = fileProvider.GetFileSystemInfo(path);
 				Title = info.Name;
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Title)));
@@ -77,8 +69,6 @@ namespace FileExplorer.ViewModels {
 				ListItems.Add(folderItem);
 			}
 		}
-
-		public IEnumerable<Item> PathItems { get; private set; }
 		public string Title { get; set; }
 
 		#endregion Public Properties
@@ -123,19 +113,7 @@ namespace FileExplorer.ViewModels {
 
 		#region Private Methods
 
-		private IEnumerable<Item> GetPathItems(string path)
-		{
-			var parents = path.Split(IO::Path.DirectorySeparatorChar).Where(s => !string.IsNullOrEmpty(s)).ToList();
-			var paths = new string[parents.Count];
-			for (var i = 0; i < parents.Count; i++) {
-				paths[i] = string.Join(IO::Path.DirectorySeparatorChar.ToString(), parents.Take(i + 1));
-			}
-			return paths.Select(path => {
-				var item = serviceProvider.GetService<Item>();
-				item.Path = path;
-				return item;
-			});
-		}
+		
 
 		#endregion Private Methods
 	}

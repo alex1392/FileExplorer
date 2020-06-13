@@ -1,10 +1,13 @@
 ﻿using FileExplorer.Models;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 
 namespace FileExplorer.ViewModels {
 
@@ -13,6 +16,7 @@ namespace FileExplorer.ViewModels {
 		#region Private Fields
 
 		private readonly IFolderNavigationService folderNavigationService;
+		private readonly IServiceProvider serviceProvider;
 
 		#endregion Private Fields
 
@@ -40,6 +44,8 @@ namespace FileExplorer.ViewModels {
 		public MainWindowViewModel(ISystemFolderProvider systemFolderProvider, IFolderNavigationService folderNavigationService, IServiceProvider serviceProvider)
 		{
 			this.folderNavigationService = folderNavigationService;
+			this.serviceProvider = serviceProvider;
+			folderNavigationService.Navigated += FolderNavigationService_Navigated;
 
 			var drivePaths = systemFolderProvider.GetLogicalDrives();
 			var driveIcon = new BitmapImage(new Uri(Path.Combine(App.PackUri, "Resources/Drive.ico")));
@@ -58,13 +64,40 @@ namespace FileExplorer.ViewModels {
 			TreeItems.Add(recentItem);
 		}
 
+		private IEnumerable<Item> GetPathItems(string path)
+		{
+			var parents = path.Split(Path.DirectorySeparatorChar).Where(s => !string.IsNullOrEmpty(s)).ToList();
+			var paths = new string[parents.Count];
+			for (var i = 0; i < parents.Count; i++) {
+				paths[i] = string.Join(Path.DirectorySeparatorChar.ToString(), parents.Take(i + 1));
+			}
+			return paths.Select(path => {
+				var item = serviceProvider.GetService<Item>();
+				item.Path = path;
+				return item;
+			});
+		}
+
+		public IEnumerable<Item> PathItems { get; private set; }
+
+		private void FolderNavigationService_Navigated(object sender, string path)
+		{
+			PathItems = GetPathItems(path);
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PathItems)));
+		}
+
 		#endregion Public Constructors
 
 		#region Public Methods
 
-		public void Navigate(TreeFolderItem folderItem)
+		public void Navigate(Item item)
 		{
-			folderNavigationService.Navigate("FolderPage", folderItem.Path);
+			folderNavigationService.Navigate("FolderPage", item.Path);
+		}
+
+		public void Navigate(string path)
+		{
+			folderNavigationService.Navigate("FolderPage", path);
 		}
 
 		#endregion Public Methods

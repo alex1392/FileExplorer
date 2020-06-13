@@ -16,6 +16,38 @@
 								 Width="800">
 	<Grid>
 		<DockPanel>
+			<Grid DockPanel.Dock="Top">
+				<ListBox Name="PathListBox"
+								 ItemsSource="{Binding PathItems}"
+								 Height="32"
+								 MouseDown="PathListBox_MouseDown">
+					<ListBox.ItemTemplate>
+						<DataTemplate DataType="{x:Type model:Item}">
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="{Binding Name}"
+													 VerticalAlignment="Center"
+													 Margin="3" />
+							</StackPanel>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+					<ListBox.ItemContainerStyle>
+						<Style TargetType="ListBoxItem">
+							<EventSetter Event="Selected"
+													 Handler="ListBoxItem_Selected" />
+						</Style>
+					</ListBox.ItemContainerStyle>
+					<ListBox.ItemsPanel>
+						<ItemsPanelTemplate>
+							<StackPanel Orientation="Horizontal" />
+						</ItemsPanelTemplate>
+					</ListBox.ItemsPanel>
+				</ListBox>
+				<TextBox Name="PathTextBox"
+								 Height="{Binding ElementName=PathListBox, Path=Height}"
+								 Text="{Binding Path, Mode=OneWay}"
+								 Visibility="Hidden"
+								 KeyUp="PathTextBox_KeyUp" />
+			</Grid>
 			<TreeView DockPanel.Dock="Left"
 								ItemsSource="{Binding TreeItems}"
 								Width="150">
@@ -41,6 +73,7 @@
 				</TreeView.ItemContainerStyle>
 			</TreeView>
 			<Frame Name="FolderFrame"
+						 NavigationUIVisibility="Hidden"
 						 Source="/FileExplorer;component/Views/HomePage.xaml" />
 		</DockPanel>
 	</Grid>
