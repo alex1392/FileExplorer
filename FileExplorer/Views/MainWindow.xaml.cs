@@ -90,30 +90,6 @@ namespace FileExplorer.Views {
 
 		#endregion Private Methods
 
-		private void ComboBox_Selected(object sender, RoutedEventArgs e)
-		{
-
-		}
-
-		private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			//if (e.AddedItems.Count > 1 || e.RemovedItems.Count > 1) {
-			//	throw new Exception("Unknown behavior");
-			//}
-			if (!(sender is ComboBox comboBox)) {
-				return;
-			}
-			//var delta = comboBox.Items.IndexOf(e.AddedItems[0]) - comboBox.Items.IndexOf(e.RemovedItems[0]);
-			//while (delta > 0) {
-			//	vm.GoForwardCommand.Execute(null);
-			//	delta--;
-			//}
-			//while (delta < 0) {
-			//	vm.GoBackCommand.Execute(null);
-			//	delta++;
-			//}
-		}
-
 		private void ComboBoxItem_Selected(object sender, RoutedEventArgs e)
 		{
 			if (!(sender is ComboBoxItem comboBoxItem) || !(comboBoxItem.DataContext is JournalEntry entry)) {
