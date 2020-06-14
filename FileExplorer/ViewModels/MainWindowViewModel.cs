@@ -39,6 +39,8 @@ namespace FileExplorer.ViewModels {
 			}
 		}
 
+		public object CurrentContent => navigationService.Content;
+
 		public ICommand GoBackCommand { get; set; }
 		public ICommand GoForwardCommand { get; set; }
 		public ICommand GoUpCommand { get; set; }
@@ -121,6 +123,7 @@ namespace FileExplorer.ViewModels {
 		private void NavigationService_NavigatedPageLoaded(object sender, EventArgs e)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NavigationHistroy)));
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentContent)));
 		}
 		private void SetupTreeItems()
 		{
