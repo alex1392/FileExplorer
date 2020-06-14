@@ -11,12 +11,14 @@ namespace FileExplorer.Models {
 		/// Raised when navigation process completed, pass the destination path as event argument.
 		/// </summary>
 		event EventHandler<string> Navigated;
+
 		event EventHandler NavigatedPageLoaded;
 
 		#endregion Public Events
 
 		#region Public Properties
 
+		IEnumerable BackStack { get; }
 		bool CanGoBack { get; }
 
 		bool CanGoForward { get; }
@@ -27,7 +29,7 @@ namespace FileExplorer.Models {
 		/// Get or set the current content.
 		/// </summary>
 		object Content { get; set; }
-		IEnumerable BackStack { get; }
+
 		IEnumerable ForwardStack { get; }
 
 		#endregion Public Properties
@@ -47,9 +49,11 @@ namespace FileExplorer.Models {
 		/// <param name="path">The folder path to be navigated.</param>
 		void Navigate(string pageKey, string path);
 
-		void Refresh();
 		void Navigate(object destination);
+
 		void Navigate(Uri uri);
+
+		void Refresh();
 
 		#endregion Public Methods
 	}

@@ -1,18 +1,22 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Markup;
 using System.Windows.Navigation;
 
 namespace FileExplorer.Views.Converters {
+
 	public class NavigationHistroyConverter : MarkupExtension, IValueConverter {
+
+		#region Private Fields
+
 		private static readonly NavigationHistroyConverter instance = new NavigationHistroyConverter();
+
+		#endregion Private Fields
+
+		#region Public Methods
+
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (value is JournalEntry entry) {
@@ -33,5 +37,7 @@ namespace FileExplorer.Views.Converters {
 		{
 			return instance;
 		}
+
+		#endregion Public Methods
 	}
 }

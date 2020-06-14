@@ -3,14 +3,13 @@
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using IO = System.IO;
 using System.Linq;
 using System.Windows.Input;
-using System.Windows.Navigation;
+
+using IO = System.IO;
 
 namespace FileExplorer.ViewModels {
 
@@ -31,6 +30,15 @@ namespace FileExplorer.ViewModels {
 		#endregion Public Events
 
 		#region Public Properties
+
+		public object CurrentContent => navigationService.Content;
+
+		public ICommand GoBackCommand { get; set; }
+
+		public ICommand GoForwardCommand { get; set; }
+
+		public ICommand GoUpCommand { get; set; }
+
 		public IEnumerable<object> NavigationHistroy {
 			get {
 				var list = new List<object>();
@@ -38,7 +46,6 @@ namespace FileExplorer.ViewModels {
 					foreach (var item in navigationService.BackStack) {
 						list.Add(item);
 					}
-
 				}
 				list.Reverse();
 				list.Add(navigationService.Content);
@@ -46,22 +53,16 @@ namespace FileExplorer.ViewModels {
 					foreach (var item in navigationService.ForwardStack) {
 						list.Add(item);
 					}
-
 				}
 
 				return list;
 			}
 		}
 
-		public object CurrentContent => navigationService.Content;
-
-		public ICommand GoBackCommand { get; set; }
-		public ICommand GoForwardCommand { get; set; }
-		public ICommand GoUpCommand { get; set; }
+		public string Path { get; private set; }
 		public IEnumerable<Item> PathItems { get; private set; }
 		public ICommand RefreshCommand { get; set; }
 		public ObservableCollection<TreeFolderItem> TreeItems { get; set; } = new ObservableCollection<TreeFolderItem>();
-		public string Path { get; private set; }
 
 		#endregion Public Properties
 
@@ -80,7 +81,7 @@ namespace FileExplorer.ViewModels {
 			this.navigationService = navigationService;
 			this.serviceProvider = serviceProvider;
 			navigationService.Navigated += NavigationService_Navigated;
-			navigationService.NavigatedPageLoaded += NavigationService_NavigatedPageLoaded; 
+			navigationService.NavigatedPageLoaded += NavigationService_NavigatedPageLoaded;
 
 			GoBackCommand = new GoBackCommand(navigationService);
 			GoForwardCommand = new GoForwardCommand(navigationService);
@@ -88,6 +89,10 @@ namespace FileExplorer.ViewModels {
 			GoUpCommand = new GoUpCommand(navigationService);
 			SetupTreeItems();
 		}
+
+		#endregion Public Constructors
+
+		#region Public Methods
 
 		public void Navigate(Uri uri)
 		{
@@ -98,10 +103,6 @@ namespace FileExplorer.ViewModels {
 		{
 			navigationService.Navigate(destination);
 		}
-
-		#endregion Public Constructors
-
-		#region Public Methods
 
 		public void Navigate(Item item)
 		{
@@ -146,6 +147,7 @@ namespace FileExplorer.ViewModels {
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NavigationHistroy)));
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentContent)));
 		}
+
 		private void SetupTreeItems()
 		{
 			var drivePaths = systemFolderProvider.GetLogicalDrives();

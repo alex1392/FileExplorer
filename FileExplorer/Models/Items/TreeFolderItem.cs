@@ -17,6 +17,7 @@ namespace FileExplorer.Models {
 		#endregion Private Fields
 
 		#region Public Properties
+
 		/// <summary>
 		/// Specify custom icon key.
 		/// </summary>

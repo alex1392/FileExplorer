@@ -1,9 +1,6 @@
 ﻿using FileExplorer.Models;
 using FileExplorer.ViewModels;
 
-using Microsoft.Extensions.DependencyInjection;
-
-using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,8 +14,8 @@ namespace FileExplorer.Views {
 
 		#region Private Fields
 
-		private string path;
 		private readonly FolderPageViewModel vm;
+		private string path;
 
 		#endregion Private Fields
 

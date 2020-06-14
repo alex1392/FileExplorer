@@ -4,9 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+
 using Navigation = System.Windows.Navigation;
 
 namespace FileExplorer.Views.Services {
@@ -17,8 +17,8 @@ namespace FileExplorer.Views.Services {
 
 		private readonly IFileProvider fileProvider;
 		private readonly IServiceProvider serviceProvider;
-		private Navigation::NavigationService internalNavigationService;
 		private Frame internalFrame;
+		private Navigation::NavigationService internalNavigationService;
 
 		#endregion Private Fields
 
@@ -32,6 +32,7 @@ namespace FileExplorer.Views.Services {
 
 		#region Public Properties
 
+		public IEnumerable BackStack => InternalFrame.BackStack;
 		public bool CanGoBack => InternalNavigationService.CanGoBack;
 
 		public bool CanGoForward => InternalNavigationService.CanGoForward;
@@ -58,29 +59,7 @@ namespace FileExplorer.Views.Services {
 			}
 		}
 
-		public Navigation::NavigationService InternalNavigationService {
-			get {
-				// Lazy initialization of dependency
-				if (internalNavigationService == null) {
-					internalNavigationService = serviceProvider.GetService<MainWindow>().FolderFrame.NavigationService;
-					// propagate navigated event
-					internalNavigationService.Navigated += InternalNavigationService_Navigated;
-				}
-				return internalNavigationService;
-			}
-		}
-
-
-		private void InternalNavigationService_Navigated(object sender, NavigationEventArgs e)
-		{
-			if (!(e.Content is Page page)) {
-				return;
-			}
-			Navigated?.Invoke(sender, (page as FolderPage)?.Path);
-			page.Loaded += (sender, e) => {
-				NavigatedPageLoaded?.Invoke(sender, null);
-			};
-		}
+		public IEnumerable ForwardStack => InternalFrame.ForwardStack;
 
 		public Frame InternalFrame {
 			get {
@@ -92,8 +71,17 @@ namespace FileExplorer.Views.Services {
 			}
 		}
 
-		public IEnumerable BackStack => InternalFrame.BackStack;
-		public IEnumerable ForwardStack => InternalFrame.ForwardStack;
+		public Navigation::NavigationService InternalNavigationService {
+			get {
+				// Lazy initialization of dependency
+				if (internalNavigationService == null) {
+					internalNavigationService = serviceProvider.GetService<MainWindow>().FolderFrame.NavigationService;
+					// propagate navigated event
+					internalNavigationService.Navigated += InternalNavigationService_Navigated;
+				}
+				return internalNavigationService;
+			}
+		}
 
 		#endregion Public Properties
 
@@ -154,6 +142,16 @@ namespace FileExplorer.Views.Services {
 			InternalNavigationService.Navigate(page);
 		}
 
+		public void Navigate(object destination)
+		{
+			InternalNavigationService.Navigate(destination);
+		}
+
+		public void Navigate(Uri uri)
+		{
+			InternalNavigationService.Navigate(uri);
+		}
+
 		public void Refresh()
 		{
 			InternalNavigationService.Refresh();
@@ -172,14 +170,15 @@ namespace FileExplorer.Views.Services {
 			return fileProvider.GetParent(path);
 		}
 
-		public void Navigate(object destination)
+		private void InternalNavigationService_Navigated(object sender, NavigationEventArgs e)
 		{
-			InternalNavigationService.Navigate(destination);
-		}
-
-		public void Navigate(Uri uri)
-		{
-			InternalNavigationService.Navigate(uri);
+			if (!(e.Content is Page page)) {
+				return;
+			}
+			Navigated?.Invoke(sender, (page as FolderPage)?.Path);
+			page.Loaded += (sender, e) => {
+				NavigatedPageLoaded?.Invoke(sender, null);
+			};
 		}
 
 		#endregion Private Methods

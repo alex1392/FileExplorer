@@ -3,10 +3,7 @@
 using FileExplorer.Models;
 using FileExplorer.ViewModels;
 
-using Microsoft.Extensions.DependencyInjection;
-
 using System;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -18,7 +15,12 @@ namespace FileExplorer.Views {
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
 	public partial class MainWindow : RevealWindow {
+
+		#region Private Fields
+
 		private readonly MainWindowViewModel vm;
+
+		#endregion Private Fields
 
 		#region Public Constructors
 
@@ -38,9 +40,36 @@ namespace FileExplorer.Views {
 
 		#region Private Methods
 
+		private void HistoryItem_Selected(object sender, RoutedEventArgs e)
+		{
+			if (!(sender is ComboBoxItem comboBoxItem) || !(comboBoxItem.DataContext is JournalEntry entry)) {
+				return;
+			}
+			var delta = NavigationComboBox.Items.IndexOf(entry) - NavigationComboBox.Items.IndexOf(vm.CurrentContent);
+			while (delta > 0) {
+				vm.GoForwardCommand.Execute(null);
+				delta--;
+			}
+			while (delta < 0) {
+				vm.GoBackCommand.Execute(null);
+				delta++;
+			}
+		}
+
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
 		{
 			vm.Navigate(new Uri("/Views/HomePage.xaml", UriKind.Relative));
+		}
+
+		private void PathItem_Selected(object sender, RoutedEventArgs e)
+		{
+			if (!((sender as ListBoxItem)?.DataContext is Item item)) {
+				return;
+			}
+			if (item.Path == vm.Path) {
+				return;
+			}
+			vm.Navigate(item);
 		}
 
 		private void PathListBox_MouseDown(object sender, MouseButtonEventArgs e)
@@ -83,32 +112,5 @@ namespace FileExplorer.Views {
 		}
 
 		#endregion Private Methods
-
-		private void HistoryItem_Selected(object sender, RoutedEventArgs e)
-		{
-			if (!(sender is ComboBoxItem comboBoxItem) || !(comboBoxItem.DataContext is JournalEntry entry)) {
-				return;
-			}
-			var delta = NavigationComboBox.Items.IndexOf(entry) - NavigationComboBox.Items.IndexOf(vm.CurrentContent);
-			while (delta > 0) {
-				vm.GoForwardCommand.Execute(null);
-				delta--;
-			}
-			while (delta < 0) {
-				vm.GoBackCommand.Execute(null);
-				delta++;
-			}
-		}
-
-		private void PathItem_Selected(object sender, RoutedEventArgs e)
-		{
-			if (!((sender as ListBoxItem)?.DataContext is Item item)) {
-				return;
-			}
-			if (item.Path == vm.Path) {
-				return;
-			}
-			vm.Navigate(item);
-		}
 	}
 }
