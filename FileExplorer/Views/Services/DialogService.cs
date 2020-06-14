@@ -2,7 +2,7 @@
 
 using System.Windows;
 
-namespace FileExplorer.Views {
+namespace FileExplorer.Views.Services {
 
 	internal class DialogService : IDialogService {
 

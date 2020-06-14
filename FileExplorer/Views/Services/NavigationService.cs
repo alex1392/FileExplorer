@@ -4,10 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 using Navigation = System.Windows.Navigation;
 
-namespace FileExplorer.Views {
+namespace FileExplorer.Views.Services {
 
 	public class NavigationService : INavigationService {
 
@@ -23,6 +25,8 @@ namespace FileExplorer.Views {
 		#region Public Events
 
 		public event EventHandler<string> Navigated;
+
+		public event EventHandler NavigatedPageLoaded;
 
 		#endregion Public Events
 
@@ -60,12 +64,22 @@ namespace FileExplorer.Views {
 				if (internalNavigationService == null) {
 					internalNavigationService = serviceProvider.GetService<MainWindow>().FolderFrame.NavigationService;
 					// propagate navigated event
-					internalNavigationService.Navigated += (sender, e) => {
-						Navigated?.Invoke(sender, (e.Content as FolderPage)?.Path);
-					};
+					internalNavigationService.Navigated += InternalNavigationService_Navigated;
 				}
 				return internalNavigationService;
 			}
+		}
+
+
+		private void InternalNavigationService_Navigated(object sender, NavigationEventArgs e)
+		{
+			if (!(e.Content is FolderPage folderPage)) {
+				return;
+			}
+			Navigated?.Invoke(sender, folderPage.Path);
+			folderPage.Loaded += (sender, e) => {
+				NavigatedPageLoaded?.Invoke(sender, e);
+			};
 		}
 
 		public Frame InternalFrame {
@@ -79,6 +93,8 @@ namespace FileExplorer.Views {
 		}
 
 		public IEnumerable BackStack => InternalFrame.BackStack;
+		public IEnumerable ForwardStack => InternalFrame.ForwardStack;
+
 		#endregion Public Properties
 
 		#region Public Constructors

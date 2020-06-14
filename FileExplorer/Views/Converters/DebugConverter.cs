@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace FileExplorer.Converters {
+namespace FileExplorer.Views.Services.Converters {
 
 	public class DebugConverter : MarkupExtension, IValueConverter {
 

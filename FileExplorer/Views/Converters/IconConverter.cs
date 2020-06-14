@@ -10,7 +10,7 @@ using System.Windows.Interop;
 using System.Windows.Markup;
 using System.Windows.Media.Imaging;
 
-namespace FileExplorer.Converters {
+namespace FileExplorer.Views.Services.Converters {
 
 	/// <summary>
 	/// Icon should be loaded dynamically in order to speed up application loading
