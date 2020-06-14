@@ -76,13 +76,9 @@ namespace FileExplorer.Views.Services {
 			if (!(e.Content is Page page)) {
 				return;
 			}
-			if (page is FolderPage folderPage) {
-				Navigated?.Invoke(sender, folderPage.Path);
-			} else {
-				Navigated?.Invoke(sender, null);
-			}
+			Navigated?.Invoke(sender, (page as FolderPage)?.Path);
 			page.Loaded += (sender, e) => {
-				NavigatedPageLoaded?.Invoke(sender, e);
+				NavigatedPageLoaded?.Invoke(sender, null);
 			};
 		}
 
@@ -178,7 +174,12 @@ namespace FileExplorer.Views.Services {
 
 		public void Navigate(object destination)
 		{
-			internalNavigationService.Navigate(destination);
+			InternalNavigationService.Navigate(destination);
+		}
+
+		public void Navigate(Uri uri)
+		{
+			InternalNavigationService.Navigate(uri);
 		}
 
 		#endregion Private Methods

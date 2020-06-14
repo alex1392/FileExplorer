@@ -49,6 +49,7 @@ namespace FileExplorer.Models {
 
 		void Refresh();
 		void Navigate(object destination);
+		void Navigate(Uri uri);
 
 		#endregion Public Methods
 	}
