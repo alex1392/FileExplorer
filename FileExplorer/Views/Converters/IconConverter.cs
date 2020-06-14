@@ -31,9 +31,9 @@ namespace FileExplorer.Views.Converters {
 				var icon = Icon.ExtractAssociatedIcon(fileItem.Path);
 				return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
 			} else if (value is ListFolderItem listFolderItem) {
-				return new BitmapImage(new Uri(Path.Combine(App.PackUri, "Resources/Folder.ico")));
+				return new BitmapImage(new Uri("/Resources/Folder.ico", UriKind.Relative));
 			} else if (value is TreeFolderItem treeFolderItem) {
-				return new BitmapImage(new Uri(Path.Combine(App.PackUri, $"Resources/{treeFolderItem.IconKey ?? "Folder"}.ico")));
+				return new BitmapImage(new Uri($"/Resources/{treeFolderItem.IconKey ?? "Folder"}.ico", UriKind.Relative));
 			} else {
 				return null;
 			}
