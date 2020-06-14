@@ -10,7 +10,7 @@ using System.Windows.Data;
 using System.Windows.Markup;
 using System.Windows.Navigation;
 
-namespace FileExplorer.Views.Services.Converters {
+namespace FileExplorer.Views.Converters {
 	public class NavigationHistroyConverter : MarkupExtension, IValueConverter {
 		private static readonly NavigationHistroyConverter instance = new NavigationHistroyConverter();
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

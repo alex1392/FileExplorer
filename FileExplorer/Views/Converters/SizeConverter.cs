@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace FileExplorer.Views.Services.Converters {
+namespace FileExplorer.Views.Converters {
 
 	internal class SizeConverter : MarkupExtension, IValueConverter {
 
