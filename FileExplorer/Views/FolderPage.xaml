@@ -4,7 +4,7 @@
 			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			xmlns:local="clr-namespace:FileExplorer.Views"
-			xmlns:converter="clr-namespace:FileExplorer.Converters"
+			xmlns:converter="clr-namespace:FileExplorer.Views.Converters"
 			xmlns:model="clr-namespace:FileExplorer.Models"
 			xmlns:vm="clr-namespace:FileExplorer.ViewModels"
 			xmlns:util="clr-namespace:FileExplorer.Utilities"

@@ -87,7 +87,7 @@
     <Compile Include="Models\Interfaces\IDialogService.cs" />
     <Compile Include="Models\Items\ListFolderItem.cs" />
     <Compile Include="Models\Items\ListItem.cs" />
-    <Compile Include="Models\FolderChildrenProvider.cs" />
+    <Compile Include="Models\Providers\FolderChildrenProvider.cs" />
     <Compile Include="Models\Interfaces\ITypeDescriptionProvider.cs" />
     <Compile Include="Utilities\GridViewSort.cs" />
     <Compile Include="ViewModels\FolderPageViewModel.cs" />
@@ -97,14 +97,14 @@
     <Compile Include="Models\Commands\GoUpCommand.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Models\Commands\RefreshCommand.cs" />
-    <Compile Include="Views\Converters\BackStackConverter.cs" />
+    <Compile Include="Views\Converters\NavigationHistroyConverter.cs" />
     <Compile Include="Views\Converters\DebugConverter.cs" />
-    <Compile Include="Models\TypeDescriptionProvider.cs" />
+    <Compile Include="Models\Providers\TypeDescriptionProvider.cs" />
     <Compile Include="Views\Converters\SizeConverter.cs" />
     <Compile Include="Views\Converters\TimeConverter.cs" />
     <Compile Include="DataVirtualization\VirtualizingCollection.cs" />
     <Compile Include="Models\Interfaces\ISystemFolderProvider.cs" />
-    <Compile Include="Models\SystemFolderProvider.cs" />
+    <Compile Include="Models\Providers\SystemFolderProvider.cs" />
     <Compile Include="Views\Services\DialogService.cs" />
     <Compile Include="Views\Services\NavigationService.cs" />
     <Compile Include="Views\FolderPage.xaml.cs">
@@ -124,7 +124,7 @@
     </Compile>
     <Compile Include="DataVirtualization\IItemsProvider.cs" />
     <Compile Include="Models\Items\ListFileItem.cs" />
-    <Compile Include="Models\FileProvider.cs" />
+    <Compile Include="Models\Providers\FileProvider.cs" />
     <Compile Include="Models\Items\TreeFolderItem.cs" />
     <Compile Include="Views\Converters\IconConverter.cs" />
     <Compile Include="Models\Interfaces\IFileProvider.cs" />

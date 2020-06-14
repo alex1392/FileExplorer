@@ -20,17 +20,12 @@ namespace FileExplorer.Views {
 		#region Private Fields
 
 		private readonly IServiceProvider serviceProvider;
-		private MainWindowViewModel vm;
 
 		#endregion Private Fields
 
 		#region Public Properties
 
-		public MainWindowViewModel Vm {
-			get {
-				return vm ?? (vm = serviceProvider.GetService<MainWindowViewModel>());
-			}
-		}
+		public MainWindowViewModel Vm => DataContext as MainWindowViewModel;
 
 		#endregion Public Properties
 
@@ -46,6 +41,7 @@ namespace FileExplorer.Views {
 		{
 			// always load dependencies of an object outside of its constructor if it is possible, this way circular dependency can be avoided
 			this.serviceProvider = serviceProvider;
+			DataContext = serviceProvider.GetService<MainWindowViewModel>();
 		}
 
 		#endregion Public Constructors
@@ -62,7 +58,6 @@ namespace FileExplorer.Views {
 
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
 		{
-			DataContext = Vm;
 		}
 
 		private void PathListBox_MouseDown(object sender, MouseButtonEventArgs e)

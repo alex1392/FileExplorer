@@ -19,7 +19,6 @@ namespace FileExplorer.Views {
 
 		private readonly IServiceProvider serviceProvider;
 		private string path;
-		private FolderPageViewModel vm;
 
 		#endregion Private Fields
 
@@ -37,12 +36,7 @@ namespace FileExplorer.Views {
 			}
 		}
 
-		public FolderPageViewModel Vm {
-			get {
-				// lazy loading dependency
-				return vm ?? (vm = serviceProvider.GetService<FolderPageViewModel>());
-			}
-		}
+		public FolderPageViewModel Vm => DataContext as FolderPageViewModel;
 
 		#endregion Public Properties
 
@@ -57,6 +51,7 @@ namespace FileExplorer.Views {
 		public FolderPage(IServiceProvider serviceProvider) : this()
 		{
 			this.serviceProvider = serviceProvider;
+			DataContext = serviceProvider.GetService<FolderPageViewModel>();
 		}
 
 		#endregion Public Constructors
@@ -65,7 +60,6 @@ namespace FileExplorer.Views {
 
 		private void FolderPage_Loaded(object sender, RoutedEventArgs e)
 		{
-			DataContext = Vm;
 			//Dispatcher.Invoke(() => {
 			//	collectionView = CollectionViewSource.GetDefaultView(ItemsDataGrid.ItemsSource) as CollectionView;
 			//	groupDescription = new PropertyGroupDescription(nameof(ListItem.TypeDescription));

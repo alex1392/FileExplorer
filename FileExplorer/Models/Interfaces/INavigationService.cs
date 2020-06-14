@@ -11,6 +11,7 @@ namespace FileExplorer.Models {
 		/// Raised when navigation process completed, pass the destination path as event argument.
 		/// </summary>
 		event EventHandler<string> Navigated;
+		event EventHandler NavigatedPageLoaded;
 
 		#endregion Public Events
 
@@ -27,6 +28,7 @@ namespace FileExplorer.Models {
 		/// </summary>
 		object Content { get; set; }
 		IEnumerable BackStack { get; }
+		IEnumerable ForwardStack { get; }
 
 		#endregion Public Properties
 

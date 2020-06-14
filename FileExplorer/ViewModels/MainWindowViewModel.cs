@@ -30,7 +30,15 @@ namespace FileExplorer.ViewModels {
 		#endregion Public Events
 
 		#region Public Properties
-		public IEnumerable BackStack => navigationService.BackStack;
+		public IEnumerable<object> NavigationHistroy {
+			get {
+				var list = navigationService.BackStack?.Cast<object>().Reverse().ToList();
+				list?.Add(navigationService.Content);
+				list?.AddRange(navigationService.ForwardStack?.Cast<object>());
+				return list;
+			}
+		}
+
 		public ICommand GoBackCommand { get; set; }
 		public ICommand GoForwardCommand { get; set; }
 		public ICommand GoUpCommand { get; set; }
@@ -55,6 +63,7 @@ namespace FileExplorer.ViewModels {
 			this.navigationService = navigationService;
 			this.serviceProvider = serviceProvider;
 			navigationService.Navigated += NavigationService_Navigated;
+			navigationService.NavigatedPageLoaded += NavigationService_NavigatedPageLoaded; 
 
 			GoBackCommand = new GoBackCommand(navigationService);
 			GoForwardCommand = new GoForwardCommand(navigationService);
@@ -62,6 +71,10 @@ namespace FileExplorer.ViewModels {
 			GoUpCommand = new GoUpCommand(navigationService);
 			SetupTreeItems();
 		}
+
+	
+
+
 
 		#endregion Public Constructors
 
@@ -102,9 +115,13 @@ namespace FileExplorer.ViewModels {
 		{
 			PathItems = GetPathItems(path);
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PathItems)));
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BackStack)));
+			
 		}
 
+		private void NavigationService_NavigatedPageLoaded(object sender, EventArgs e)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NavigationHistroy)));
+		}
 		private void SetupTreeItems()
 		{
 			var drivePaths = systemFolderProvider.GetLogicalDrives();
