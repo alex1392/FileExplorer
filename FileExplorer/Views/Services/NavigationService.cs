@@ -73,11 +73,15 @@ namespace FileExplorer.Views.Services {
 
 		private void InternalNavigationService_Navigated(object sender, NavigationEventArgs e)
 		{
-			if (!(e.Content is FolderPage folderPage)) {
+			if (!(e.Content is Page page)) {
 				return;
 			}
-			Navigated?.Invoke(sender, folderPage.Path);
-			folderPage.Loaded += (sender, e) => {
+			if (page is FolderPage folderPage) {
+				Navigated?.Invoke(sender, folderPage.Path);
+			} else {
+				Navigated?.Invoke(sender, null);
+			}
+			page.Loaded += (sender, e) => {
 				NavigatedPageLoaded?.Invoke(sender, e);
 			};
 		}
@@ -170,6 +174,11 @@ namespace FileExplorer.Views.Services {
 			}
 			var path = folderPage.Path;
 			return fileProvider.GetParent(path);
+		}
+
+		public void Navigate(object destination)
+		{
+			internalNavigationService.Navigate(destination);
 		}
 
 		#endregion Private Methods

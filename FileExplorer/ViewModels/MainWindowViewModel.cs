@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
+using System.Windows.Navigation;
 
 namespace FileExplorer.ViewModels {
 
@@ -74,7 +75,12 @@ namespace FileExplorer.ViewModels {
 			SetupTreeItems();
 		}
 
-	
+		public void Navigate(object destination)
+		{
+			navigationService.Navigate(destination);
+		}
+
+
 
 
 

@@ -48,6 +48,7 @@ namespace FileExplorer.Models {
 		void Navigate(string pageKey, string path);
 
 		void Refresh();
+		void Navigate(object destination);
 
 		#endregion Public Methods
 	}
