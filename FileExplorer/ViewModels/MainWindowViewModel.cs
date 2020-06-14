@@ -7,7 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
+using IO = System.IO;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows.Navigation;
@@ -33,9 +33,22 @@ namespace FileExplorer.ViewModels {
 		#region Public Properties
 		public IEnumerable<object> NavigationHistroy {
 			get {
-				var list = navigationService.BackStack?.Cast<object>().Reverse().ToList();
-				list?.Add(navigationService.Content);
-				list?.AddRange(navigationService.ForwardStack?.Cast<object>());
+				var list = new List<object>();
+				if (navigationService.BackStack != null) {
+					foreach (var item in navigationService.BackStack) {
+						list.Add(item);
+					}
+
+				}
+				list.Reverse();
+				list.Add(navigationService.Content);
+				if (navigationService.ForwardStack != null) {
+					foreach (var item in navigationService.ForwardStack) {
+						list.Add(item);
+					}
+
+				}
+
 				return list;
 			}
 		}
@@ -48,6 +61,7 @@ namespace FileExplorer.ViewModels {
 		public IEnumerable<Item> PathItems { get; private set; }
 		public ICommand RefreshCommand { get; set; }
 		public ObservableCollection<TreeFolderItem> TreeItems { get; set; } = new ObservableCollection<TreeFolderItem>();
+		public string Path { get; private set; }
 
 		#endregion Public Properties
 
@@ -75,14 +89,15 @@ namespace FileExplorer.ViewModels {
 			SetupTreeItems();
 		}
 
+		public void Navigate(Uri uri)
+		{
+			navigationService.Navigate(uri);
+		}
+
 		public void Navigate(object destination)
 		{
 			navigationService.Navigate(destination);
 		}
-
-
-
-
 
 		#endregion Public Constructors
 
@@ -107,10 +122,10 @@ namespace FileExplorer.ViewModels {
 			if (path == null) {
 				return null;
 			}
-			var parents = path.Split(Path.DirectorySeparatorChar).Where(s => !string.IsNullOrEmpty(s)).ToList();
+			var parents = path.Split(IO::Path.DirectorySeparatorChar).Where(s => !string.IsNullOrEmpty(s)).ToList();
 			var paths = new string[parents.Count];
 			for (var i = 0; i < parents.Count; i++) {
-				paths[i] = string.Join(Path.DirectorySeparatorChar.ToString(), parents.Take(i + 1));
+				paths[i] = string.Join(IO::Path.DirectorySeparatorChar.ToString(), parents.Take(i + 1));
 			}
 			return paths.Select(path => {
 				var item = serviceProvider.GetService<Item>();
@@ -121,9 +136,9 @@ namespace FileExplorer.ViewModels {
 
 		private void NavigationService_Navigated(object sender, string path)
 		{
+			Path = path;
 			PathItems = GetPathItems(path);
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PathItems)));
-			
 		}
 
 		private void NavigationService_NavigatedPageLoaded(object sender, EventArgs e)

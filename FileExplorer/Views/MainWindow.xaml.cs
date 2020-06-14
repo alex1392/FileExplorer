@@ -6,6 +6,7 @@ using FileExplorer.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -39,6 +40,7 @@ namespace FileExplorer.Views {
 
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
 		{
+			vm.Navigate(new Uri("/Views/HomePage.xaml", UriKind.Relative));
 		}
 
 		private void PathListBox_MouseDown(object sender, MouseButtonEventArgs e)
