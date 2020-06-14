@@ -15,9 +15,9 @@ namespace FileExplorer.Utilities {
 
 			#region Private Fields
 
-			private GridViewColumnHeader _columnHeader;
-			private ListSortDirection _direction;
-			private ImageSource _sortGlyph;
+			private readonly GridViewColumnHeader _columnHeader;
+			private readonly ListSortDirection _direction;
+			private readonly ImageSource _sortGlyph;
 
 			#endregion Private Fields
 

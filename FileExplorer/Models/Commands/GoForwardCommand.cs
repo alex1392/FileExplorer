@@ -7,7 +7,7 @@ namespace FileExplorer.Models {
 
 		#region Private Fields
 
-		private INavigationService navigationService;
+		private readonly INavigationService navigationService;
 
 		#endregion Private Fields
 
