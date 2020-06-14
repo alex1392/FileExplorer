@@ -16,18 +16,7 @@ namespace FileExplorer.Views {
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
 	public partial class MainWindow : RevealWindow {
-
-		#region Private Fields
-
-		private readonly IServiceProvider serviceProvider;
-
-		#endregion Private Fields
-
-		#region Public Properties
-
-		public MainWindowViewModel Vm => DataContext as MainWindowViewModel;
-
-		#endregion Public Properties
+		private readonly MainWindowViewModel vm;
 
 		#region Public Constructors
 
@@ -37,11 +26,10 @@ namespace FileExplorer.Views {
 			this.Loaded += MainWindow_Loaded;
 		}
 
-		public MainWindow(IServiceProvider serviceProvider) : this()
+		public MainWindow(MainWindowViewModel vm) : this()
 		{
-			// always load dependencies of an object outside of its constructor if it is possible, this way circular dependency can be avoided
-			this.serviceProvider = serviceProvider;
-			DataContext = serviceProvider.GetService<MainWindowViewModel>();
+			this.vm = vm;
+			DataContext = this.vm;
 		}
 
 		#endregion Public Constructors
@@ -53,7 +41,7 @@ namespace FileExplorer.Views {
 			if (!((sender as ListBoxItem)?.DataContext is Item item)) {
 				return;
 			}
-			Vm.Navigate(item);
+			vm.Navigate(item);
 		}
 
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -72,7 +60,7 @@ namespace FileExplorer.Views {
 		{
 			// TODO: prevent this event when pressing enter on the message box
 			if (e.Key == Key.Enter) {
-				Vm.Navigate(PathTextBox.Text);
+				vm.Navigate(PathTextBox.Text);
 			}
 		}
 
@@ -92,7 +80,7 @@ namespace FileExplorer.Views {
 			// load the subfolders for the tree view item to expand
 			folderItem.LoadSubFolders();
 			// Navigate to the selected folder
-			Vm.Navigate(folderItem);
+			vm.Navigate(folderItem);
 			// avoid recursive event propagation
 			if (e != null) {
 				e.Handled = true;

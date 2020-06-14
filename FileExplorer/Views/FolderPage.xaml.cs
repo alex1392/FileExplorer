@@ -17,8 +17,8 @@ namespace FileExplorer.Views {
 
 		#region Private Fields
 
-		private readonly IServiceProvider serviceProvider;
 		private string path;
+		private readonly FolderPageViewModel vm;
 
 		#endregion Private Fields
 
@@ -32,11 +32,9 @@ namespace FileExplorer.Views {
 					return;
 				}
 				path = value;
-				Vm.Path = value; // property injection
+				vm.Path = value; // property injection
 			}
 		}
-
-		public FolderPageViewModel Vm => DataContext as FolderPageViewModel;
 
 		#endregion Public Properties
 
@@ -48,10 +46,10 @@ namespace FileExplorer.Views {
 			Loaded += FolderPage_Loaded;
 		}
 
-		public FolderPage(IServiceProvider serviceProvider) : this()
+		public FolderPage(FolderPageViewModel vm) : this()
 		{
-			this.serviceProvider = serviceProvider;
-			DataContext = serviceProvider.GetService<FolderPageViewModel>();
+			this.vm = vm;
+			DataContext = this.vm;
 		}
 
 		#endregion Public Constructors
@@ -72,7 +70,7 @@ namespace FileExplorer.Views {
 			if (!((sender as ListViewItem)?.DataContext is ListFolderItem folderItem)) {
 				return;
 			}
-			Vm.Navigate(folderItem);
+			vm.Navigate(folderItem);
 		}
 
 		#endregion Private Methods
