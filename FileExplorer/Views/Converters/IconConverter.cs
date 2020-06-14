@@ -33,7 +33,7 @@ namespace FileExplorer.Converters {
 			} else if (value is ListFolderItem listFolderItem) {
 				return new BitmapImage(new Uri(Path.Combine(App.PackUri, "Resources/Folder.ico")));
 			} else if (value is TreeFolderItem treeFolderItem) {
-				return treeFolderItem.Icon ?? new BitmapImage(new Uri(Path.Combine(App.PackUri, "Resources/Folder.ico")));
+				return new BitmapImage(new Uri(Path.Combine(App.PackUri, $"Resources/{treeFolderItem.IconKey ?? "Folder"}.ico")));
 			} else {
 				return null;
 			}

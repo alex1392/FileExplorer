@@ -10,7 +10,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 
 namespace FileExplorer.ViewModels {
 
@@ -109,19 +108,17 @@ namespace FileExplorer.ViewModels {
 		private void SetupTreeItems()
 		{
 			var drivePaths = systemFolderProvider.GetLogicalDrives();
-			var driveIcon = new BitmapImage(new Uri(Path.Combine(App.PackUri, "Resources/Drive.ico")));
 			foreach (var drivePath in drivePaths) {
 				var driveItem = serviceProvider.GetService<TreeFolderItem>();
 				driveItem.Path = drivePath;
-				driveItem.Icon = driveIcon;
+				driveItem.IconKey = "Drive";
 				TreeItems.Add(driveItem);
 			}
 
 			var recentPath = systemFolderProvider.GetRecentFolder();
-			var recentIcon = new BitmapImage(new Uri(Path.Combine(App.PackUri, "Resources/Favorites.ico")));
 			var recentItem = serviceProvider.GetService<TreeFolderItem>();
 			recentItem.Path = recentPath;
-			recentItem.Icon = recentIcon;
+			recentItem.IconKey = "Favorites";
 			TreeItems.Add(recentItem);
 		}
 

@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Media;
 
 namespace FileExplorer.Models {
 
@@ -18,11 +17,10 @@ namespace FileExplorer.Models {
 		#endregion Private Fields
 
 		#region Public Properties
-
 		/// <summary>
-		/// customized icon property injection
+		/// Specify custom icon key.
 		/// </summary>
-		public ImageSource Icon { get; set; }
+		public string IconKey { get; set; }
 
 		public List<Item> SubFolders { get; set; } = new List<Item>
 		{
