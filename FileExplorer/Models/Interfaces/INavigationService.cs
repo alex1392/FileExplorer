@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace FileExplorer.Models {
 
@@ -25,6 +26,7 @@ namespace FileExplorer.Models {
 		/// Get or set the current content.
 		/// </summary>
 		object Content { get; set; }
+		IEnumerable BackStack { get; }
 
 		#endregion Public Properties
 

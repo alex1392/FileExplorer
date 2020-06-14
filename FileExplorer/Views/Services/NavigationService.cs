@@ -3,7 +3,8 @@
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
-
+using System.Collections;
+using System.Windows.Controls;
 using Navigation = System.Windows.Navigation;
 
 namespace FileExplorer.Views {
@@ -14,7 +15,8 @@ namespace FileExplorer.Views {
 
 		private readonly IFileProvider fileProvider;
 		private readonly IServiceProvider serviceProvider;
-		private Navigation::NavigationService wpfNavigationService;
+		private Navigation::NavigationService internalNavigationService;
+		private Frame internalFrame;
 
 		#endregion Private Fields
 
@@ -26,9 +28,9 @@ namespace FileExplorer.Views {
 
 		#region Public Properties
 
-		public bool CanGoBack => WpfNavigationService.CanGoBack;
+		public bool CanGoBack => InternalNavigationService.CanGoBack;
 
-		public bool CanGoForward => WpfNavigationService.CanGoForward;
+		public bool CanGoForward => InternalNavigationService.CanGoForward;
 
 		public bool CanGoUp {
 			get {
@@ -43,30 +45,40 @@ namespace FileExplorer.Views {
 		/// Get or set the current content
 		/// </summary>
 		public object Content {
-			get => WpfNavigationService.Content;
+			get => InternalNavigationService.Content;
 			set {
-				if (WpfNavigationService.Content == value) {
+				if (InternalNavigationService.Content == value) {
 					return;
 				}
-				WpfNavigationService.Content = value;
+				InternalNavigationService.Content = value;
 			}
 		}
 
-		// set navigation service when the first time you get it
-		public Navigation::NavigationService WpfNavigationService {
+		public Navigation::NavigationService InternalNavigationService {
 			get {
-				if (wpfNavigationService != null) {
-					return wpfNavigationService;
+				// Lazy initialization of dependency
+				if (internalNavigationService == null) {
+					internalNavigationService = serviceProvider.GetService<MainWindow>().FolderFrame.NavigationService;
+					// propagate navigated event
+					internalNavigationService.Navigated += (sender, e) => {
+						Navigated?.Invoke(sender, (e.Content as FolderPage)?.Path);
+					};
 				}
-				wpfNavigationService = serviceProvider.GetService<MainWindow>().FolderFrame.NavigationService;
-				// propagate navigated event
-				wpfNavigationService.Navigated += (sender, e) => {
-					Navigated?.Invoke(sender, (e.Content as FolderPage)?.Path);
-				};
-				return wpfNavigationService;
+				return internalNavigationService;
 			}
 		}
 
+		public Frame InternalFrame {
+			get {
+				//Lazy initialization of dependency
+				if (internalFrame == null) {
+					internalFrame = serviceProvider.GetService<MainWindow>().FolderFrame;
+				}
+				return internalFrame;
+			}
+		}
+
+		public IEnumerable BackStack => InternalFrame.BackStack;
 		#endregion Public Properties
 
 		#region Public Constructors
@@ -83,18 +95,18 @@ namespace FileExplorer.Views {
 
 		public void GoBack()
 		{
-			if (!WpfNavigationService.CanGoBack) {
+			if (!InternalNavigationService.CanGoBack) {
 				return;
 			}
-			WpfNavigationService.GoBack();
+			InternalNavigationService.GoBack();
 		}
 
 		public void GoForward()
 		{
-			if (!WpfNavigationService.CanGoForward) {
+			if (!InternalNavigationService.CanGoForward) {
 				return;
 			}
-			WpfNavigationService.GoForward();
+			InternalNavigationService.GoForward();
 		}
 
 		public void GoUp()
@@ -105,7 +117,7 @@ namespace FileExplorer.Views {
 			var parentPath = GetParentPath();
 			var parentFolderPage = serviceProvider.GetService<FolderPage>();
 			parentFolderPage.Path = parentPath;
-			WpfNavigationService.Navigate(parentFolderPage);
+			InternalNavigationService.Navigate(parentFolderPage);
 		}
 
 		public void Navigate(string pageKey, string path)
@@ -123,12 +135,12 @@ namespace FileExplorer.Views {
 				return;
 			}
 			page.Path = path;
-			WpfNavigationService.Navigate(page);
+			InternalNavigationService.Navigate(page);
 		}
 
 		public void Refresh()
 		{
-			WpfNavigationService.Refresh();
+			InternalNavigationService.Refresh();
 		}
 
 		#endregion Public Methods

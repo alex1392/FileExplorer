@@ -97,6 +97,7 @@
     <Compile Include="Models\Commands\GoUpCommand.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Models\Commands\RefreshCommand.cs" />
+    <Compile Include="Views\Converters\BackStackConverter.cs" />
     <Compile Include="Views\Converters\DebugConverter.cs" />
     <Compile Include="Models\TypeDescriptionProvider.cs" />
     <Compile Include="Views\Converters\SizeConverter.cs" />

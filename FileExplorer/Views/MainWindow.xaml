@@ -20,19 +20,24 @@
 			<StackPanel DockPanel.Dock="Top"
 									Orientation="Horizontal"
 									Background="White">
-				<Button Height="20"
-								Command="{Binding GoBackCommand}">
-					<fa:ImageAwesome Icon="ArrowLeft" />
-				</Button>
-				<Button Height="20"
-								Command="{Binding GoForwardCommand}">
-					<fa:ImageAwesome Icon="ArrowRight" />
-				</Button>
-				<Button Width="15"
-								Height="10"
-								Command="{Binding }">
-					<fa:ImageAwesome Icon="ChevronDown" />
-				</Button>
+				<Grid>
+					<ComboBox Height="20"
+										Width="58" 
+										ItemsSource="{Binding BackStack, Converter={converter:BackStackConverter}}"/>
+					<StackPanel Orientation="Horizontal"
+											Visibility="Visible">
+						<Button Height="20"
+										Width="20"
+										Command="{Binding GoBackCommand}">
+							<fa:ImageAwesome Icon="ArrowLeft" />
+						</Button>
+						<Button Height="20"
+										Width="20"
+										Command="{Binding GoForwardCommand}">
+							<fa:ImageAwesome Icon="ArrowRight" />
+						</Button>
+					</StackPanel>
+				</Grid>
 				<Button Height="20"
 								Command="{Binding GoUpCommand}">
 					<fa:ImageAwesome Icon="ArrowUp" />

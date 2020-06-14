@@ -3,6 +3,7 @@
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -30,7 +31,7 @@ namespace FileExplorer.ViewModels {
 		#endregion Public Events
 
 		#region Public Properties
-
+		public IEnumerable BackStack => navigationService.BackStack;
 		public ICommand GoBackCommand { get; set; }
 		public ICommand GoForwardCommand { get; set; }
 		public ICommand GoUpCommand { get; set; }
@@ -102,6 +103,7 @@ namespace FileExplorer.ViewModels {
 		{
 			PathItems = GetPathItems(path);
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PathItems)));
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BackStack)));
 		}
 
 		private void SetupTreeItems()
