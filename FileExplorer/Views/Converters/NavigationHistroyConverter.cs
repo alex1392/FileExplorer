@@ -15,16 +15,13 @@ namespace FileExplorer.Views.Converters {
 		private static readonly NavigationHistroyConverter instance = new NavigationHistroyConverter();
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-
-			return (value as IEnumerable<object>)?.Select(obj => {
-				if (obj is JournalEntry entry) {
-					return entry.Name;
-				} else if (obj is Page page) {
-					return page.Title;
-				} else {
-					return null;
-				}
-			});
+			if (value is JournalEntry entry) {
+				return entry.Name;
+			} else if (value is Page page) {
+				return page.Title;
+			} else {
+				return null;
+			}
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -22,8 +22,14 @@
 									Background="White">
 				<Grid>
 					<ComboBox Height="20"
-										Width="58" 
-										ItemsSource="{Binding NavigationHistroy, Converter={converter:NavigationHistroyConverter}}"/>
+										Width="58"
+										ItemsSource="{Binding NavigationHistroy}">
+						<ComboBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding .,Converter={converter:NavigationHistroyConverter}}" />
+							</DataTemplate>
+						</ComboBox.ItemTemplate>
+					</ComboBox>
 					<StackPanel Orientation="Horizontal"
 											Visibility="Visible">
 						<Button Height="20"
