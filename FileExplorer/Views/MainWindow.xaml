@@ -35,7 +35,7 @@
 						<ComboBox.ItemContainerStyle>
 							<Style TargetType="ComboBoxItem">
 								<EventSetter Event="Selected"
-														 Handler="ComboBoxItem_Selected" />
+														 Handler="HistoryItem_Selected" />
 							</Style>
 						</ComboBox.ItemContainerStyle>
 					</ComboBox>
@@ -80,7 +80,7 @@
 							<ListBox.ItemContainerStyle>
 								<Style TargetType="ListBoxItem">
 									<EventSetter Event="Selected"
-															 Handler="ListBoxItem_Selected" />
+															 Handler="PathItem_Selected" />
 								</Style>
 							</ListBox.ItemContainerStyle>
 							<ListBox.ItemsPanel>
@@ -122,8 +122,7 @@
 				</TreeView.ItemContainerStyle>
 			</TreeView>
 			<Frame Name="FolderFrame"
-						 NavigationUIVisibility="Hidden"
-						 Source="/FileExplorer;component/Views/HomePage.xaml" />
+						 NavigationUIVisibility="Hidden"/>
 		</DockPanel>
 	</Grid>
 </fd:RevealWindow>

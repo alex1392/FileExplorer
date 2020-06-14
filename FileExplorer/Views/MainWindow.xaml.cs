@@ -37,14 +37,6 @@ namespace FileExplorer.Views {
 
 		#region Private Methods
 
-		private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
-		{
-			if (!((sender as ListBoxItem)?.DataContext is Item item)) {
-				return;
-			}
-			vm.Navigate(item);
-		}
-
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
 		{
 		}
@@ -90,7 +82,7 @@ namespace FileExplorer.Views {
 
 		#endregion Private Methods
 
-		private void ComboBoxItem_Selected(object sender, RoutedEventArgs e)
+		private void HistoryItem_Selected(object sender, RoutedEventArgs e)
 		{
 			if (!(sender is ComboBoxItem comboBoxItem) || !(comboBoxItem.DataContext is JournalEntry entry)) {
 				return;
@@ -104,6 +96,17 @@ namespace FileExplorer.Views {
 				vm.GoBackCommand.Execute(null);
 				delta++;
 			}
+		}
+
+		private void PathItem_Selected(object sender, RoutedEventArgs e)
+		{
+			if (!((sender as ListBoxItem)?.DataContext is Item item)) {
+				return;
+			}
+			if (item.Path == vm.Path) {
+				return;
+			}
+			vm.Navigate(item);
 		}
 	}
 }
