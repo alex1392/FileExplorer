@@ -9,6 +9,8 @@
 								 xmlns:vm="clr-namespace:FileExplorer.ViewModels"
 								 xmlns:fd="clr-namespace:Cyc.FluentDesign;assembly=Cyc.FluentDesign"
 								 xmlns:fa="http://schemas.fontawesome.io/icons/"
+								 xmlns:sys="clr-namespace:System;assembly=mscorlib"
+								 xmlns:cycConverter="clr-namespace:Cyc.Mvvm.Converters;assembly=Cyc.Mvvm"
 								 mc:Ignorable="d"
 								 d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel, IsDesignTimeCreatable=True}"
 								 Icon="/FileExplorer;component/Resources/Computer.ico"
@@ -17,52 +19,68 @@
 								 Width="800">
 	<Grid>
 		<DockPanel>
-			<StackPanel DockPanel.Dock="Top"
-									Orientation="Horizontal"
-									Background="White">
-				<Grid>
-					<ComboBox Name="NavigationComboBox" 
-										Height="20"
-										Width="58"
-										IsEditable="False"
-										ItemsSource="{Binding NavigationHistroy}"
-										SelectedItem="{Binding CurrentContent, Mode=OneWay}">
-						<ComboBox.ItemTemplate>
-							<DataTemplate>
-								<TextBlock Text="{Binding .,Converter={converter:NavigationHistroyConverter}}" />
-							</DataTemplate>
-						</ComboBox.ItemTemplate>
-						<ComboBox.ItemContainerStyle>
-							<Style TargetType="ComboBoxItem">
-								<EventSetter Event="Selected"
-														 Handler="HistoryItem_Selected" />
-							</Style>
-						</ComboBox.ItemContainerStyle>
-					</ComboBox>
-					<StackPanel Orientation="Horizontal"
-											Visibility="Visible">
-						<Button Height="20"
-										Width="20"
-										Command="{Binding GoBackCommand}">
-							<fa:ImageAwesome Icon="ArrowLeft" />
-						</Button>
-						<Button Height="20"
-										Width="20"
-										Command="{Binding GoForwardCommand}">
-							<fa:ImageAwesome Icon="ArrowRight" />
-						</Button>
-					</StackPanel>
-				</Grid>
-				<Button Height="20"
-								Command="{Binding GoUpCommand}">
-					<fa:ImageAwesome Icon="ArrowUp" />
-				</Button>
-				<Button Height="20"
-								Command="{Binding RefreshCommand}">
-					<fa:ImageAwesome Icon="Refresh" />
-				</Button>
+			<Grid DockPanel.Dock="Top">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="auto" />
+				</Grid.ColumnDefinitions>
+				<StackPanel Orientation="Horizontal"
+										Background="White">
+					<StackPanel.Resources>
+						<sys:Double x:Key="ButtonWidth">32</sys:Double>
+						<Style TargetType="Button">
+							<Setter Property="Width"
+											Value="{StaticResource ButtonWidth}" />
+							<Setter Property="Height"
+											Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Width}" />
+						</Style>
+						<Style TargetType="fa:ImageAwesome">
+							<Setter Property="Width"
+											Value="20" />
+							<Setter Property="Height"
+											Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Width}" />
+						</Style>
+					</StackPanel.Resources>
+					<Grid>
+						<ComboBox Name="NavigationComboBox"
+											Width="{Binding Source={StaticResource ButtonWidth}, Converter={cycConverter:MathConverter}, ConverterParameter=x*2+18}"
+											IsEditable="False"
+											ItemsSource="{Binding NavigationHistroy}"
+											SelectedItem="{Binding CurrentContent, Mode=OneWay}">
+							<ComboBox.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding .,Converter={converter:NavigationHistroyConverter}}" />
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+							<ComboBox.ItemContainerStyle>
+								<Style TargetType="ComboBoxItem">
+									<EventSetter Event="Selected"
+															 Handler="HistoryItem_Selected" />
+								</Style>
+							</ComboBox.ItemContainerStyle>
+						</ComboBox>
+						<StackPanel Orientation="Horizontal"
+												Visibility="Visible">
+							<Button Command="{Binding GoBackCommand}">
+								<fa:ImageAwesome Icon="ArrowLeft" />
+							</Button>
+							<Button Command="{Binding GoForwardCommand}">
+								<fa:ImageAwesome Icon="ArrowRight" />
+							</Button>
+						</StackPanel>
+					</Grid>
+					<Button Command="{Binding GoUpCommand}">
+						<fa:ImageAwesome Icon="ArrowUp" />
+					</Button>
+					<Button Command="{Binding RefreshCommand}">
+						<fa:ImageAwesome Icon="Refresh" />
+					</Button>
 
-				<Border BorderBrush="Black">
+				</StackPanel>
+				<Border Name="PathItemBorder"
+								Grid.Column="1"
+								BorderBrush="Black">
 					<Grid>
 						<ListBox Name="PathListBox"
 										 ItemsSource="{Binding PathItems}"
@@ -96,7 +114,47 @@
 										 KeyUp="PathTextBox_KeyUp" />
 					</Grid>
 				</Border>
-			</StackPanel>
+				<Border Grid.Column="2"
+								BorderBrush="#FFABADB3"
+								BorderThickness="1">
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="auto" />
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						<fa:ImageAwesome Icon="Search"
+														 Height="20" 
+														 Foreground="Gray"
+														 Margin="3"/>
+						<TextBox x:Name="searchTextBox"
+										 Grid.Column="1"
+										 BorderBrush="Transparent"
+										 Width="200"
+										 VerticalAlignment="Center"
+										 VerticalContentAlignment="Center" />
+						<TextBlock VerticalAlignment="Center"
+											 Grid.Column="1"
+											 Foreground="Gray"
+											 Padding="3"
+											 IsHitTestVisible="False">
+							<TextBlock.Style>
+								<Style TargetType="{x:Type TextBlock}">
+									<Setter Property="Visibility"
+													Value="Collapsed" />
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding Text, ElementName=searchTextBox}"
+																 Value="">
+											<Setter Property="Visibility"
+															Value="Visible" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</TextBlock.Style>
+							<Run Text="Search in folder" />
+						</TextBlock>
+					</Grid>
+				</Border>
+			</Grid>
 			<TreeView DockPanel.Dock="Left"
 								ItemsSource="{Binding TreeItems}"
 								Width="150">
@@ -122,7 +180,7 @@
 				</TreeView.ItemContainerStyle>
 			</TreeView>
 			<Frame Name="FolderFrame"
-						 NavigationUIVisibility="Hidden"/>
+						 NavigationUIVisibility="Hidden" />
 		</DockPanel>
 	</Grid>
 </fd:RevealWindow>
