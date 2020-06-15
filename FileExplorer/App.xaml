@@ -6,8 +6,8 @@
 	<Application.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/Cyc.FluentDesign;component/Themes/Generic.xaml">
-				</ResourceDictionary>
+				<ResourceDictionary Source="pack://application:,,,/Cyc.FluentDesign;component/Themes/Generic.xaml" />
+				<ResourceDictionary Source="Resources/Resources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Application.Resources>

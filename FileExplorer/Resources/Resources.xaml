@@ -1,0 +1,15 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+										xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Geometry x:Key="shapes_solidGeometry">F1 M512,512z M0,0z M128,256A128,128,0,1,0,256,384A128,128,0,0,0,128,256z M507,201.14L400.07,18.29A37.26,37.26,0,0,0,335.93,18.29L229,201.14C214.76,225.52,232.58,256,261.09,256L474.91,256C503.42,256,521.24,225.52,507,201.14z M480,288L320,288A32,32,0,0,0,288,320L288,480A32,32,0,0,0,320,512L480,512A32,32,0,0,0,512,480L512,320A32,32,0,0,0,480,288z</Geometry>
+	<DrawingGroup x:Key="shapes_solidDrawingGroup"
+								ClipGeometry="M0,0 V512 H512 V0 H0 Z">
+		<DrawingGroup.Transform>
+			<TranslateTransform X="0.0037371641956269741"
+													Y="0.001018524169921875" />
+		</DrawingGroup.Transform>
+		<GeometryDrawing Brush="#FF000000"
+										 Geometry="{StaticResource shapes_solidGeometry}" />
+	</DrawingGroup>
+	<DrawingImage x:Key="shapes_solidDrawingImage"
+								Drawing="{StaticResource shapes_solidDrawingGroup}" />
+</ResourceDictionary>

@@ -17,123 +17,77 @@
 								 Title="MainWindow"
 								 Height="450"
 								 Width="800">
-	<Grid>
-		<DockPanel>
-			<Grid DockPanel.Dock="Top">
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="auto" />
-					<ColumnDefinition Width="*" />
-					<ColumnDefinition Width="auto" />
-				</Grid.ColumnDefinitions>
-				<StackPanel Orientation="Horizontal"
-										Background="White">
-					<StackPanel.Resources>
-						<sys:Double x:Key="ButtonWidth">32</sys:Double>
-						<Style TargetType="Button">
-							<Setter Property="Width"
-											Value="{StaticResource ButtonWidth}" />
-							<Setter Property="Height"
-											Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Width}" />
-						</Style>
-						<Style TargetType="fa:ImageAwesome">
-							<Setter Property="Width"
-											Value="20" />
-							<Setter Property="Height"
-											Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Width}" />
-						</Style>
-					</StackPanel.Resources>
-					<Grid>
-						<ComboBox Name="NavigationComboBox"
-											Width="{Binding Source={StaticResource ButtonWidth}, Converter={cycConverter:MathConverter}, ConverterParameter=x*2+18}"
-											IsEditable="False"
-											ItemsSource="{Binding NavigationHistroy}"
-											SelectedItem="{Binding CurrentContent, Mode=OneWay}">
-							<ComboBox.ItemTemplate>
-								<DataTemplate>
-									<TextBlock Text="{Binding .,Converter={converter:NavigationHistroyConverter}}" />
-								</DataTemplate>
-							</ComboBox.ItemTemplate>
-							<ComboBox.ItemContainerStyle>
-								<Style TargetType="ComboBoxItem">
-									<EventSetter Event="Selected"
-															 Handler="HistoryItem_Selected" />
-								</Style>
-							</ComboBox.ItemContainerStyle>
-						</ComboBox>
-						<StackPanel Orientation="Horizontal"
-												Visibility="Visible">
-							<Button Command="{Binding GoBackCommand}">
-								<fa:ImageAwesome Icon="ArrowLeft" />
-							</Button>
-							<Button Command="{Binding GoForwardCommand}">
-								<fa:ImageAwesome Icon="ArrowRight" />
-							</Button>
-						</StackPanel>
-					</Grid>
-					<Button Command="{Binding GoUpCommand}">
-						<fa:ImageAwesome Icon="ArrowUp" />
-					</Button>
-					<Button Command="{Binding RefreshCommand}">
-						<fa:ImageAwesome Icon="Refresh" />
-					</Button>
 
-				</StackPanel>
-				<Border Name="PathItemBorder"
-								Grid.Column="1"
-								BorderBrush="Black">
-					<Grid>
-						<ListBox Name="PathListBox"
-										 ItemsSource="{Binding PathItems}"
-										 Height="32"
-										 MouseDown="PathListBox_MouseDown">
-							<ListBox.ItemTemplate>
-								<DataTemplate DataType="{x:Type model:Item}">
-									<StackPanel Orientation="Horizontal">
-										<TextBlock Text="{Binding Name}"
-															 VerticalAlignment="Center"
-															 Margin="3" />
-									</StackPanel>
-								</DataTemplate>
-							</ListBox.ItemTemplate>
-							<ListBox.ItemContainerStyle>
-								<Style TargetType="ListBoxItem">
-									<EventSetter Event="Selected"
-															 Handler="PathItem_Selected" />
-								</Style>
-							</ListBox.ItemContainerStyle>
-							<ListBox.ItemsPanel>
-								<ItemsPanelTemplate>
-									<StackPanel Orientation="Horizontal" />
-								</ItemsPanelTemplate>
-							</ListBox.ItemsPanel>
-						</ListBox>
-						<TextBox Name="PathTextBox"
-										 Height="{Binding ElementName=PathListBox, Path=Height}"
-										 Text="{Binding Path, Mode=OneWay}"
-										 Visibility="Hidden"
-										 KeyUp="PathTextBox_KeyUp" />
-					</Grid>
-				</Border>
-				<Border Grid.Column="2"
-								BorderBrush="#FFABADB3"
-								BorderThickness="1">
-					<Grid>
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="auto" />
-							<ColumnDefinition Width="*" />
-						</Grid.ColumnDefinitions>
-						<fa:ImageAwesome Icon="Search"
-														 Height="20" 
-														 Foreground="Gray"
-														 Margin="3"/>
+	<DockPanel>
+		<DockPanel DockPanel.Dock="Top">
+			<DockPanel.Resources>
+				<sys:Double x:Key="ButtonWidth">32</sys:Double>
+				<Style TargetType="Button">
+					<Setter Property="Width"
+									Value="{StaticResource ButtonWidth}" />
+					<Setter Property="Height"
+									Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Width}" />
+				</Style>
+				<Style TargetType="fa:ImageAwesome">
+					<Setter Property="Width"
+									Value="20" />
+					<Setter Property="Height"
+									Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Width}" />
+				</Style>
+			</DockPanel.Resources>
+			<StackPanel Orientation="Horizontal"
+									DockPanel.Dock="Left"
+									Background="White">
+				<Grid>
+					<ComboBox Name="NavigationComboBox"
+										Width="{Binding Source={StaticResource ButtonWidth}, Converter={cycConverter:MathConverter}, ConverterParameter=x*2+18}"
+										IsEditable="False"
+										ItemsSource="{Binding NavigationHistroy}"
+										SelectedItem="{Binding CurrentContent, Mode=OneWay}">
+						<ComboBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding .,Converter={converter:NavigationHistroyConverter}}" />
+							</DataTemplate>
+						</ComboBox.ItemTemplate>
+						<ComboBox.ItemContainerStyle>
+							<Style TargetType="ComboBoxItem">
+								<EventSetter Event="Selected"
+														 Handler="HistoryItem_Selected" />
+							</Style>
+						</ComboBox.ItemContainerStyle>
+					</ComboBox>
+					<StackPanel Orientation="Horizontal"
+											Visibility="Visible">
+						<Button Command="{Binding GoBackCommand}">
+							<fa:ImageAwesome Icon="ArrowLeft" />
+						</Button>
+						<Button Command="{Binding GoForwardCommand}">
+							<fa:ImageAwesome Icon="ArrowRight" />
+						</Button>
+					</StackPanel>
+				</Grid>
+				<Button Command="{Binding GoUpCommand}">
+					<fa:ImageAwesome Icon="ArrowUp" />
+				</Button>
+				<Button Command="{Binding RefreshCommand}">
+					<fa:ImageAwesome Icon="Refresh" />
+				</Button>
+
+			</StackPanel>
+			<Border DockPanel.Dock="Right"
+							BorderBrush="#FFABADB3"
+							BorderThickness="1">
+				<StackPanel Orientation="Horizontal">
+					<fa:ImageAwesome Icon="Search"
+													 Height="20"
+													 Foreground="Gray"
+													 Margin="3" />
+					<Grid Width="200">
 						<TextBox x:Name="searchTextBox"
-										 Grid.Column="1"
 										 BorderBrush="Transparent"
-										 Width="200"
 										 VerticalAlignment="Center"
 										 VerticalContentAlignment="Center" />
 						<TextBlock VerticalAlignment="Center"
-											 Grid.Column="1"
 											 Foreground="Gray"
 											 Padding="3"
 											 IsHitTestVisible="False">
@@ -149,38 +103,78 @@
 										</DataTrigger>
 									</Style.Triggers>
 								</Style>
-							</TextBlock.Style>
-							<Run Text="Search in folder" />
-						</TextBlock>
+							</TextBlock.Style><Run Text="Search in folder" /></TextBlock>
 					</Grid>
-				</Border>
-			</Grid>
-			<TreeView DockPanel.Dock="Left"
-								ItemsSource="{Binding TreeItems}"
-								Width="150">
-				<TreeView.ItemTemplate>
-					<HierarchicalDataTemplate DataType="{x:Type model:TreeFolderItem}"
-																		ItemsSource="{Binding SubFolders}">
-						<StackPanel Orientation="Horizontal">
-							<Image Source="{Binding .,Converter={converter:IconConverter}}"
-										 Width="18" />
-							<TextBlock Text="{Binding Name}"
-												 VerticalAlignment="Center"
-												 Margin="3" />
-						</StackPanel>
-					</HierarchicalDataTemplate>
-				</TreeView.ItemTemplate>
-				<TreeView.ItemContainerStyle>
-					<Style TargetType="TreeViewItem">
-						<EventSetter Event="Selected"
-												 Handler="TreeViewItem_Selected" />
-						<EventSetter Event="Expanded"
-												 Handler="TreeViewItem_Expanded" />
-					</Style>
-				</TreeView.ItemContainerStyle>
-			</TreeView>
-			<Frame Name="FolderFrame"
-						 NavigationUIVisibility="Hidden" />
+				</StackPanel>
+			</Border>
+			<Button DockPanel.Dock="Right">
+				<Image Source="{StaticResource shapes_solidDrawingImage}" 
+							 Width="20"
+							 Height="20"/>
+			</Button>
+			<Border Name="PathItemBorder"
+							Grid.Column="1"
+							BorderBrush="Black">
+				<Grid>
+					<ListBox Name="PathListBox"
+									 ItemsSource="{Binding PathItems}"
+									 Height="32"
+									 MouseDown="PathListBox_MouseDown">
+						<ListBox.ItemTemplate>
+							<DataTemplate DataType="{x:Type model:Item}">
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="{Binding Name}"
+														 VerticalAlignment="Center"
+														 Margin="3" />
+								</StackPanel>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+						<ListBox.ItemContainerStyle>
+							<Style TargetType="ListBoxItem">
+								<EventSetter Event="Selected"
+														 Handler="PathItem_Selected" />
+							</Style>
+						</ListBox.ItemContainerStyle>
+						<ListBox.ItemsPanel>
+							<ItemsPanelTemplate>
+								<StackPanel Orientation="Horizontal" />
+							</ItemsPanelTemplate>
+						</ListBox.ItemsPanel>
+					</ListBox>
+					<TextBox Name="PathTextBox"
+									 Height="{Binding ElementName=PathListBox, Path=Height}"
+									 Text="{Binding Path, Mode=OneWay}"
+									 Visibility="Hidden"
+									 KeyUp="PathTextBox_KeyUp" />
+				</Grid>
+			</Border>
 		</DockPanel>
-	</Grid>
+		<TreeView DockPanel.Dock="Left"
+							ItemsSource="{Binding TreeItems}"
+							Width="150">
+			<TreeView.ItemTemplate>
+				<HierarchicalDataTemplate DataType="{x:Type model:TreeFolderItem}"
+																	ItemsSource="{Binding SubFolders}">
+					<StackPanel Orientation="Horizontal">
+						<Image Source="{Binding .,Converter={converter:IconConverter}}"
+									 Width="18" />
+						<TextBlock Text="{Binding Name}"
+											 VerticalAlignment="Center"
+											 Margin="3" />
+					</StackPanel>
+				</HierarchicalDataTemplate>
+			</TreeView.ItemTemplate>
+			<TreeView.ItemContainerStyle>
+				<Style TargetType="TreeViewItem">
+					<EventSetter Event="Selected"
+											 Handler="TreeViewItem_Selected" />
+					<EventSetter Event="Expanded"
+											 Handler="TreeViewItem_Expanded" />
+				</Style>
+			</TreeView.ItemContainerStyle>
+		</TreeView>
+		<Frame Name="FolderFrame"
+					 NavigationUIVisibility="Hidden" />
+	</DockPanel>
+
 </fd:RevealWindow>
