@@ -1,6 +1,6 @@
 ﻿using FileExplorer.Models;
 using FileExplorer.ViewModels;
-
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -56,11 +56,7 @@ namespace FileExplorer.Views {
 
 		private void FolderPage_Loaded(object sender, RoutedEventArgs e)
 		{
-			//Dispatcher.Invoke(() => {
-			//	collectionView = CollectionViewSource.GetDefaultView(ItemsDataGrid.ItemsSource) as CollectionView;
-			//	groupDescription = new PropertyGroupDescription(nameof(ListItem.TypeDescription));
-			//	collectionView.GroupDescriptions.Add(groupDescription);
-			//}, DispatcherPriority.Loaded); // priority need to be less than Render
+
 		}
 
 		private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -69,6 +65,24 @@ namespace FileExplorer.Views {
 				return;
 			}
 			vm.Navigate(folderItem);
+		}
+
+		public void ToggleGroupByType()
+		{
+			if (!(CollectionViewSource.GetDefaultView(ItemsListView.ItemsSource) is CollectionView collectionView)) {
+				return;
+			}
+			var groupDescription = new PropertyGroupDescription(nameof(ListItem.TypeDescription));
+			collectionView.GroupDescriptions.Clear();
+			collectionView.GroupDescriptions.Add(groupDescription);
+		}
+
+		public void UnToggleGroupByType()
+		{
+			if (!(CollectionViewSource.GetDefaultView(ItemsListView.ItemsSource) is CollectionView collectionView)) {
+				return;
+			}
+			collectionView.GroupDescriptions.Clear();
 		}
 
 		#endregion Private Methods

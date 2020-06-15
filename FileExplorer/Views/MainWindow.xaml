@@ -76,18 +76,20 @@
 
 			</StackPanel>
 			<Border DockPanel.Dock="Right"
+							Background="White"
 							BorderBrush="#FFABADB3"
 							BorderThickness="1">
 				<StackPanel Orientation="Horizontal">
 					<fa:ImageAwesome Icon="Search"
-													 Height="20"
+													 Height="{StaticResource IconWidth}"
 													 Foreground="Gray"
 													 Margin="3" />
 					<Grid Width="200">
 						<TextBox x:Name="searchTextBox"
 										 BorderBrush="Transparent"
 										 VerticalAlignment="Center"
-										 VerticalContentAlignment="Center" />
+										 VerticalContentAlignment="Center"
+										 Height="{StaticResource ButtonWidth}"/>
 						<TextBlock VerticalAlignment="Center"
 											 Foreground="Gray"
 											 Padding="3"
@@ -108,9 +110,12 @@
 					</Grid>
 				</StackPanel>
 			</Border>
-			<ToggleButton DockPanel.Dock="Right"
+			<ToggleButton Name="GroupToggleButton" 
+										DockPanel.Dock="Right"
 										Width="{StaticResource ButtonWidth}"
-										Height="{StaticResource ButtonWidth}">
+										Height="{StaticResource ButtonWidth}"
+										Checked="GroupToggleButton_Checked"
+										Unchecked="GroupToggleButton_Unchecked">
 				<Image Source="{StaticResource shapes_solidDrawingImage}"
 							 Width="{StaticResource IconWidth}"/>
 			</ToggleButton>

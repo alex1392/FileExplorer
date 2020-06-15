@@ -2,7 +2,7 @@
 
 using FileExplorer.Models;
 using FileExplorer.ViewModels;
-
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,6 +19,7 @@ namespace FileExplorer.Views {
 		#region Private Fields
 
 		private readonly MainWindowViewModel vm;
+		private readonly IServiceProvider serviceProvider;
 
 		#endregion Private Fields
 
@@ -30,9 +31,10 @@ namespace FileExplorer.Views {
 			this.Loaded += MainWindow_Loaded;
 		}
 
-		public MainWindow(MainWindowViewModel vm) : this()
+		public MainWindow(MainWindowViewModel vm, IServiceProvider serviceProvider) : this()
 		{
 			this.vm = vm;
+			this.serviceProvider = serviceProvider;
 			DataContext = this.vm;
 		}
 
@@ -59,6 +61,13 @@ namespace FileExplorer.Views {
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
 		{
 			vm.Navigate(new Uri("/Views/HomePage.xaml", UriKind.Relative));
+			var navigationService = serviceProvider.GetService<INavigationService>();
+			navigationService.Navigated += NavigationService_Navigated;
+		}
+
+		private void NavigationService_Navigated(object sender, string e)
+		{
+			GroupToggleButton.IsChecked = false;
 		}
 
 		private void PathItem_Selected(object sender, RoutedEventArgs e)
@@ -112,5 +121,21 @@ namespace FileExplorer.Views {
 		}
 
 		#endregion Private Methods
+
+		private void GroupToggleButton_Checked(object sender, RoutedEventArgs e)
+		{
+			if (!(FolderFrame.Content is FolderPage folderPage)) {
+				return;
+			}
+			folderPage.ToggleGroupByType();
+		}
+
+		private void GroupToggleButton_Unchecked(object sender, RoutedEventArgs e)
+		{
+			if (!(FolderFrame.Content is FolderPage folderPage)) {
+				return;
+			}
+			folderPage.UnToggleGroupByType();
+		}
 	}
 }
