@@ -1,0 +1,31 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Geometry x:Key="grip_vertical_solidGeometry">
+		F1 M320,512z M0,0z 
+		M96,32
+		L32,32
+		C14.33,32,0,46.33,0,64
+		L0,128
+		C0,145.67,14.33,160,32,160
+		L96,160
+		C113.67,160,128,145.67,128,128
+		L128,64
+		C128,46.33,113.67,32,96,32z 
+		M96,192L32,192C14.33,192,0,206.33,0,224L0,288C0,305.67,14.33,320,32,320L96,320C113.67,320,128,305.67,128,288L128,224C128,206.33,113.67,192,96,192z 
+		M96,352L32,352C14.33,352,0,366.33,0,384L0,448C0,465.67,14.33,480,32,480L96,480C113.67,480,128,465.67,128,448L128,384C128,366.33,113.67,352,96,352z 
+		M288,32L224,32C206.33,32,192,46.33,192,64L192,128C192,145.67,206.33,160,224,160L288,160C305.67,160,320,145.67,320,128L320,64C320,46.33,305.67,32,288,32z 
+		M288,192L224,192C206.33,192,192,206.33,192,224L192,288C192,305.67,206.33,320,224,320L288,320C305.67,320,320,305.67,320,288L320,224C320,206.33,305.67,192,288,192z 
+		M288,352L224,352C206.33,352,192,366.33,192,384L192,448C192,465.67,206.33,480,224,480L288,480C305.67,480,320,465.67,320,448L320,384C320,366.33,305.67,352,288,352z
+	</Geometry>
+	<DrawingGroup x:Key="grip_vertical_solidDrawingGroup" ClipGeometry="M0,0 V512 H320 V0 H0 Z">
+		<GeometryDrawing Brush="#FF000000" Geometry="{StaticResource grip_vertical_solidGeometry}" />
+	</DrawingGroup>
+	<DrawingImage x:Key="grip_vertical_solidDrawingImage" Drawing="{StaticResource grip_vertical_solidDrawingGroup}" />
+	<Geometry x:Key="shapes_solidGeometry">F1 M512,512z M0,0z M128,256A128,128,0,1,0,256,384A128,128,0,0,0,128,256z M507,201.14L400.07,18.29A37.26,37.26,0,0,0,335.93,18.29L229,201.14C214.76,225.52,232.58,256,261.09,256L474.91,256C503.42,256,521.24,225.52,507,201.14z M480,288L320,288A32,32,0,0,0,288,320L288,480A32,32,0,0,0,320,512L480,512A32,32,0,0,0,512,480L512,320A32,32,0,0,0,480,288z</Geometry>
+	<DrawingGroup x:Key="shapes_solidDrawingGroup" ClipGeometry="M0,0 V512 H512 V0 H0 Z">
+		<DrawingGroup.Transform>
+			<TranslateTransform X="0.0037371641956269741" Y="0.001018524169921875" />
+		</DrawingGroup.Transform>
+		<GeometryDrawing Brush="#FF000000" Geometry="{StaticResource shapes_solidGeometry}" />
+	</DrawingGroup>
+	<DrawingImage x:Key="shapes_solidDrawingImage" Drawing="{StaticResource shapes_solidDrawingGroup}" />
+</ResourceDictionary>

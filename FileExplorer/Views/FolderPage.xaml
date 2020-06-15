@@ -13,48 +13,49 @@
 			d:DesignHeight="450"
 			d:DesignWidth="800"
 			Title="{Binding Title}">
+	<Page.Resources>
+		<GridView x:Key="GridViewKey">
+			<GridViewColumn Header="Name"
+											Width="Auto"
+											util:GridViewSort.PropertyName="Name">
+				<GridViewColumn.CellTemplate>
+					<DataTemplate DataType="{x:Type model:Item}">
+						<StackPanel Orientation="Horizontal">
+							<Image Source="{Binding .,Converter={converter:IconConverter}}"
+										 Width="18" />
+							<TextBlock Text="{Binding Name}"
+												 VerticalAlignment="Center"
+												 Margin="3" />
+						</StackPanel>
+					</DataTemplate>
+				</GridViewColumn.CellTemplate>
+			</GridViewColumn>
+			<GridViewColumn Header="Date"
+											Width="Auto"
+											DisplayMemberBinding="{Binding LastModifiedTime, Converter={converter:TimeConverter}}"
+											util:GridViewSort.PropertyName="LastModifiedTime" />
+			<GridViewColumn Header="Type"
+											Width="Auto"
+											DisplayMemberBinding="{Binding TypeDescription}"
+											util:GridViewSort.PropertyName="TypeDescription" />
+			<GridViewColumn Header="Size"
+											Width="Auto"
+											util:GridViewSort.PropertyName="Size">
+				<GridViewColumn.CellTemplate>
+					<DataTemplate DataType="{x:Type model:ListFileItem}">
+						<TextBlock Text="{Binding Size, Converter={converter:SizeConverter}}"
+											 TextAlignment="Right" />
+					</DataTemplate>
+				</GridViewColumn.CellTemplate>
+			</GridViewColumn>
+		</GridView>
+	</Page.Resources>
 	<Grid>
 		<ListView Name="ItemsListView"
 							ItemsSource="{Binding ListItems}"
+							View="{StaticResource GridViewKey}"
 							util:GridViewSort.AutoSort="True"
 							VirtualizingPanel.IsVirtualizingWhenGrouping="True">
-			<ListView.View>
-				<GridView>
-					<GridViewColumn Header="Name"
-													Width="Auto"
-													util:GridViewSort.PropertyName="Name">
-						<GridViewColumn.CellTemplate>
-							<DataTemplate DataType="{x:Type model:Item}">
-								<StackPanel Orientation="Horizontal">
-									<Image Source="{Binding .,Converter={converter:IconConverter}}"
-												 Width="18" />
-									<TextBlock Text="{Binding Name}"
-														 VerticalAlignment="Center"
-														 Margin="3" />
-								</StackPanel>
-							</DataTemplate>
-						</GridViewColumn.CellTemplate>
-					</GridViewColumn>
-					<GridViewColumn Header="Date"
-													Width="Auto"
-													DisplayMemberBinding="{Binding LastModifiedTime, Converter={converter:TimeConverter}}"
-													util:GridViewSort.PropertyName="LastModifiedTime" />
-					<GridViewColumn Header="Type"
-													Width="Auto"
-													DisplayMemberBinding="{Binding TypeDescription}"
-													util:GridViewSort.PropertyName="TypeDescription" />
-					<GridViewColumn Header="Size"
-													Width="Auto"
-													util:GridViewSort.PropertyName="Size">
-						<GridViewColumn.CellTemplate>
-							<DataTemplate DataType="{x:Type model:ListFileItem}">
-								<TextBlock Text="{Binding Size, Converter={converter:SizeConverter}}"
-													 TextAlignment="Right" />
-							</DataTemplate>
-						</GridViewColumn.CellTemplate>
-					</GridViewColumn>
-				</GridView>
-			</ListView.View>
 			<ListView.ItemContainerStyle>
 				<Style TargetType="ListViewItem">
 					<EventSetter Event="MouseDoubleClick"

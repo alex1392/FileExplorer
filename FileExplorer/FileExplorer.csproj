@@ -97,6 +97,7 @@
     <Compile Include="Models\Commands\GoUpCommand.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Models\Commands\RefreshCommand.cs" />
+    <Compile Include="Views\DropDownButtonBehavior.cs" />
     <Compile Include="Views\Converters\NavigationHistroyConverter.cs" />
     <Compile Include="Views\Converters\DebugConverter.cs" />
     <Compile Include="Models\Providers\TypeDescriptionProvider.cs" />
@@ -105,14 +106,21 @@
     <Compile Include="DataVirtualization\VirtualizingCollection.cs" />
     <Compile Include="Models\Interfaces\ISystemFolderProvider.cs" />
     <Compile Include="Models\Providers\SystemFolderProvider.cs" />
+    <Compile Include="Views\Canvas.xaml.cs">
+      <DependentUpon>Canvas.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Services\DialogService.cs" />
     <Compile Include="Views\Services\NavigationService.cs" />
     <Compile Include="Views\FolderPage.xaml.cs">
       <DependentUpon>FolderPage.xaml</DependentUpon>
     </Compile>
-    <Page Include="Resources\Resources.xaml">
+    <Page Include="Resources\FontAwesomeResources.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Resources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\HomePage.xaml">
       <SubType>Designer</SubType>
@@ -141,6 +149,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\FolderPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Canvas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

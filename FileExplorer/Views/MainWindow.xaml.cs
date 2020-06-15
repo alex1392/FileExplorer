@@ -167,5 +167,15 @@ namespace FileExplorer.Views {
 		}
 
 		#endregion Private Methods
+
+		private void ListViewButton_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void GridViewButton_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
 	}
 }
