@@ -47,6 +47,12 @@
 					<Setter Property="Width"
 									Value="{StaticResource IconWidth}" />
 				</Style>
+				<fa:ImageAwesome x:Key="ListIcon" 
+												 Icon="List" />
+				<fa:ImageAwesome x:Key="ThIcon" 
+												 Icon="Th" />
+				<Image x:Key="TileViewIcon"
+							 Source="{StaticResource tileview_solidDrawingImage}" />
 			</DockPanel.Resources>
 			<StackPanel Orientation="Horizontal"
 									DockPanel.Dock="Left"
@@ -104,11 +110,11 @@
 				<Image Source="{StaticResource shapes_solidDrawingImage}" />
 			</ToggleButton>
 			<Button Name="ViewButton"
+							Content="{StaticResource ListIcon}"
 							DockPanel.Dock="Right">
 				<i:Interaction.Behaviors>
 					<local:DropDownButtonBehavior />
 				</i:Interaction.Behaviors>
-				<fa:ImageAwesome Icon="List" />
 				<Button.ContextMenu>
 					<ContextMenu>
 						<ContextMenu.Resources>
@@ -136,7 +142,8 @@
 								<fa:ImageAwesome Icon="Th" />
 							</MenuItem.Icon>
 						</MenuItem>
-						<MenuItem Header="TileView">
+						<MenuItem Header="TileView"
+											Click="TileViewButton_Click">
 							<MenuItem.Icon>
 								<Image Source="{StaticResource tileview_solidDrawingImage}" />
 							</MenuItem.Icon>

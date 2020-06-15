@@ -170,22 +170,32 @@ namespace FileExplorer.Views {
 
 		private void ListViewButton_Click(object sender, RoutedEventArgs e)
 		{
-
+			if (!(FolderFrame.Content is FolderPage folderPage))
+			{
+				return;
+			}
+			folderPage.ToggleListView();
+			ViewButton.Content = ViewButton.FindResource("ListIcon");
 		}
 
 		private void GridViewButton_Click(object sender, RoutedEventArgs e)
 		{
-
+			if (!(FolderFrame.Content is FolderPage folderPage))
+			{
+				return;
+			}
+			folderPage.ToggleGridView();
+			ViewButton.Content = ViewButton.FindResource("ThIcon");
 		}
 
-		private void TreeViewToggleButton_Checked(object sender, RoutedEventArgs e)
+		private void TileViewButton_Click(object sender, RoutedEventArgs e)
 		{
-
-		}
-
-		private void TreeViewToggleButton_Unchecked(object sender, RoutedEventArgs e)
-		{
-
+			if (!(FolderFrame.Content is FolderPage folderPage))
+			{
+				return;
+			}
+			folderPage.ToggleTileView();
+			ViewButton.Content = ViewButton.FindResource("TileViewIcon");
 		}
 	}
 }

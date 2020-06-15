@@ -2,6 +2,7 @@
 using FileExplorer.ViewModels;
 
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -27,7 +28,12 @@ namespace FileExplorer.Views {
 		public CollectionView CollectionView {
 			get {
 				if (collectionView == null) {
-					collectionView = CollectionViewSource.GetDefaultView(ItemsListView.ItemsSource) as CollectionView;
+					collectionView = 
+					(
+						CollectionViewSource.GetDefaultView(ItemsListView.ItemsSource) ??
+						CollectionViewSource.GetDefaultView(ItemsGridView.ItemsSource) ??
+						CollectionViewSource.GetDefaultView(ItemsTileView.ItemsSource)
+					) as CollectionView;
 				}
 				return collectionView;
 			}
@@ -42,6 +48,23 @@ namespace FileExplorer.Views {
 				}
 				path = value;
 				vm.Path = value; // property injection
+			}
+		}
+
+		public List<ListView> ListViews
+		{
+			get
+			{
+				if (listViews == null)
+				{
+					listViews = new List<ListView>
+					{
+						ItemsListView,
+						ItemsGridView,
+						ItemsTileView,
+					};
+				}
+				return listViews;
 			}
 		}
 
@@ -74,7 +97,7 @@ namespace FileExplorer.Views {
 
 		public void UnToggleGroupByType()
 		{
-			CollectionView.GroupDescriptions.Clear();
+			CollectionView?.GroupDescriptions.Clear();
 		}
 
 		#endregion Public Methods
@@ -97,6 +120,7 @@ namespace FileExplorer.Views {
 
 		private void FolderPage_Loaded(object sender, RoutedEventArgs e)
 		{
+			
 		}
 
 		private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -105,6 +129,33 @@ namespace FileExplorer.Views {
 				return;
 			}
 			vm.Navigate(folderItem);
+		}
+
+		private List<ListView> listViews;
+		internal void ToggleListView()
+		{
+			HideListViews();
+			ItemsListView.Visibility = Visibility.Visible;
+		}
+
+		private void HideListViews()
+		{
+			foreach (var view in ListViews)
+			{
+				view.Visibility = Visibility.Collapsed;
+			}
+		}
+
+		internal void ToggleGridView()
+		{
+			HideListViews();
+			ItemsGridView.Visibility = Visibility.Visible;
+		}
+
+		internal void ToggleTileView()
+		{
+			HideListViews();
+			ItemsTileView.Visibility = Visibility.Visible;
 		}
 
 		#endregion Private Methods
