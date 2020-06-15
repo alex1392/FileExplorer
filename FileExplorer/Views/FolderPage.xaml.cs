@@ -1,5 +1,6 @@
 ﻿using FileExplorer.Models;
 using FileExplorer.ViewModels;
+
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,6 +24,15 @@ namespace FileExplorer.Views {
 
 		#region Public Properties
 
+		public CollectionView CollectionView {
+			get {
+				if (collectionView == null) {
+					collectionView = CollectionViewSource.GetDefaultView(ItemsListView.ItemsSource) as CollectionView;
+				}
+				return collectionView;
+			}
+		}
+
 		public string Path {
 			get => path;
 			set {
@@ -32,15 +42,6 @@ namespace FileExplorer.Views {
 				}
 				path = value;
 				vm.Path = value; // property injection
-			}
-		}
-
-		public CollectionView CollectionView {
-			get {
-				if (collectionView == null) {
-					collectionView = CollectionViewSource.GetDefaultView(ItemsListView.ItemsSource) as CollectionView;
-				}
-				return collectionView;
 			}
 		}
 
@@ -62,20 +63,7 @@ namespace FileExplorer.Views {
 
 		#endregion Public Constructors
 
-		#region Private Methods
-
-		private void FolderPage_Loaded(object sender, RoutedEventArgs e)
-		{
-
-		}
-
-		private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-		{
-			if (!((sender as ListViewItem)?.DataContext is ListFolderItem folderItem)) {
-				return;
-			}
-			vm.Navigate(folderItem);
-		}
+		#region Public Methods
 
 		public void ToggleGroupByType()
 		{
@@ -89,6 +77,10 @@ namespace FileExplorer.Views {
 			CollectionView.GroupDescriptions.Clear();
 		}
 
+		#endregion Public Methods
+
+		#region Internal Methods
+
 		internal void ApplyFilter(Predicate<object> listItemFilter)
 		{
 			CollectionView.Filter = listItemFilter;
@@ -97,6 +89,22 @@ namespace FileExplorer.Views {
 		internal void RefreshPage()
 		{
 			CollectionView.Refresh();
+		}
+
+		#endregion Internal Methods
+
+		#region Private Methods
+
+		private void FolderPage_Loaded(object sender, RoutedEventArgs e)
+		{
+		}
+
+		private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			if (!((sender as ListViewItem)?.DataContext is ListFolderItem folderItem)) {
+				return;
+			}
+			vm.Navigate(folderItem);
 		}
 
 		#endregion Private Methods

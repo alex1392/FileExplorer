@@ -2,7 +2,9 @@
 
 using FileExplorer.Models;
 using FileExplorer.ViewModels;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,8 +20,8 @@ namespace FileExplorer.Views {
 
 		#region Private Fields
 
-		private readonly MainWindowViewModel vm;
 		private readonly IServiceProvider serviceProvider;
+		private readonly MainWindowViewModel vm;
 
 		#endregion Private Fields
 
@@ -42,6 +44,22 @@ namespace FileExplorer.Views {
 
 		#region Private Methods
 
+		private void GroupToggleButton_Checked(object sender, RoutedEventArgs e)
+		{
+			if (!(FolderFrame.Content is FolderPage folderPage)) {
+				return;
+			}
+			folderPage.ToggleGroupByType();
+		}
+
+		private void GroupToggleButton_Unchecked(object sender, RoutedEventArgs e)
+		{
+			if (!(FolderFrame.Content is FolderPage folderPage)) {
+				return;
+			}
+			folderPage.UnToggleGroupByType();
+		}
+
 		private void HistoryItem_Selected(object sender, RoutedEventArgs e)
 		{
 			if (!(sender is ComboBoxItem comboBoxItem) || !(comboBoxItem.DataContext is JournalEntry entry)) {
@@ -58,12 +76,27 @@ namespace FileExplorer.Views {
 			}
 		}
 
+		private bool ListItemFilter(object item)
+		{
+			if (string.IsNullOrWhiteSpace(searchTextBox.Text)) {
+				return true;
+			}
+			return (item as ListItem).Name.IndexOf(searchTextBox.Text, StringComparison.OrdinalIgnoreCase) >= 0;
+		}
+
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
 		{
 			vm.Navigate(new Uri("/Views/HomePage.xaml", UriKind.Relative));
 			var navigationService = serviceProvider.GetService<INavigationService>();
 			navigationService.Navigated += NavigationService_Navigated;
 			navigationService.NavigatedPageLoaded += NavigationService_NavigatedPageLoaded;
+		}
+
+		private void NavigationService_Navigated(object sender, string e)
+		{
+			// reset filter and group
+			GroupToggleButton.IsChecked = false;
+			searchTextBox.Text = null;
 		}
 
 		private void NavigationService_NavigatedPageLoaded(object sender, EventArgs e)
@@ -73,13 +106,6 @@ namespace FileExplorer.Views {
 				return;
 			}
 			folderPage.ApplyFilter(ListItemFilter);
-		}
-
-		private void NavigationService_Navigated(object sender, string e)
-		{
-			// reset filter and group
-			GroupToggleButton.IsChecked = false;
-			searchTextBox.Text = null;
 		}
 
 		private void PathItem_Selected(object sender, RoutedEventArgs e)
@@ -109,6 +135,14 @@ namespace FileExplorer.Views {
 			}
 		}
 
+		private void searchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			if (!(FolderFrame.Content is FolderPage folderPage)) {
+				return;
+			}
+			folderPage.RefreshPage();
+		}
+
 		private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
 		{
 			if (!((sender as TreeViewItem)?.DataContext is TreeFolderItem folderItem)) {
@@ -133,37 +167,5 @@ namespace FileExplorer.Views {
 		}
 
 		#endregion Private Methods
-
-		private void GroupToggleButton_Checked(object sender, RoutedEventArgs e)
-		{
-			if (!(FolderFrame.Content is FolderPage folderPage)) {
-				return;
-			}
-			folderPage.ToggleGroupByType();
-		}
-
-		private void GroupToggleButton_Unchecked(object sender, RoutedEventArgs e)
-		{
-			if (!(FolderFrame.Content is FolderPage folderPage)) {
-				return;
-			}
-			folderPage.UnToggleGroupByType();
-		}
-
-		private bool ListItemFilter(object item)
-		{
-			if (string.IsNullOrWhiteSpace(searchTextBox.Text)) {
-				return true;
-			}
-			return (item as ListItem).Name.IndexOf(searchTextBox.Text, StringComparison.OrdinalIgnoreCase) >= 0;
-		}
-
-		private void searchTextBox_TextChanged(object sender, TextChangedEventArgs e)
-		{
-			if (!(FolderFrame.Content is FolderPage folderPage)) {
-				return;
-			}
-			folderPage.RefreshPage();
-		}
 	}
 }
