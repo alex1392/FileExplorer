@@ -25,6 +25,12 @@
 							 Height="32">
 			<DockPanel.Resources>
 				<sys:Double x:Key="IconWidth">20</sys:Double>
+				<Style TargetType="ToggleButton">
+					<Setter Property="Width"
+									Value="{Binding ElementName=MenuBar, Path=Height}" />
+					<Setter Property="Height"
+									Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Width}" />
+				</Style>
 				<Style TargetType="Button">
 					<Setter Property="Width"
 									Value="{Binding ElementName=MenuBar, Path=Height}" />
@@ -36,6 +42,10 @@
 									Value="{StaticResource IconWidth}" />
 					<Setter Property="Height"
 									Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Width}" />
+				</Style>
+				<Style TargetType="Image">
+					<Setter Property="Width"
+									Value="{StaticResource IconWidth}" />
 				</Style>
 			</DockPanel.Resources>
 			<StackPanel Orientation="Horizontal"
@@ -78,53 +88,63 @@
 				</Button>
 
 			</StackPanel>
+			<ToggleButton Name="PreviewToggleButton"
+										DockPanel.Dock="Right">
+				<fa:ImageAwesome Icon="Binoculars" />
+			</ToggleButton>
+			<ToggleButton Name="TreeViewToggleButton"
+										DockPanel.Dock="Right">
+				<Image Source="/Resources/treeview.png" />
+			</ToggleButton>
 			<ToggleButton Name="GroupToggleButton"
 										DockPanel.Dock="Right"
-										Width="{Binding ElementName=MenuBar, Path=Height}"
-										Height="{Binding ElementName=MenuBar, Path=Height}"
 										Checked="GroupToggleButton_Checked"
 										Unchecked="GroupToggleButton_Unchecked">
-				<Image Source="{StaticResource shapes_solidDrawingImage}"
-							 Width="{StaticResource IconWidth}" />
+				<Image Source="{StaticResource shapes_solidDrawingImage}" />
 			</ToggleButton>
 			<Button Name="ViewButton"
 							DockPanel.Dock="Right">
 				<i:Interaction.Behaviors>
 					<local:DropDownButtonBehavior />
 				</i:Interaction.Behaviors>
-				<fa:ImageAwesome Icon="ThList" />
+				<fa:ImageAwesome Icon="List" />
 				<Button.ContextMenu>
 					<ContextMenu>
 						<ContextMenu.Resources>
+							<sys:Double x:Key="ContextMenuIconWidth">15</sys:Double>
 							<Style TargetType="fa:ImageAwesome">
 								<Setter Property="Width"
-												Value="15" />
+												Value="{StaticResource ContextMenuIconWidth}" />
 								<Setter Property="Height"
-												Value="15" />
+												Value="{StaticResource ContextMenuIconWidth}" />
+							</Style>
+							<Style TargetType="Image">
+								<Setter Property="Width"
+												Value="{StaticResource ContextMenuIconWidth}" />
 							</Style>
 						</ContextMenu.Resources>
 						<MenuItem Header="ListView"
 											Click="ListViewButton_Click">
 							<MenuItem.Icon>
-								<fa:ImageAwesome Icon="ThList" />
-							</MenuItem.Icon>
-						</MenuItem>
-						<MenuItem Header="TileView">
-							<MenuItem.Icon>
-								<Image Source="{StaticResource tileview_solidDrawingImage}"
-											 Width="15" />
+								<fa:ImageAwesome Icon="List" />
 							</MenuItem.Icon>
 						</MenuItem>
 						<MenuItem Header="GridView"
 											Click="GridViewButton_Click">
 							<MenuItem.Icon>
-								<fa:ImageAwesome Icon="ThLarge" />
+								<fa:ImageAwesome Icon="Th" />
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="TileView">
+							<MenuItem.Icon>
+								<Image Source="{StaticResource tileview_solidDrawingImage}" />
 							</MenuItem.Icon>
 						</MenuItem>
 					</ContextMenu>
 				</Button.ContextMenu>
 			</Button>
-			<Border DockPanel.Dock="Right"
+			<Border Name="searchBoxBorder" 
+							DockPanel.Dock="Right"
 							Background="White"
 							BorderBrush="#FFABADB3"
 							BorderThickness="1">
