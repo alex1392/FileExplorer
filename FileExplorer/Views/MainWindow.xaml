@@ -89,7 +89,8 @@
 										 BorderBrush="Transparent"
 										 VerticalAlignment="Center"
 										 VerticalContentAlignment="Center"
-										 Height="{StaticResource ButtonWidth}"/>
+										 Height="{StaticResource ButtonWidth}"
+										 TextChanged="searchTextBox_TextChanged"/>
 						<TextBlock VerticalAlignment="Center"
 											 Foreground="Gray"
 											 Padding="3"

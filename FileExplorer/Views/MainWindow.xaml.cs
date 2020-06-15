@@ -63,11 +63,23 @@ namespace FileExplorer.Views {
 			vm.Navigate(new Uri("/Views/HomePage.xaml", UriKind.Relative));
 			var navigationService = serviceProvider.GetService<INavigationService>();
 			navigationService.Navigated += NavigationService_Navigated;
+			navigationService.NavigatedPageLoaded += NavigationService_NavigatedPageLoaded;
+		}
+
+		private void NavigationService_NavigatedPageLoaded(object sender, EventArgs e)
+		{
+			// apply new filter
+			if (!(FolderFrame.Content is FolderPage folderPage)) {
+				return;
+			}
+			folderPage.ApplyFilter(ListItemFilter);
 		}
 
 		private void NavigationService_Navigated(object sender, string e)
 		{
+			// reset filter and group
 			GroupToggleButton.IsChecked = false;
+			searchTextBox.Text = null;
 		}
 
 		private void PathItem_Selected(object sender, RoutedEventArgs e)
@@ -136,6 +148,22 @@ namespace FileExplorer.Views {
 				return;
 			}
 			folderPage.UnToggleGroupByType();
+		}
+
+		private bool ListItemFilter(object item)
+		{
+			if (string.IsNullOrWhiteSpace(searchTextBox.Text)) {
+				return true;
+			}
+			return (item as ListItem).Name.IndexOf(searchTextBox.Text, StringComparison.OrdinalIgnoreCase) >= 0;
+		}
+
+		private void searchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			if (!(FolderFrame.Content is FolderPage folderPage)) {
+				return;
+			}
+			folderPage.RefreshPage();
 		}
 	}
 }

@@ -16,6 +16,7 @@ namespace FileExplorer.Views {
 		#region Private Fields
 
 		private readonly FolderPageViewModel vm;
+		private CollectionView collectionView;
 		private string path;
 
 		#endregion Private Fields
@@ -31,6 +32,15 @@ namespace FileExplorer.Views {
 				}
 				path = value;
 				vm.Path = value; // property injection
+			}
+		}
+
+		public CollectionView CollectionView {
+			get {
+				if (collectionView == null) {
+					collectionView = CollectionViewSource.GetDefaultView(ItemsListView.ItemsSource) as CollectionView;
+				}
+				return collectionView;
 			}
 		}
 
@@ -69,20 +79,24 @@ namespace FileExplorer.Views {
 
 		public void ToggleGroupByType()
 		{
-			if (!(CollectionViewSource.GetDefaultView(ItemsListView.ItemsSource) is CollectionView collectionView)) {
-				return;
-			}
 			var groupDescription = new PropertyGroupDescription(nameof(ListItem.TypeDescription));
-			collectionView.GroupDescriptions.Clear();
-			collectionView.GroupDescriptions.Add(groupDescription);
+			CollectionView.GroupDescriptions.Clear();
+			CollectionView.GroupDescriptions.Add(groupDescription);
 		}
 
 		public void UnToggleGroupByType()
 		{
-			if (!(CollectionViewSource.GetDefaultView(ItemsListView.ItemsSource) is CollectionView collectionView)) {
-				return;
-			}
-			collectionView.GroupDescriptions.Clear();
+			CollectionView.GroupDescriptions.Clear();
+		}
+
+		internal void ApplyFilter(Predicate<object> listItemFilter)
+		{
+			CollectionView.Filter = listItemFilter;
+		}
+
+		internal void RefreshPage()
+		{
+			CollectionView.Refresh();
 		}
 
 		#endregion Private Methods
