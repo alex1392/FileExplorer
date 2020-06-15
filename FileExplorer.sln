@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
+# Blend for Visual Studio Version 16
 VisualStudioVersion = 16.0.30104.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileExplorer", "FileExplorer\FileExplorer.csproj", "{7E2117C2-F8CE-4735-8533-96EAEE56C10D}"
@@ -11,8 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListViewCustomView", "..\docs-samples-snippets-csharp-VS_Snippets_Wpf-ListViewCustomView\CSharp\ListViewCustomView.csproj", "{C3AD96EC-8C52-4FC9-B4B1-724316D17B7C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "WpfApp1\WpfApp1.csproj", "{DA94EC7A-C685-4BF3-98CD-58C984F9A7CF}"
 EndProject
@@ -72,25 +70,6 @@ Global
 		{BF1F329D-2A66-48F8-BD93-96F95C9024F8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BF1F329D-2A66-48F8-BD93-96F95C9024F8}.Release|x86.ActiveCfg = Release|Any CPU
 		{BF1F329D-2A66-48F8-BD93-96F95C9024F8}.Release|x86.Build.0 = Release|Any CPU
-		{C3AD96EC-8C52-4FC9-B4B1-724316D17B7C}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{C3AD96EC-8C52-4FC9-B4B1-724316D17B7C}.Debug|x86.ActiveCfg = Debug|x86
-		{C3AD96EC-8C52-4FC9-B4B1-724316D17B7C}.Debug|x86.Build.0 = Debug|x86
-		{C3AD96EC-8C52-4FC9-B4B1-724316D17B7C}.Google|Any CPU.ActiveCfg = Debug|x86
-		{C3AD96EC-8C52-4FC9-B4B1-724316D17B7C}.Google|Any CPU.Build.0 = Debug|x86
-		{C3AD96EC-8C52-4FC9-B4B1-724316D17B7C}.Google|x86.ActiveCfg = Debug|x86
-		{C3AD96EC-8C52-4FC9-B4B1-724316D17B7C}.Google|x86.Build.0 = Debug|x86
-		{C3AD96EC-8C52-4FC9-B4B1-724316D17B7C}.Local|Any CPU.ActiveCfg = Debug|x86
-		{C3AD96EC-8C52-4FC9-B4B1-724316D17B7C}.Local|Any CPU.Build.0 = Debug|x86
-		{C3AD96EC-8C52-4FC9-B4B1-724316D17B7C}.Local|x86.ActiveCfg = Debug|x86
-		{C3AD96EC-8C52-4FC9-B4B1-724316D17B7C}.Local|x86.Build.0 = Debug|x86
-		{C3AD96EC-8C52-4FC9-B4B1-724316D17B7C}.Microsoft|Any CPU.ActiveCfg = Debug|x86
-		{C3AD96EC-8C52-4FC9-B4B1-724316D17B7C}.Microsoft|Any CPU.Build.0 = Debug|x86
-		{C3AD96EC-8C52-4FC9-B4B1-724316D17B7C}.Microsoft|x86.ActiveCfg = Debug|x86
-		{C3AD96EC-8C52-4FC9-B4B1-724316D17B7C}.Microsoft|x86.Build.0 = Debug|x86
-		{C3AD96EC-8C52-4FC9-B4B1-724316D17B7C}.Release|Any CPU.ActiveCfg = Debug|x86
-		{C3AD96EC-8C52-4FC9-B4B1-724316D17B7C}.Release|Any CPU.Build.0 = Debug|x86
-		{C3AD96EC-8C52-4FC9-B4B1-724316D17B7C}.Release|x86.ActiveCfg = Debug|x86
-		{C3AD96EC-8C52-4FC9-B4B1-724316D17B7C}.Release|x86.Build.0 = Debug|x86
 		{DA94EC7A-C685-4BF3-98CD-58C984F9A7CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DA94EC7A-C685-4BF3-98CD-58C984F9A7CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA94EC7A-C685-4BF3-98CD-58C984F9A7CF}.Debug|x86.ActiveCfg = Debug|Any CPU
