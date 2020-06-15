@@ -93,7 +93,8 @@
 				<fa:ImageAwesome Icon="Binoculars" />
 			</ToggleButton>
 			<ToggleButton Name="TreeViewToggleButton"
-										DockPanel.Dock="Right">
+										DockPanel.Dock="Right"
+										IsChecked="True">
 				<Image Source="/Resources/treeview.png" />
 			</ToggleButton>
 			<ToggleButton Name="GroupToggleButton"
@@ -219,6 +220,7 @@
 		</DockPanel>
 		<TreeView DockPanel.Dock="Left"
 							ItemsSource="{Binding TreeItems}"
+							Visibility="{Binding ElementName=TreeViewToggleButton, Path=IsChecked, Converter={converter:BoolToVisibilityConverter}}"
 							Width="150">
 			<TreeView.ItemTemplate>
 				<HierarchicalDataTemplate DataType="{x:Type model:TreeFolderItem}"

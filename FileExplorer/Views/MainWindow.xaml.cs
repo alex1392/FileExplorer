@@ -177,5 +177,15 @@ namespace FileExplorer.Views {
 		{
 
 		}
+
+		private void TreeViewToggleButton_Checked(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void TreeViewToggleButton_Unchecked(object sender, RoutedEventArgs e)
+		{
+
+		}
 	}
 }
