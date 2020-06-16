@@ -1,9 +1,9 @@
 ﻿using System.IO;
 
-namespace FileExplorer.Models {
-
-	public interface IFileProvider {
-
+namespace FileExplorer.Models
+{
+	public interface IFileProvider
+	{
 		#region Public Methods
 
 		(string[], string[]) GetChildren(string path);

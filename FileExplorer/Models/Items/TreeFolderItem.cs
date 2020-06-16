@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FileExplorer.Models {
-
-	public class TreeFolderItem : Item {
-
+namespace FileExplorer.Models
+{
+	public class TreeFolderItem : Item
+	{
 		#region Private Fields
 
 		private readonly IServiceProvider serviceProvider;
@@ -43,12 +43,14 @@ namespace FileExplorer.Models {
 
 		public void LoadSubFolders()
 		{
-			if (HasExpanded) {
+			if (HasExpanded)
+			{
 				return;
 			}
 			SubFolders.Clear();
 			folderPaths = fileProvider.GetDirectories(Path);
-			SubFolders.AddRange(folderPaths.Select(path => {
+			SubFolders.AddRange(folderPaths.Select(path =>
+			{
 				var item = serviceProvider.GetService<TreeFolderItem>();
 				item.Path = path;
 				return item;

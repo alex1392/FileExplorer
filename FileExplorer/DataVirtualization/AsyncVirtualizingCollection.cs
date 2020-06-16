@@ -3,14 +3,14 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Threading;
 
-namespace FileExplorer.DataVirtualization {
-
+namespace FileExplorer.DataVirtualization
+{
 	/// <summary>
 	/// Derived VirtualizatingCollection, performing loading asychronously.
 	/// </summary>
 	/// <typeparam name="T">The type of items in the collection</typeparam>
-	public class AsyncVirtualizingCollection<T> : VirtualizingCollection<T>, INotifyCollectionChanged, INotifyPropertyChanged {
-
+	public class AsyncVirtualizingCollection<T> : VirtualizingCollection<T>, INotifyCollectionChanged, INotifyPropertyChanged
+	{
 		#region Private Fields
 
 		private readonly SynchronizationContext _synchronizationContext;
@@ -41,12 +41,16 @@ namespace FileExplorer.DataVirtualization {
 		/// <value>
 		/// 	<c>true</c> if this collection is loading; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsLoading {
-			get {
+		public bool IsLoading
+		{
+			get
+			{
 				return _isLoading;
 			}
-			set {
-				if (value != _isLoading) {
+			set
+			{
+				if (value != _isLoading)
+				{
 					_isLoading = value;
 				}
 				FirePropertyChanged("IsLoading");
@@ -62,7 +66,8 @@ namespace FileExplorer.DataVirtualization {
 		/// the current SynchronizationContext when the AsyncVirtualizingCollection is created.
 		/// </summary>
 		/// <value>The synchronization context.</value>
-		protected SynchronizationContext SynchronizationContext {
+		protected SynchronizationContext SynchronizationContext
+		{
 			get { return _synchronizationContext; }
 		}
 

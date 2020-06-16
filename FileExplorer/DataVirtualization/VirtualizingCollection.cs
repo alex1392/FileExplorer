@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace FileExplorer.DataVirtualization {
-
+namespace FileExplorer.DataVirtualization
+{
 	/// <summary>
 	/// Specialized list implementation that provides data virtualization. The collection is divided up into pages,
 	/// and pages are dynamically fetched from the IItemsProvider when required. Stale pages are removed after a
@@ -17,8 +17,8 @@ namespace FileExplorer.DataVirtualization {
 	/// data bound to a suitable ItemsControl.
 	/// </remarks>
 	/// <typeparam name="T"></typeparam>
-	public class VirtualizingCollection<T> : IList<T>, IList {
-
+	public class VirtualizingCollection<T> : IList<T>, IList
+	{
 		#region Private Fields
 
 		private readonly IItemsProvider<T> _itemsProvider;
@@ -45,14 +45,18 @@ namespace FileExplorer.DataVirtualization {
 		/// <returns>
 		/// The number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
 		/// </returns>
-		public virtual int Count {
-			get {
-				if (_count == -1) {
+		public virtual int Count
+		{
+			get
+			{
+				if (_count == -1)
+				{
 					LoadCount();
 				}
 				return _count;
 			}
-			protected set {
+			protected set
+			{
 				_count = value;
 			}
 		}
@@ -63,7 +67,8 @@ namespace FileExplorer.DataVirtualization {
 		/// <value></value>
 		/// <returns>Always false.
 		/// </returns>
-		public bool IsFixedSize {
+		public bool IsFixedSize
+		{
 			get { return false; }
 		}
 
@@ -73,7 +78,8 @@ namespace FileExplorer.DataVirtualization {
 		/// <value></value>
 		/// <returns>Always true.
 		/// </returns>
-		public bool IsReadOnly {
+		public bool IsReadOnly
+		{
 			get { return true; }
 		}
 
@@ -83,7 +89,8 @@ namespace FileExplorer.DataVirtualization {
 		/// <value></value>
 		/// <returns>Always false.
 		/// </returns>
-		public bool IsSynchronized {
+		public bool IsSynchronized
+		{
 			get { return false; }
 		}
 
@@ -91,7 +98,8 @@ namespace FileExplorer.DataVirtualization {
 		/// Gets the items provider.
 		/// </summary>
 		/// <value>The items provider.</value>
-		public IItemsProvider<T> ItemsProvider {
+		public IItemsProvider<T> ItemsProvider
+		{
 			get { return _itemsProvider; }
 		}
 
@@ -99,7 +107,8 @@ namespace FileExplorer.DataVirtualization {
 		/// Gets the size of the page.
 		/// </summary>
 		/// <value>The size of the page.</value>
-		public int PageSize {
+		public int PageSize
+		{
 			get { return _pageSize; }
 		}
 
@@ -107,7 +116,8 @@ namespace FileExplorer.DataVirtualization {
 		/// Gets the page timeout.
 		/// </summary>
 		/// <value>The page timeout.</value>
-		public long PageTimeout {
+		public long PageTimeout
+		{
 			get { return _pageTimeout; }
 		}
 
@@ -118,7 +128,8 @@ namespace FileExplorer.DataVirtualization {
 		/// <returns>
 		/// An object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection"/>.
 		/// </returns>
-		public object SyncRoot {
+		public object SyncRoot
+		{
 			get { return this; }
 		}
 
@@ -131,8 +142,10 @@ namespace FileExplorer.DataVirtualization {
 		/// the corresponding page from the IItemsProvider if required.
 		/// </summary>
 		/// <value></value>
-		public T this[int index] {
-			get {
+		public T this[int index]
+		{
+			get
+			{
 				// determine which page and offset within page
 				var pageIndex = index / PageSize;
 				var pageOffset = index % PageSize;
@@ -161,7 +174,8 @@ namespace FileExplorer.DataVirtualization {
 			set { throw new NotSupportedException(); }
 		}
 
-		object IList.this[int index] {
+		object IList.this[int index]
+		{
 			get { return this[index]; }
 			set { throw new NotSupportedException(); }
 		}
@@ -230,9 +244,11 @@ namespace FileExplorer.DataVirtualization {
 		public void CleanUpPages()
 		{
 			var keys = new List<int>(_pageTouchTimes.Keys);
-			foreach (var key in keys) {
+			foreach (var key in keys)
+			{
 				// page 0 is a special case, since WPF ItemsControl access the first item frequently
-				if (key != 0 && (DateTime.Now - _pageTouchTimes[key]).TotalMilliseconds > PageTimeout) {
+				if (key != 0 && (DateTime.Now - _pageTouchTimes[key]).TotalMilliseconds > PageTimeout)
+				{
 					_pages.Remove(key);
 					_pageTouchTimes.Remove(key);
 					Trace.WriteLine("Removed Page: " + key);
@@ -309,7 +325,8 @@ namespace FileExplorer.DataVirtualization {
 		/// </returns>
 		public IEnumerator<T> GetEnumerator()
 		{
-			for (var i = 0; i < Count; i++) {
+			for (var i = 0; i < Count; i++)
+			{
 				yield return this[i];
 			}
 		}
@@ -457,12 +474,15 @@ namespace FileExplorer.DataVirtualization {
 		/// <param name="pageIndex">Index of the page.</param>
 		protected virtual void RequestPage(int pageIndex)
 		{
-			if (!_pages.ContainsKey(pageIndex)) {
+			if (!_pages.ContainsKey(pageIndex))
+			{
 				_pages.Add(pageIndex, null);
 				_pageTouchTimes.Add(pageIndex, DateTime.Now);
 				Trace.WriteLine("Added page: " + pageIndex);
 				LoadPage(pageIndex);
-			} else {
+			}
+			else
+			{
 				_pageTouchTimes[pageIndex] = DateTime.Now;
 			}
 		}

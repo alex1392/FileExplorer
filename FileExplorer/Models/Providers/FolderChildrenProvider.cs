@@ -6,10 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FileExplorer.Models {
-
-	public class FolderChildrenProvider : IItemsProvider<ListItem> {
-
+namespace FileExplorer.Models
+{
+	public class FolderChildrenProvider : IItemsProvider<ListItem>
+	{
 		#region Private Fields
 
 		private readonly IFileProvider fileProvider;
@@ -23,11 +23,14 @@ namespace FileExplorer.Models {
 
 		#region Public Properties
 
-		public string Path {
+		public string Path
+		{
 			get => path;
-			set {
+			set
+			{
 				// can only be set once
-				if (path != null || path == value) {
+				if (path != null || path == value)
+				{
 					return;
 				}
 				path = value;
@@ -60,7 +63,8 @@ namespace FileExplorer.Models {
 			startIndex = Math.Max(0, startIndex);
 			return folderPaths.Skip(startIndex)
 			   .Take(count)
-			   .Select(path => {
+			   .Select(path =>
+			   {
 				   var folderItem = serviceProvider.GetService<ListFolderItem>();
 				   folderItem.Path = path;
 				   return folderItem;
@@ -68,7 +72,8 @@ namespace FileExplorer.Models {
 			   .Cast<ListItem>()
 			   .Concat(filePaths.Skip(Math.Max(startIndex - folderPaths.Length, 0))
 					   .Take(count - Math.Max(folderPaths.Length - startIndex, 0))
-					   .Select(path => {
+					   .Select(path =>
+					   {
 						   var fileItem = serviceProvider.GetService<ListFileItem>();
 						   fileItem.Path = path;
 						   return fileItem;
@@ -82,10 +87,12 @@ namespace FileExplorer.Models {
 
 		private void LoadChildrenPaths()
 		{
-			if (path == null) {
+			if (path == null)
+			{
 				throw new InvalidOperationException("Folder Path has not been set.");
 			}
-			if (IsChildrenPathsLoaded) {
+			if (IsChildrenPathsLoaded)
+			{
 				return;
 			}
 			(folderPaths, filePaths) = fileProvider.GetChildren(path);

@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace FileExplorer.DataVirtualization {
-
+namespace FileExplorer.DataVirtualization
+{
 	/// <summary>
 	/// Represents a provider of collection details.
 	/// </summary>
 	/// <typeparam name="T">The type of items in the collection.</typeparam>
-	public interface IItemsProvider<T> {
-
+	public interface IItemsProvider<T>
+	{
 		#region Public Methods
 
 		/// <summary>

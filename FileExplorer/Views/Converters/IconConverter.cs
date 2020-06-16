@@ -9,13 +9,13 @@ using System.Windows.Interop;
 using System.Windows.Markup;
 using System.Windows.Media.Imaging;
 
-namespace FileExplorer.Views.Converters {
-
+namespace FileExplorer.Views.Converters
+{
 	/// <summary>
 	/// Icon should be loaded dynamically in order to speed up application loading
 	/// </summary>
-	public class IconConverter : MarkupExtension, IValueConverter {
-
+	public class IconConverter : MarkupExtension, IValueConverter
+	{
 		#region Private Fields
 
 		private static readonly IconConverter instance = new IconConverter();
@@ -26,14 +26,21 @@ namespace FileExplorer.Views.Converters {
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (value is ListFileItem fileItem) {
+			if (value is ListFileItem fileItem)
+			{
 				var icon = Icon.ExtractAssociatedIcon(fileItem.Path);
 				return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-			} else if (value is ListFolderItem listFolderItem) {
+			}
+			else if (value is ListFolderItem listFolderItem)
+			{
 				return new BitmapImage(new Uri("/Resources/Folder.ico", UriKind.Relative));
-			} else if (value is TreeFolderItem treeFolderItem) {
+			}
+			else if (value is TreeFolderItem treeFolderItem)
+			{
 				return new BitmapImage(new Uri($"/Resources/{treeFolderItem.IconKey ?? "Folder"}.ico", UriKind.Relative));
-			} else {
+			}
+			else
+			{
 				return null;
 			}
 		}

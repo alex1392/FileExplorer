@@ -1,37 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Xaml.Behaviors;
+
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using Microsoft.Xaml.Behaviors;
 
-namespace FileExplorer.Views {
+namespace FileExplorer.Views
+{
+	public class DropDownButtonBehavior : Behavior<Button>
+	{
+		#region Private Fields
 
-	public class DropDownButtonBehavior : Behavior<Button> {
 		private bool isContextMenuOpen;
+
+		#endregion Private Fields
+
+		#region Protected Methods
 
 		protected override void OnAttached()
 		{
 			base.OnAttached();
 			AssociatedObject.AddHandler(ButtonBase.ClickEvent, new RoutedEventHandler(AssociatedObject_Click), true);
-		}
-
-		void AssociatedObject_Click(object sender, RoutedEventArgs e)
-		{
-			if (sender is Button source && source.ContextMenu != null) {
-				if (!isContextMenuOpen) {
-					// Add handler to detect when the ContextMenu closes
-					source.ContextMenu.AddHandler(ContextMenu.ClosedEvent, new RoutedEventHandler(ContextMenu_Closed), true);
-					// If there is a drop-down assigned to this button, then position and display it 
-					source.ContextMenu.PlacementTarget = source;
-					source.ContextMenu.Placement = PlacementMode.Bottom;
-					source.ContextMenu.IsOpen = true;
-					isContextMenuOpen = true;
-				}
-			}
 		}
 
 		protected override void OnDetaching()
@@ -40,12 +28,36 @@ namespace FileExplorer.Views {
 			AssociatedObject.RemoveHandler(ButtonBase.ClickEvent, new RoutedEventHandler(AssociatedObject_Click));
 		}
 
-		void ContextMenu_Closed(object sender, RoutedEventArgs e)
+		#endregion Protected Methods
+
+		#region Private Methods
+
+		private void AssociatedObject_Click(object sender, RoutedEventArgs e)
+		{
+			if (sender is Button source && source.ContextMenu != null)
+			{
+				if (!isContextMenuOpen)
+				{
+					// Add handler to detect when the ContextMenu closes
+					source.ContextMenu.AddHandler(ContextMenu.ClosedEvent, new RoutedEventHandler(ContextMenu_Closed), true);
+					// If there is a drop-down assigned to this button, then position and display it
+					source.ContextMenu.PlacementTarget = source;
+					source.ContextMenu.Placement = PlacementMode.Bottom;
+					source.ContextMenu.IsOpen = true;
+					isContextMenuOpen = true;
+				}
+			}
+		}
+
+		private void ContextMenu_Closed(object sender, RoutedEventArgs e)
 		{
 			isContextMenuOpen = false;
-			if (sender is ContextMenu contextMenu) {
+			if (sender is ContextMenu contextMenu)
+			{
 				contextMenu.RemoveHandler(ContextMenu.ClosedEvent, new RoutedEventHandler(ContextMenu_Closed));
 			}
 		}
+
+		#endregion Private Methods
 	}
 }

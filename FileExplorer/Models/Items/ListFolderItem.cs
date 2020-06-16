@@ -1,7 +1,7 @@
-﻿namespace FileExplorer.Models {
-
-	public class ListFolderItem : ListItem {
-
+﻿namespace FileExplorer.Models
+{
+	public class ListFolderItem : ListItem
+	{
 		#region Private Fields
 
 		private readonly ITypeDescriptionProvider typeDescriptionProvider;
@@ -10,10 +10,13 @@
 
 		#region Public Properties
 
-		public override string Path {
+		public override string Path
+		{
 			get => base.Path;
-			set {
-				if (base.Path != null || value == base.Path) {
+			set
+			{
+				if (base.Path != null || value == base.Path)
+				{
 					return;
 				}
 				base.Path = value;

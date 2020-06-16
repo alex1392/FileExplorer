@@ -1,7 +1,7 @@
-﻿namespace FileExplorer.Models {
-
-	public interface ITypeDescriptionProvider {
-
+﻿namespace FileExplorer.Models
+{
+	public interface ITypeDescriptionProvider
+	{
 		#region Public Methods
 
 		string GetFileTypeDescription(string fileNameOrExtension);

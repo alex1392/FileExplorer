@@ -8,13 +8,13 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
 
-namespace FileExplorer {
-
+namespace FileExplorer
+{
 	/// <summary>
 	/// Interaction logic for App.xaml
 	/// </summary>
-	public partial class App : Application {
-
+	public partial class App : Application
+	{
 		#region Public Fields
 
 		public static readonly string PackUri = $"pack://application:,,,/{ResourceAssembly.GetName().Name};component/";

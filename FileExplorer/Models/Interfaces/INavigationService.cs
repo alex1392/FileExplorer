@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
 
-namespace FileExplorer.Models {
-
-	public interface INavigationService {
-
+namespace FileExplorer.Models
+{
+	public interface INavigationService
+	{
 		#region Public Events
 
 		/// <summary>

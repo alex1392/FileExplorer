@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 
-namespace FileExplorer.Models {
-
-	public class Item {
-
+namespace FileExplorer.Models
+{
+	public class Item
+	{
 		#region Protected Fields
 
 		protected IFileProvider fileProvider;
@@ -23,16 +23,20 @@ namespace FileExplorer.Models {
 		/// <summary>
 		/// Property Injection
 		/// </summary>
-		public virtual string Path {
+		public virtual string Path
+		{
 			get => path;
-			set {
+			set
+			{
 				// can only be set once
-				if (path != null || value == path) {
+				if (path != null || value == path)
+				{
 					return;
 				}
 				path = value;
 				// fix drive path
-				if (path.Last() == ':') {
+				if (path.Last() == ':')
+				{
 					path += System.IO.Path.DirectorySeparatorChar;
 				}
 				var info = fileProvider.GetFileSystemInfo(path);

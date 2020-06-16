@@ -3,10 +3,10 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace FileExplorer.Views.Converters {
-
-	internal class SizeConverter : MarkupExtension, IValueConverter {
-
+namespace FileExplorer.Views.Converters
+{
+	internal class SizeConverter : MarkupExtension, IValueConverter
+	{
 		#region Private Fields
 
 		private static readonly SizeConverter instance = new SizeConverter();
@@ -24,7 +24,8 @@ namespace FileExplorer.Views.Converters {
 		{
 			double size = (long)value;
 			var i = 0;
-			while (size > 1024d) {
+			while (size > 1024d)
+			{
 				size /= 1024d;
 				i++;
 			}

@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace FileExplorer.Models {
-
-	public abstract class ListItem : Item {
-
+namespace FileExplorer.Models
+{
+	public abstract class ListItem : Item
+	{
 		#region Public Properties
 
 		public DateTimeOffset LastModifiedTime { get; private set; }
@@ -11,11 +11,14 @@ namespace FileExplorer.Models {
 		/// <summary>
 		/// Property Injection
 		/// </summary>
-		public override string Path {
+		public override string Path
+		{
 			get => base.Path;
-			set {
+			set
+			{
 				// can only be injected once
-				if (base.Path != null || value == base.Path) {
+				if (base.Path != null || value == base.Path)
+				{
 					return;
 				}
 				base.Path = value;

@@ -11,10 +11,10 @@ using System.Windows.Input;
 
 using IO = System.IO;
 
-namespace FileExplorer.ViewModels {
-
-	public class MainWindowViewModel : INotifyPropertyChanged {
-
+namespace FileExplorer.ViewModels
+{
+	public class MainWindowViewModel : INotifyPropertyChanged
+	{
 		#region Private Fields
 
 		private readonly INavigationService navigationService;
@@ -39,18 +39,24 @@ namespace FileExplorer.ViewModels {
 
 		public ICommand GoUpCommand { get; set; }
 
-		public IEnumerable<object> NavigationHistroy {
-			get {
+		public IEnumerable<object> NavigationHistroy
+		{
+			get
+			{
 				var list = new List<object>();
-				if (navigationService.BackStack != null) {
-					foreach (var item in navigationService.BackStack) {
+				if (navigationService.BackStack != null)
+				{
+					foreach (var item in navigationService.BackStack)
+					{
 						list.Add(item);
 					}
 				}
 				list.Reverse();
 				list.Add(navigationService.Content);
-				if (navigationService.ForwardStack != null) {
-					foreach (var item in navigationService.ForwardStack) {
+				if (navigationService.ForwardStack != null)
+				{
+					foreach (var item in navigationService.ForwardStack)
+					{
 						list.Add(item);
 					}
 				}
@@ -120,15 +126,18 @@ namespace FileExplorer.ViewModels {
 
 		private IEnumerable<Item> GetPathItems(string path)
 		{
-			if (path == null) {
+			if (path == null)
+			{
 				return null;
 			}
 			var parents = path.Split(IO::Path.DirectorySeparatorChar).Where(s => !string.IsNullOrEmpty(s)).ToList();
 			var paths = new string[parents.Count];
-			for (var i = 0; i < parents.Count; i++) {
+			for (var i = 0; i < parents.Count; i++)
+			{
 				paths[i] = string.Join(IO::Path.DirectorySeparatorChar.ToString(), parents.Take(i + 1));
 			}
-			return paths.Select(path => {
+			return paths.Select(path =>
+			{
 				var item = serviceProvider.GetService<Item>();
 				item.Path = path;
 				return item;
@@ -151,7 +160,8 @@ namespace FileExplorer.ViewModels {
 		private void SetupTreeItems()
 		{
 			var drivePaths = systemFolderProvider.GetLogicalDrives();
-			foreach (var drivePath in drivePaths) {
+			foreach (var drivePath in drivePaths)
+			{
 				var driveItem = serviceProvider.GetService<TreeFolderItem>();
 				driveItem.Path = drivePath;
 				driveItem.IconKey = "Drive";

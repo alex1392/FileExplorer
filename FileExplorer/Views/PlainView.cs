@@ -1,10 +1,10 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace FileExplorer.Views {
-
-	public class PlainView : ViewBase {
-
+namespace FileExplorer.Views
+{
+	public class PlainView : ViewBase
+	{
 		#region Public Fields
 
 		public static readonly DependencyProperty
@@ -24,22 +24,26 @@ namespace FileExplorer.Views {
 
 		#region Public Properties
 
-		public Style ItemContainerStyle {
+		public Style ItemContainerStyle
+		{
 			get { return (Style)GetValue(ItemContainerStyleProperty); }
 			set { SetValue(ItemContainerStyleProperty, value); }
 		}
 
-		public double ItemHeight {
+		public double ItemHeight
+		{
 			get { return (double)GetValue(ItemHeightProperty); }
 			set { SetValue(ItemHeightProperty, value); }
 		}
 
-		public DataTemplate ItemTemplate {
+		public DataTemplate ItemTemplate
+		{
 			get { return (DataTemplate)GetValue(ItemTemplateProperty); }
 			set { SetValue(ItemTemplateProperty, value); }
 		}
 
-		public double ItemWidth {
+		public double ItemWidth
+		{
 			get { return (double)GetValue(ItemWidthProperty); }
 			set { SetValue(ItemWidthProperty, value); }
 		}
@@ -48,8 +52,10 @@ namespace FileExplorer.Views {
 
 		#region Protected Properties
 
-		protected override object DefaultStyleKey {
-			get {
+		protected override object DefaultStyleKey
+		{
+			get
+			{
 				return new ComponentResourceKey(GetType(), "PlainView");
 			}
 		}

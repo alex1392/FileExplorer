@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace FileExplorer.Models {
-
-	internal class GoUpCommand : ICommand {
-
+namespace FileExplorer.Models
+{
+	internal class GoUpCommand : ICommand
+	{
 		#region Private Fields
 
 		private readonly INavigationService navigationService;
@@ -22,7 +22,8 @@ namespace FileExplorer.Models {
 		public GoUpCommand(INavigationService navigationService)
 		{
 			this.navigationService = navigationService;
-			navigationService.Navigated += (sender, e) => {
+			navigationService.Navigated += (sender, e) =>
+			{
 				CanExecuteChanged?.Invoke(this, null);
 			};
 		}

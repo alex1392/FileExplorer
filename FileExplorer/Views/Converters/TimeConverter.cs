@@ -3,10 +3,10 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace FileExplorer.Views.Converters {
-
-	internal class TimeConverter : MarkupExtension, IValueConverter {
-
+namespace FileExplorer.Views.Converters
+{
+	internal class TimeConverter : MarkupExtension, IValueConverter
+	{
 		#region Private Fields
 
 		private static readonly TimeConverter instance = new TimeConverter();
@@ -17,7 +17,8 @@ namespace FileExplorer.Views.Converters {
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (value is DateTimeOffset dateTimeOffset) {
+			if (value is DateTimeOffset dateTimeOffset)
+			{
 				return dateTimeOffset.DateTime.ToString("g");
 			}
 			return null;

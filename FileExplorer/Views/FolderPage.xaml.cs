@@ -11,25 +11,28 @@ using System.Windows.Input;
 
 namespace FileExplorer.Views
 {
-
 	/// <summary>
 	/// Interaction logic for FolderPage.xaml
 	/// </summary>
 	public partial class FolderPage : Page, INotifyPropertyChanged
 	{
-
 		#region Private Fields
 
 		private readonly FolderPageViewModel vm;
 		private CollectionView collectionView;
-		private string path;
-		private List<ListView> listViews;
-		private ViewType viewType = ViewType.ListView;
+		private string filterText;
 		private bool isGrouping;
+		private List<ListView> listViews;
+		private string path;
+		private ViewType viewType = ViewType.ListView;
+
+		#endregion Private Fields
+
+		#region Public Events
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		#endregion Private Fields
+		#endregion Public Events
 
 		#region Public Properties
 
@@ -45,57 +48,23 @@ namespace FileExplorer.Views
 			}
 		}
 
-		public string Path
+		public string FilterText
 		{
-			get => path;
+			get => filterText;
 			set
 			{
-				// can only be set once
-				if (path != null || path == value)
+				if (value == filterText)
 				{
 					return;
 				}
-				path = value;
-				vm.Path = value; // property injection
+				filterText = value;
+
+				RefreshPage();
+
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FilterText)));
 			}
 		}
 
-		public List<ListView> ListViews
-		{
-			get
-			{
-				if (listViews == null)
-				{
-					listViews = new List<ListView>
-					{
-						ItemsListView,
-						ItemsGridView,
-						ItemsTileView,
-					};
-				}
-				return listViews;
-			}
-		}
-
-		#endregion Public Properties
-
-		#region Public Constructors
-
-		public FolderPage()
-		{
-			InitializeComponent();
-			Loaded += FolderPage_Loaded;
-		}
-
-		public FolderPage(FolderPageViewModel vm) : this()
-		{
-			this.vm = vm;
-			DataContext = this.vm;
-		}
-
-		#endregion Public Constructors
-
-		#region Public Methods
 		public bool IsGrouping
 		{
 			get => isGrouping;
@@ -120,67 +89,36 @@ namespace FileExplorer.Views
 			}
 		}
 
-
-		#endregion Public Methods
-
-		#region Internal Methods
-
-		private string filterText;
-
-		public string FilterText
+		public List<ListView> ListViews
 		{
-			get => filterText;
+			get
+			{
+				if (listViews == null)
+				{
+					listViews = new List<ListView>
+					{
+						ItemsListView,
+						ItemsGridView,
+						ItemsTileView,
+					};
+				}
+				return listViews;
+			}
+		}
+
+		public string Path
+		{
+			get => path;
 			set
 			{
-				if (value == filterText)
+				// can only be set once
+				if (path != null || path == value)
 				{
 					return;
-				} 
-				filterText = value;
-				
-				RefreshPage();
-
-				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FilterText)));
+				}
+				path = value;
+				vm.Path = value; // property injection
 			}
-		}
-
-
-		public void ApplyFilter()
-		{
-			if (CollectionView != null)
-			{
-				CollectionView.Filter = ListItemFilter;
-			}
-		}
-
-		public void RefreshPage()
-		{
-			CollectionView?.Refresh();
-		}
-
-		#endregion Internal Methods
-
-		#region Private Methods
-		private bool ListItemFilter(object item)
-		{
-			if (string.IsNullOrWhiteSpace(FilterText))
-			{
-				return true;
-			}
-			return (item as ListItem).Name.IndexOf(FilterText, StringComparison.OrdinalIgnoreCase) >= 0;
-		}
-		private void FolderPage_Loaded(object sender, RoutedEventArgs e)
-		{
-			ApplyFilter();
-		}
-
-		private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-		{
-			if (!((sender as ListViewItem)?.DataContext is ListFolderItem folderItem))
-			{
-				return;
-			}
-			vm.Navigate(folderItem);
 		}
 
 		public ViewType ViewType
@@ -199,17 +137,62 @@ namespace FileExplorer.Views
 					case ViewType.ListView:
 						ItemsListView.Visibility = Visibility.Visible;
 						break;
+
 					case ViewType.GridView:
 						ItemsGridView.Visibility = Visibility.Visible;
 						break;
+
 					case ViewType.TileView:
 						ItemsTileView.Visibility = Visibility.Visible;
 						break;
+
 					default:
 						break;
 				}
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ViewType)));
 			}
+		}
+
+		#endregion Public Properties
+
+		#region Public Constructors
+
+		public FolderPage()
+		{
+			InitializeComponent();
+			Loaded += FolderPage_Loaded;
+		}
+
+		public FolderPage(FolderPageViewModel vm) : this()
+		{
+			this.vm = vm;
+			DataContext = this.vm;
+		}
+
+		#endregion Public Constructors
+
+		#region Public Methods
+
+		public void ApplyFilter()
+		{
+			if (CollectionView != null)
+			{
+				CollectionView.Filter = ListItemFilter;
+			}
+		}
+
+		public void RefreshPage()
+		{
+			CollectionView?.Refresh();
+		}
+
+		#endregion Public Methods
+
+		#region Private Methods
+
+		private void FolderPage_Loaded(object sender, RoutedEventArgs e)
+		{
+			ApplyFilter();
 		}
 
 		private void HideListViews()
@@ -218,6 +201,24 @@ namespace FileExplorer.Views
 			{
 				view.Visibility = Visibility.Collapsed;
 			}
+		}
+
+		private bool ListItemFilter(object item)
+		{
+			if (string.IsNullOrWhiteSpace(FilterText))
+			{
+				return true;
+			}
+			return (item as ListItem).Name.IndexOf(FilterText, StringComparison.OrdinalIgnoreCase) >= 0;
+		}
+
+		private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			if (!((sender as ListViewItem)?.DataContext is ListFolderItem folderItem))
+			{
+				return;
+			}
+			vm.Navigate(folderItem);
 		}
 
 		#endregion Private Methods

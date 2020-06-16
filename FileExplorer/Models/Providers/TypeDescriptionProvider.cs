@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace FileExplorer.Models {
-
-	internal class TypeDescriptionProvider : ITypeDescriptionProvider {
-
+namespace FileExplorer.Models
+{
+	internal class TypeDescriptionProvider : ITypeDescriptionProvider
+	{
 		#region Private Structs
 
 		[StructLayout(LayoutKind.Sequential)]
-		private struct SHFILEINFO {
+		private struct SHFILEINFO
+		{
 			public IntPtr hIcon;
 			public int iIcon;
 			public uint dwAttributes;
@@ -43,7 +44,8 @@ namespace FileExplorer.Models {
 								FILE_ATTRIBUTE_NORMAL,
 								out var shfi,
 								(uint)Marshal.SizeOf(typeof(SHFILEINFO)),
-								SHGFI_USEFILEATTRIBUTES | SHGFI_TYPENAME)) {
+								SHGFI_USEFILEATTRIBUTES | SHGFI_TYPENAME))
+			{
 				return shfi.szTypeName;
 			}
 			return null;
@@ -56,7 +58,8 @@ namespace FileExplorer.Models {
 								FILE_ATTRIBUTE_NORMAL | FILE_ATTRIBUTE_DIRECTORY,
 								out var shfi,
 								(uint)Marshal.SizeOf(typeof(SHFILEINFO)),
-								SHGFI_USEFILEATTRIBUTES | SHGFI_TYPENAME)) {
+								SHGFI_USEFILEATTRIBUTES | SHGFI_TYPENAME))
+			{
 				return shfi.szTypeName;
 			}
 			return null;

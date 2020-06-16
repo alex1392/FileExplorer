@@ -4,10 +4,10 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace FileExplorer.Views.Converters {
-
-	public class DebugConverter : MarkupExtension, IValueConverter {
-
+namespace FileExplorer.Views.Converters
+{
+	public class DebugConverter : MarkupExtension, IValueConverter
+	{
 		#region Private Fields
 
 		private static readonly DebugConverter instance = new DebugConverter();

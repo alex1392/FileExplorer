@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace FileExplorer.Models {
-
-	internal class RefreshCommand : ICommand {
-
+namespace FileExplorer.Models
+{
+	internal class RefreshCommand : ICommand
+	{
 		#region Private Fields
 
 		private readonly INavigationService navigationService;

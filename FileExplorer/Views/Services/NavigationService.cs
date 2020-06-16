@@ -9,10 +9,10 @@ using System.Windows.Navigation;
 
 using Navigation = System.Windows.Navigation;
 
-namespace FileExplorer.Views.Services {
-
-	public class NavigationService : INavigationService {
-
+namespace FileExplorer.Views.Services
+{
+	public class NavigationService : INavigationService
+	{
 		#region Private Fields
 
 		private readonly IFileProvider fileProvider;
@@ -37,9 +37,12 @@ namespace FileExplorer.Views.Services {
 
 		public bool CanGoForward => InternalNavigationService.CanGoForward;
 
-		public bool CanGoUp {
-			get {
-				if (GetParentPath() == null) {
+		public bool CanGoUp
+		{
+			get
+			{
+				if (GetParentPath() == null)
+				{
 					return false;
 				}
 				return true;
@@ -49,10 +52,13 @@ namespace FileExplorer.Views.Services {
 		/// <summary>
 		/// Get or set the current content
 		/// </summary>
-		public object Content {
+		public object Content
+		{
 			get => InternalNavigationService.Content;
-			set {
-				if (InternalNavigationService.Content == value) {
+			set
+			{
+				if (InternalNavigationService.Content == value)
+				{
 					return;
 				}
 				InternalNavigationService.Content = value;
@@ -61,20 +67,26 @@ namespace FileExplorer.Views.Services {
 
 		public IEnumerable ForwardStack => InternalFrame.ForwardStack;
 
-		public Frame InternalFrame {
-			get {
+		public Frame InternalFrame
+		{
+			get
+			{
 				//Lazy initialization of dependency
-				if (internalFrame == null) {
+				if (internalFrame == null)
+				{
 					internalFrame = serviceProvider.GetService<MainWindow>().FolderFrame;
 				}
 				return internalFrame;
 			}
 		}
 
-		public Navigation::NavigationService InternalNavigationService {
-			get {
+		public Navigation::NavigationService InternalNavigationService
+		{
+			get
+			{
 				// Lazy initialization of dependency
-				if (internalNavigationService == null) {
+				if (internalNavigationService == null)
+				{
 					internalNavigationService = serviceProvider.GetService<MainWindow>().FolderFrame.NavigationService;
 					// propagate navigated event
 					internalNavigationService.Navigated += InternalNavigationService_Navigated;
@@ -99,7 +111,8 @@ namespace FileExplorer.Views.Services {
 
 		public void GoBack()
 		{
-			if (!InternalNavigationService.CanGoBack) {
+			if (!InternalNavigationService.CanGoBack)
+			{
 				return;
 			}
 			InternalNavigationService.GoBack();
@@ -107,7 +120,8 @@ namespace FileExplorer.Views.Services {
 
 		public void GoForward()
 		{
-			if (!InternalNavigationService.CanGoForward) {
+			if (!InternalNavigationService.CanGoForward)
+			{
 				return;
 			}
 			InternalNavigationService.GoForward();
@@ -115,7 +129,8 @@ namespace FileExplorer.Views.Services {
 
 		public void GoUp()
 		{
-			if (!CanGoUp) {
+			if (!CanGoUp)
+			{
 				return;
 			}
 			var parentPath = GetParentPath();
@@ -134,7 +149,8 @@ namespace FileExplorer.Views.Services {
 			};
 			// check if destination path is exist
 			var fileProvider = serviceProvider.GetService<IFileProvider>();
-			if (!fileProvider.IsDirectoryExists(path)) {
+			if (!fileProvider.IsDirectoryExists(path))
+			{
 				serviceProvider.GetService<IDialogService>().ShowMessage("Specified folder path does not exist.");
 				return;
 			}
@@ -163,7 +179,8 @@ namespace FileExplorer.Views.Services {
 
 		private string GetParentPath()
 		{
-			if (!(Content is FolderPage folderPage)) {
+			if (!(Content is FolderPage folderPage))
+			{
 				return null;
 			}
 			var path = folderPage.Path;
@@ -172,11 +189,13 @@ namespace FileExplorer.Views.Services {
 
 		private void InternalNavigationService_Navigated(object sender, NavigationEventArgs e)
 		{
-			if (!(e.Content is Page page)) {
+			if (!(e.Content is Page page))
+			{
 				return;
 			}
 			Navigated?.Invoke(sender, (page as FolderPage)?.Path);
-			page.Loaded += (sender, e) => {
+			page.Loaded += (sender, e) =>
+			{
 				NavigatedPageLoaded?.Invoke(sender, null);
 			};
 		}

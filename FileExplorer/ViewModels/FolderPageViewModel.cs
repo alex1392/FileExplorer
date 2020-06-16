@@ -6,10 +6,10 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace FileExplorer.ViewModels {
-
-	public class FolderPageViewModel : INotifyPropertyChanged {
-
+namespace FileExplorer.ViewModels
+{
+	public class FolderPageViewModel : INotifyPropertyChanged
+	{
 		#region Private Fields
 
 		private readonly IFileProvider fileProvider;
@@ -33,11 +33,14 @@ namespace FileExplorer.ViewModels {
 		/// <summary>
 		/// Property injection
 		/// </summary>
-		public string Path {
+		public string Path
+		{
 			get => path;
-			internal set {
+			internal set
+			{
 				// can only be set once
-				if (path != null || path == value) {
+				if (path != null || path == value)
+				{
 					return;
 				}
 				path = value;
@@ -97,12 +100,14 @@ namespace FileExplorer.ViewModels {
 		private void SetupListItems(string path)
 		{
 			var (folderPaths, filePaths) = fileProvider.GetChildren(path);
-			foreach (var folderPath in folderPaths) {
+			foreach (var folderPath in folderPaths)
+			{
 				var folderItem = serviceProvider.GetService<ListFolderItem>();
 				folderItem.Path = folderPath;
 				ListItems.Add(folderItem);
 			}
-			foreach (var filePath in filePaths) {
+			foreach (var filePath in filePaths)
+			{
 				var folderItem = serviceProvider.GetService<ListFileItem>();
 				folderItem.Path = filePath;
 				ListItems.Add(folderItem);

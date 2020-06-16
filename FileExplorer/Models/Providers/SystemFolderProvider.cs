@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 
-namespace FileExplorer.Models {
-
-	internal class SystemFolderProvider : ISystemFolderProvider {
-
+namespace FileExplorer.Models
+{
+	internal class SystemFolderProvider : ISystemFolderProvider
+	{
 		#region Public Methods
 
 		public string[] GetLogicalDrives()
