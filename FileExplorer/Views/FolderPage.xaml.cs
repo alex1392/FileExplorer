@@ -3,47 +3,55 @@ using FileExplorer.ViewModels;
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 
-namespace FileExplorer.Views {
+namespace FileExplorer.Views
+{
 
 	/// <summary>
 	/// Interaction logic for FolderPage.xaml
 	/// </summary>
-	public partial class FolderPage : Page {
+	public partial class FolderPage : Page, INotifyPropertyChanged
+	{
 
 		#region Private Fields
 
 		private readonly FolderPageViewModel vm;
 		private CollectionView collectionView;
 		private string path;
+		private List<ListView> listViews;
+		private ViewType viewType = ViewType.ListView;
+
+		public event PropertyChangedEventHandler PropertyChanged;
 
 		#endregion Private Fields
 
 		#region Public Properties
 
-		public CollectionView CollectionView {
-			get {
-				if (collectionView == null) {
-					collectionView = 
-					(
-						CollectionViewSource.GetDefaultView(ItemsListView.ItemsSource) ??
-						CollectionViewSource.GetDefaultView(ItemsGridView.ItemsSource) ??
-						CollectionViewSource.GetDefaultView(ItemsTileView.ItemsSource)
-					) as CollectionView;
+		public CollectionView CollectionView
+		{
+			get
+			{
+				if (collectionView == null)
+				{
+					collectionView = CollectionViewSource.GetDefaultView(ItemsListView.ItemsSource) as CollectionView;
 				}
 				return collectionView;
 			}
 		}
 
-		public string Path {
+		public string Path
+		{
 			get => path;
-			set {
+			set
+			{
 				// can only be set once
-				if (path != null || path == value) {
+				if (path != null || path == value)
+				{
 					return;
 				}
 				path = value;
@@ -120,24 +128,61 @@ namespace FileExplorer.Views {
 
 		private void FolderPage_Loaded(object sender, RoutedEventArgs e)
 		{
-			
+
 		}
 
 		private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
-			if (!((sender as ListViewItem)?.DataContext is ListFolderItem folderItem)) {
+			if (!((sender as ListViewItem)?.DataContext is ListFolderItem folderItem))
+			{
 				return;
 			}
 			vm.Navigate(folderItem);
 		}
 
-		private List<ListView> listViews;
+		public ViewType ViewType
+		{
+			get => viewType;
+			set
+			{
+				if (value == viewType)
+				{
+					return;
+				}
+				viewType = value;
+				HideListViews();
+				switch (viewType)
+				{
+					case ViewType.ListView:
+						ItemsListView.Visibility = Visibility.Visible;
+						break;
+					case ViewType.GridView:
+						ItemsGridView.Visibility = Visibility.Visible;
+						break;
+					case ViewType.TileView:
+						ItemsTileView.Visibility = Visibility.Visible;
+						break;
+					default:
+						break;
+				}
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ViewType)));
+			}
+		}
 		internal void ToggleListView()
 		{
-			HideListViews();
-			ItemsListView.Visibility = Visibility.Visible;
+			ViewType = ViewType.ListView;
 		}
 
+
+		internal void ToggleGridView()
+		{
+			ViewType = ViewType.GridView;
+		}
+
+		internal void ToggleTileView()
+		{
+			ViewType = ViewType.TileView;
+		}
 		private void HideListViews()
 		{
 			foreach (var view in ListViews)
@@ -146,18 +191,13 @@ namespace FileExplorer.Views {
 			}
 		}
 
-		internal void ToggleGridView()
-		{
-			HideListViews();
-			ItemsGridView.Visibility = Visibility.Visible;
-		}
-
-		internal void ToggleTileView()
-		{
-			HideListViews();
-			ItemsTileView.Visibility = Visibility.Visible;
-		}
-
 		#endregion Private Methods
+	}
+
+	public enum ViewType
+	{
+		ListView,
+		GridView,
+		TileView,
 	}
 }

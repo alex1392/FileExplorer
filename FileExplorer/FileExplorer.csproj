@@ -101,6 +101,7 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Models\Commands\RefreshCommand.cs" />
     <Compile Include="Views\Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Views\Converters\ViewTypeConverter.cs" />
     <Compile Include="Views\DropDownButtonBehavior.cs" />
     <Compile Include="Views\Converters\NavigationHistroyConverter.cs" />
     <Compile Include="Views\Converters\DebugConverter.cs" />

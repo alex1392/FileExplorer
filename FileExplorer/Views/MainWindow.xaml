@@ -49,9 +49,9 @@
 				</Style>
 				<fa:ImageAwesome x:Key="ListIcon" 
 												 Icon="List" />
-				<fa:ImageAwesome x:Key="ThIcon" 
+				<fa:ImageAwesome x:Key="GridIcon" 
 												 Icon="Th" />
-				<Image x:Key="TileViewIcon"
+				<Image x:Key="TileIcon"
 							 Source="{StaticResource tileview_solidDrawingImage}" />
 			</DockPanel.Resources>
 			<StackPanel Orientation="Horizontal"
@@ -110,8 +110,14 @@
 				<Image Source="{StaticResource shapes_solidDrawingImage}" />
 			</ToggleButton>
 			<Button Name="ViewButton"
-							Content="{StaticResource ListIcon}"
 							DockPanel.Dock="Right">
+				<Button.Content>
+					<MultiBinding Converter="{converter:ViewTypeConverter}">
+						<Binding ElementName="FolderFrame"
+										 Path="Content.ViewType" />
+						<Binding RelativeSource="{RelativeSource Mode=Self}" />
+					</MultiBinding>
+				</Button.Content>
 				<i:Interaction.Behaviors>
 					<local:DropDownButtonBehavior />
 				</i:Interaction.Behaviors>

@@ -94,7 +94,7 @@ namespace FileExplorer.Views {
 
 		private void NavigationService_Navigated(object sender, string e)
 		{
-			// reset filter and group
+			// reset tool bar
 			GroupToggleButton.IsChecked = false;
 			searchTextBox.Text = null;
 		}
@@ -175,7 +175,6 @@ namespace FileExplorer.Views {
 				return;
 			}
 			folderPage.ToggleListView();
-			ViewButton.Content = ViewButton.FindResource("ListIcon");
 		}
 
 		private void GridViewButton_Click(object sender, RoutedEventArgs e)
@@ -185,7 +184,6 @@ namespace FileExplorer.Views {
 				return;
 			}
 			folderPage.ToggleGridView();
-			ViewButton.Content = ViewButton.FindResource("ThIcon");
 		}
 
 		private void TileViewButton_Click(object sender, RoutedEventArgs e)
@@ -195,7 +193,6 @@ namespace FileExplorer.Views {
 				return;
 			}
 			folderPage.ToggleTileView();
-			ViewButton.Content = ViewButton.FindResource("TileViewIcon");
 		}
 	}
 }
