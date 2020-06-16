@@ -105,8 +105,7 @@
 			</ToggleButton>
 			<ToggleButton Name="GroupToggleButton"
 										DockPanel.Dock="Right"
-										Checked="GroupToggleButton_Checked"
-										Unchecked="GroupToggleButton_Unchecked">
+										IsChecked="{Binding ElementName=FolderFrame, Path=Content.IsGrouping, Mode=TwoWay}">
 				<Image Source="{StaticResource shapes_solidDrawingImage}" />
 			</ToggleButton>
 			<Button Name="ViewButton"
@@ -173,7 +172,7 @@
 										 VerticalAlignment="Center"
 										 VerticalContentAlignment="Center"
 										 Height="{Binding ElementName=MenuBar, Path=Height}"
-										 TextChanged="searchTextBox_TextChanged" />
+										 Text="{Binding ElementName=FolderFrame, Path=Content.FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 						<TextBlock VerticalAlignment="Center"
 											 Foreground="Gray"
 											 Padding="3"

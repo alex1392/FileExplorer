@@ -25,6 +25,7 @@ namespace FileExplorer.Views
 		private string path;
 		private List<ListView> listViews;
 		private ViewType viewType = ViewType.ListView;
+		private bool isGrouping;
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -95,40 +96,82 @@ namespace FileExplorer.Views
 		#endregion Public Constructors
 
 		#region Public Methods
-
-		public void ToggleGroupByType()
+		public bool IsGrouping
 		{
-			var groupDescription = new PropertyGroupDescription(nameof(ListItem.TypeDescription));
-			CollectionView.GroupDescriptions.Clear();
-			CollectionView.GroupDescriptions.Add(groupDescription);
+			get => isGrouping;
+			set
+			{
+				if (value == isGrouping)
+				{
+					return;
+				}
+				isGrouping = value;
+				if (isGrouping)
+				{
+					var groupDescription = new PropertyGroupDescription(nameof(ListItem.TypeDescription));
+					CollectionView?.GroupDescriptions.Clear();
+					CollectionView?.GroupDescriptions.Add(groupDescription);
+				}
+				else
+				{
+					CollectionView?.GroupDescriptions.Clear();
+				}
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsGrouping)));
+			}
 		}
 
-		public void UnToggleGroupByType()
-		{
-			CollectionView?.GroupDescriptions.Clear();
-		}
 
 		#endregion Public Methods
 
 		#region Internal Methods
 
-		internal void ApplyFilter(Predicate<object> listItemFilter)
+		private string filterText;
+
+		public string FilterText
 		{
-			CollectionView.Filter = listItemFilter;
+			get => filterText;
+			set
+			{
+				if (value == filterText)
+				{
+					return;
+				} 
+				filterText = value;
+				
+				RefreshPage();
+
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FilterText)));
+			}
 		}
 
-		internal void RefreshPage()
+
+		public void ApplyFilter()
 		{
-			CollectionView.Refresh();
+			if (CollectionView != null)
+			{
+				CollectionView.Filter = ListItemFilter;
+			}
+		}
+
+		public void RefreshPage()
+		{
+			CollectionView?.Refresh();
 		}
 
 		#endregion Internal Methods
 
 		#region Private Methods
-
+		private bool ListItemFilter(object item)
+		{
+			if (string.IsNullOrWhiteSpace(FilterText))
+			{
+				return true;
+			}
+			return (item as ListItem).Name.IndexOf(FilterText, StringComparison.OrdinalIgnoreCase) >= 0;
+		}
 		private void FolderPage_Loaded(object sender, RoutedEventArgs e)
 		{
-
+			ApplyFilter();
 		}
 
 		private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -168,21 +211,7 @@ namespace FileExplorer.Views
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ViewType)));
 			}
 		}
-		internal void ToggleListView()
-		{
-			ViewType = ViewType.ListView;
-		}
 
-
-		internal void ToggleGridView()
-		{
-			ViewType = ViewType.GridView;
-		}
-
-		internal void ToggleTileView()
-		{
-			ViewType = ViewType.TileView;
-		}
 		private void HideListViews()
 		{
 			foreach (var view in ListViews)

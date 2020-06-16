@@ -44,22 +44,6 @@ namespace FileExplorer.Views {
 
 		#region Private Methods
 
-		private void GroupToggleButton_Checked(object sender, RoutedEventArgs e)
-		{
-			if (!(FolderFrame.Content is FolderPage folderPage)) {
-				return;
-			}
-			folderPage.ToggleGroupByType();
-		}
-
-		private void GroupToggleButton_Unchecked(object sender, RoutedEventArgs e)
-		{
-			if (!(FolderFrame.Content is FolderPage folderPage)) {
-				return;
-			}
-			folderPage.UnToggleGroupByType();
-		}
-
 		private void HistoryItem_Selected(object sender, RoutedEventArgs e)
 		{
 			if (!(sender is ComboBoxItem comboBoxItem) || !(comboBoxItem.DataContext is JournalEntry entry)) {
@@ -87,26 +71,8 @@ namespace FileExplorer.Views {
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
 		{
 			vm.Navigate(new Uri("/Views/HomePage.xaml", UriKind.Relative));
-			var navigationService = serviceProvider.GetService<INavigationService>();
-			navigationService.Navigated += NavigationService_Navigated;
-			navigationService.NavigatedPageLoaded += NavigationService_NavigatedPageLoaded;
 		}
 
-		private void NavigationService_Navigated(object sender, string e)
-		{
-			// reset tool bar
-			GroupToggleButton.IsChecked = false;
-			searchTextBox.Text = null;
-		}
-
-		private void NavigationService_NavigatedPageLoaded(object sender, EventArgs e)
-		{
-			// apply new filter
-			if (!(FolderFrame.Content is FolderPage folderPage)) {
-				return;
-			}
-			folderPage.ApplyFilter(ListItemFilter);
-		}
 
 		private void PathItem_Selected(object sender, RoutedEventArgs e)
 		{
@@ -135,13 +101,7 @@ namespace FileExplorer.Views {
 			}
 		}
 
-		private void searchTextBox_TextChanged(object sender, TextChangedEventArgs e)
-		{
-			if (!(FolderFrame.Content is FolderPage folderPage)) {
-				return;
-			}
-			folderPage.RefreshPage();
-		}
+		
 
 		private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
 		{
@@ -174,7 +134,7 @@ namespace FileExplorer.Views {
 			{
 				return;
 			}
-			folderPage.ToggleListView();
+			folderPage.ViewType = ViewType.ListView;
 		}
 
 		private void GridViewButton_Click(object sender, RoutedEventArgs e)
@@ -183,7 +143,7 @@ namespace FileExplorer.Views {
 			{
 				return;
 			}
-			folderPage.ToggleGridView();
+			folderPage.ViewType = ViewType.GridView;
 		}
 
 		private void TileViewButton_Click(object sender, RoutedEventArgs e)
@@ -192,7 +152,7 @@ namespace FileExplorer.Views {
 			{
 				return;
 			}
-			folderPage.ToggleTileView();
+			folderPage.ViewType = ViewType.TileView;
 		}
 	}
 }
