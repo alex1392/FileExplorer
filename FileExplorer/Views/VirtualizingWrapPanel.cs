@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.ComponentModel;
 using System.Windows.Input;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace FileExplorer.Views
 {
@@ -420,6 +421,17 @@ namespace FileExplorer.Views
             base.OnItemsChanged(sender, args);
             _abstractPanel = null;
             ResetScrollInfo();
+
+            switch (args.Action)
+            {
+                case NotifyCollectionChangedAction.Remove:
+                case NotifyCollectionChangedAction.Replace:
+                    RemoveInternalChildRange(args.Position.Index, args.ItemUICount);
+                    break;
+                case NotifyCollectionChangedAction.Move:
+                    RemoveInternalChildRange(args.OldPosition.Index, args.ItemUICount);
+                    break;
+            }
         }
 
         protected override void OnInitialized(EventArgs e)
