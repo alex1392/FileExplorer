@@ -43,25 +43,30 @@ namespace FileExplorer
 
 		private static void ConfigureServices(IServiceCollection serviceCollection)
 		{
+			serviceCollection.AddSingleton<IServiceProvider>(sp => sp);
 			serviceCollection.AddSingleton<IFileProvider, FileProvider>();
 			serviceCollection.AddSingleton<ISystemFolderProvider, SystemFolderProvider>();
+
+			serviceCollection.AddSingleton<INavigationService, NavigationService>();
+			serviceCollection.AddSingleton<IDialogService, DialogService>();
+			serviceCollection.AddSingleton<ITypeDescriptionProvider, TypeDescriptionProvider>();
+			serviceCollection.AddSingleton<IDispatcherService, DispatcherService>();
+
 			serviceCollection.AddSingleton<MainWindowViewModel>();
 			serviceCollection.AddSingleton<MainWindow>();
-
-			serviceCollection.AddSingleton<IServiceProvider>(sp => sp);
 
 			serviceCollection.AddTransient<FolderPage>();
 			serviceCollection.AddTransient<FolderPageViewModel>();
 			serviceCollection.AddTransient<FolderChildrenProvider>();
-			serviceCollection.AddSingleton<INavigationService, NavigationService>();
-
-			serviceCollection.AddSingleton<IDialogService, DialogService>();
-			serviceCollection.AddSingleton<ITypeDescriptionProvider, TypeDescriptionProvider>();
 
 			serviceCollection.AddTransient<Item>();
 			serviceCollection.AddTransient<ListFileItem>();
 			serviceCollection.AddTransient<ListFolderItem>();
 			serviceCollection.AddTransient<TreeFolderItem>();
+
+			serviceCollection.AddTransient<ListFileItemViewModel>();
+			serviceCollection.AddTransient<ListFolderItemViewModel>();
+
 		}
 
 		#endregion Private Methods

@@ -28,7 +28,7 @@ namespace FileExplorer.ViewModels
 
 		#region Public Properties
 
-		public ObservableCollection<ListItem> ListItems { get; } = new ObservableCollection<ListItem>();
+		public ObservableCollection<ListItemViewModel> ListItems { get; } = new ObservableCollection<ListItemViewModel>();
 
 		/// <summary>
 		/// Property injection
@@ -102,15 +102,15 @@ namespace FileExplorer.ViewModels
 			var (folderPaths, filePaths) = fileProvider.GetChildren(path);
 			foreach (var folderPath in folderPaths)
 			{
-				var folderItem = serviceProvider.GetService<ListFolderItem>();
+				var folderItem = serviceProvider.GetService<ListFolderItemViewModel>();
 				folderItem.Path = folderPath;
 				ListItems.Add(folderItem);
 			}
 			foreach (var filePath in filePaths)
 			{
-				var folderItem = serviceProvider.GetService<ListFileItem>();
-				folderItem.Path = filePath;
-				ListItems.Add(folderItem);
+				var fileItem = serviceProvider.GetService<ListFileItemViewModel>();
+				fileItem.Path = filePath;
+				ListItems.Add(fileItem);
 			}
 		}
 

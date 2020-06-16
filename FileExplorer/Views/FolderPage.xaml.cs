@@ -4,6 +4,7 @@ using FileExplorer.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,6 +17,22 @@ namespace FileExplorer.Views
 	/// </summary>
 	public partial class FolderPage : Page, INotifyPropertyChanged
 	{
+		class ItemTypeConverter : IValueConverter
+		{
+			public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+			{
+				if (!(value is ListItem listItem))
+				{
+					throw new InvalidOperationException();
+				}
+				return listItem.TypeDescription;
+			}
+
+			public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+			{
+				throw new NotImplementedException();
+			}
+		}
 		#region Private Fields
 
 		private readonly FolderPageViewModel vm;
@@ -77,7 +94,7 @@ namespace FileExplorer.Views
 				isGrouping = value;
 				if (isGrouping)
 				{
-					var groupDescription = new PropertyGroupDescription(nameof(ListItem.TypeDescription));
+					var groupDescription = new PropertyGroupDescription(nameof(ListItemViewModel.Item), new ItemTypeConverter());
 					CollectionView?.GroupDescriptions.Clear();
 					CollectionView?.GroupDescriptions.Add(groupDescription);
 				}
@@ -214,11 +231,11 @@ namespace FileExplorer.Views
 
 		private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
-			if (!((sender as ListViewItem)?.DataContext is ListFolderItem folderItem))
+			if (!((sender as ListViewItem)?.DataContext is ListFolderItemViewModel folderVM))
 			{
 				return;
 			}
-			vm.Navigate(folderItem);
+			vm.Navigate(folderVM.Item);
 		}
 
 		#endregion Private Methods

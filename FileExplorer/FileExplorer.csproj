@@ -98,6 +98,9 @@
     <Compile Include="Models\Commands\GoBackCommand.cs" />
     <Compile Include="Models\Commands\GoForwardCommand.cs" />
     <Compile Include="Models\Commands\GoUpCommand.cs" />
+    <Compile Include="ViewModels\ListFileItemViewModel.cs" />
+    <Compile Include="ViewModels\ListFolderItemViewModel.cs" />
+    <Compile Include="ViewModels\ListItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Models\Commands\RefreshCommand.cs" />
     <Compile Include="Views\Converters\BoolToVisibilityConverter.cs" />
@@ -115,7 +118,9 @@
       <DependentUpon>Canvas.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PlainView.cs" />
+    <Compile Include="Views\Services\DispatcherService.cs" />
     <Compile Include="Views\Services\DialogService.cs" />
+    <Compile Include="Models\Interfaces\IDispatcherService.cs" />
     <Compile Include="Views\Services\NavigationService.cs" />
     <Compile Include="Views\FolderPage.xaml.cs">
       <DependentUpon>FolderPage.xaml</DependentUpon>
@@ -224,6 +229,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\File.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
