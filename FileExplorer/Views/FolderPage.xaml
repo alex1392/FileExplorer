@@ -8,6 +8,7 @@
 			xmlns:model="clr-namespace:FileExplorer.Models"
 			xmlns:vm="clr-namespace:FileExplorer.ViewModels"
 			xmlns:util="clr-namespace:FileExplorer.Utilities"
+			xmlns:vwp="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
 			mc:Ignorable="d"
 			d:DataContext="{d:DesignInstance Type=vm:FolderPageViewModel, IsDesignTimeCreatable=True}"
 			d:DesignHeight="450"
@@ -126,7 +127,8 @@
 			</ListView.ItemTemplate>
 			<ListView.ItemsPanel>
 				<ItemsPanelTemplate>
-					<local:VirtualizingWrapPanel Orientation="Horizontal" />
+					<vwp:VirtualizingWrapPanel Orientation="Vertical"
+																		 ItemSize="100,80"/>
 				</ItemsPanelTemplate>
 			</ListView.ItemsPanel>
 			<ListView.GroupStyle>
