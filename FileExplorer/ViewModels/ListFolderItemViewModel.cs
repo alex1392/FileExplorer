@@ -18,7 +18,7 @@ namespace FileExplorer.ViewModels
 			dispatcherService.Invoke(() =>
 			{
 				// image source must be created at the main thread
-				source = new BitmapImage(new Uri("/Resources/Folder.ico", UriKind.Relative));
+				source = App.Current.TryFindResource("FolderIcon") as ImageSource;
 			});
 			return source;
 		}

@@ -28,7 +28,14 @@ namespace FileExplorer.Views.Converters
 		{
 			if (value is TreeFolderItem treeFolderItem)
 			{
-				return new BitmapImage(new Uri($"/Resources/{treeFolderItem.IconKey ?? "Folder"}.ico", UriKind.Relative));
+				if (treeFolderItem.IconKey != null)
+				{
+					return new BitmapImage(new Uri($"/Resources/{treeFolderItem.IconKey}.ico", UriKind.Relative));
+				}
+				else
+				{
+					return App.Current.TryFindResource("FolderIcon");
+				}
 			}
 			else
 			{
