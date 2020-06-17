@@ -102,6 +102,7 @@ namespace FileExplorer.ViewModels
 		{
 			HomePage = serviceProvider.GetService<TreePageItem>();
 			HomePage.Uri = new Uri("/Views/HomePage.xaml", UriKind.Relative);
+			HomePage.IconKey = "Home";
 			TreeItems.Add(HomePage);
 		}
 

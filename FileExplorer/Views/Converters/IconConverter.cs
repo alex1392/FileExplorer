@@ -8,6 +8,7 @@ using System.Windows.Data;
 using System.Windows.Interop;
 using System.Windows.Markup;
 using System.Windows.Media.Imaging;
+using FontAwesome.WPF;
 
 namespace FileExplorer.Views.Converters
 {
