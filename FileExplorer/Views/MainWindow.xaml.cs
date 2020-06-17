@@ -70,15 +70,6 @@ namespace FileExplorer.Views
 			}
 		}
 
-		private bool ListItemFilter(object item)
-		{
-			if (string.IsNullOrWhiteSpace(searchTextBox.Text))
-			{
-				return true;
-			}
-			return (item as ListItem).Name.IndexOf(searchTextBox.Text, StringComparison.OrdinalIgnoreCase) >= 0;
-		}
-
 		private void ListViewButton_Click(object sender, RoutedEventArgs e)
 		{
 			if (!(FolderFrame.Content is FolderPage folderPage))

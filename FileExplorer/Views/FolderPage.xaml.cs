@@ -106,23 +106,6 @@ namespace FileExplorer.Views
 			}
 		}
 
-		public List<ListView> ListViews
-		{
-			get
-			{
-				if (listViews == null)
-				{
-					listViews = new List<ListView>
-					{
-						ItemsListView,
-						ItemsGridView,
-						ItemsTileView,
-					};
-				}
-				return listViews;
-			}
-		}
-
 		public string Path
 		{
 			get => path;
@@ -190,22 +173,30 @@ namespace FileExplorer.Views
 
 		#region Public Methods
 
-		public void ApplyFilter()
-		{
-			if (CollectionView != null)
-			{
-				CollectionView.Filter = ListItemFilter;
-			}
-		}
 
-		public void RefreshPage()
-		{
-			CollectionView?.Refresh();
-		}
 
 		#endregion Public Methods
 
 		#region Private Methods
+		private void RefreshPage()
+		{
+			CollectionView?.Refresh();
+		}
+
+		private void ApplyFilter()
+		{
+			if (CollectionView != null)
+			{
+				CollectionView.Filter = item => 
+				{
+					if (string.IsNullOrWhiteSpace(FilterText))
+					{
+						return true;
+					}
+					return (item as ListItem).Name.IndexOf(FilterText, StringComparison.OrdinalIgnoreCase) >= 0;
+				};
+			}
+		}
 
 		private void FolderPage_Loaded(object sender, RoutedEventArgs e)
 		{
@@ -214,19 +205,15 @@ namespace FileExplorer.Views
 
 		private void HideListViews()
 		{
-			foreach (var view in ListViews)
+			foreach (var view in new List<ListView>
+					{
+						ItemsListView,
+						ItemsGridView,
+						ItemsTileView,
+					})
 			{
 				view.Visibility = Visibility.Collapsed;
 			}
-		}
-
-		private bool ListItemFilter(object item)
-		{
-			if (string.IsNullOrWhiteSpace(FilterText))
-			{
-				return true;
-			}
-			return (item as ListItem).Name.IndexOf(FilterText, StringComparison.OrdinalIgnoreCase) >= 0;
 		}
 
 		private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -247,4 +234,5 @@ namespace FileExplorer.Views
 		GridView,
 		TileView,
 	}
+
 }
