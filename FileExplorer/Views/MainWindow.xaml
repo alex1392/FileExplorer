@@ -237,7 +237,7 @@
 							Visibility="{Binding ElementName=TreeViewToggleButton, Path=IsChecked, Converter={converter:BoolToVisibilityConverter}}"
 							Width="150">
 			<TreeView.ItemTemplate>
-				<HierarchicalDataTemplate DataType="{x:Type model:TreeFolderItem}"
+				<HierarchicalDataTemplate DataType="{x:Type model:ITreeItem}"
 																	ItemsSource="{Binding SubFolders}">
 					<StackPanel Orientation="Horizontal">
 						<Image Source="{Binding .,Converter={converter:IconConverter}}"

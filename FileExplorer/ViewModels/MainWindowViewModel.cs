@@ -68,7 +68,8 @@ namespace FileExplorer.ViewModels
 		public string Path { get; private set; }
 		public IEnumerable<Item> PathItems { get; private set; }
 		public ICommand RefreshCommand { get; set; }
-		public ObservableCollection<TreeFolderItem> TreeItems { get; set; } = new ObservableCollection<TreeFolderItem>();
+		public ObservableCollection<ITreeItem> TreeItems { get; set; } = new ObservableCollection<ITreeItem>();
+		public TreePageItem HomePage { get; private set; }
 
 		#endregion Public Properties
 
@@ -93,7 +94,15 @@ namespace FileExplorer.ViewModels
 			GoForwardCommand = new GoForwardCommand(navigationService);
 			RefreshCommand = new RefreshCommand(navigationService);
 			GoUpCommand = new GoUpCommand(navigationService);
+			SetupHomePage();
 			SetupTreeItems();
+		}
+
+		private void SetupHomePage()
+		{
+			HomePage = serviceProvider.GetService<TreePageItem>();
+			HomePage.Uri = new Uri("/Views/HomePage.xaml", UriKind.Relative);
+			TreeItems.Add(HomePage);
 		}
 
 		#endregion Public Constructors
@@ -105,9 +114,9 @@ namespace FileExplorer.ViewModels
 			navigationService.Navigate(uri);
 		}
 
-		public void Navigate(object destination)
+		public void Navigate(TreePageItem treePageItem)
 		{
-			navigationService.Navigate(destination);
+			navigationService.Navigate(treePageItem.Uri);
 		}
 
 		public void Navigate(Item item)

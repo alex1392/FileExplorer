@@ -99,6 +99,11 @@ namespace FileExplorer.Models
 			return File.Exists(path);
 		}
 
+		public string GetFileNameWithoutExtension(string path)
+		{
+			return Path.GetFileNameWithoutExtension(path);
+		}
+
 		#endregion Public Methods
 	}
 }

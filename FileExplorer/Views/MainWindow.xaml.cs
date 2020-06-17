@@ -79,7 +79,7 @@ namespace FileExplorer.Views
 
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
 		{
-			vm.Navigate(new Uri("/Views/HomePage.xaml", UriKind.Relative));
+			vm.Navigate(vm.HomePage);
 		}
 
 		private void PathItem_Selected(object sender, RoutedEventArgs e)
@@ -136,14 +136,21 @@ namespace FileExplorer.Views
 
 		private void TreeViewItem_Selected(object sender, RoutedEventArgs e)
 		{
-			if (!((sender as TreeViewItem)?.DataContext is TreeFolderItem folderItem))
+			if (!((sender as TreeViewItem)?.DataContext is ITreeItem treeItem))
 			{
 				return;
 			}
-			// load the subfolders for the tree view item to expand
-			folderItem.LoadSubFolders();
-			// Navigate to the selected folder
-			vm.Navigate(folderItem);
+			if (treeItem is TreeFolderItem folderItem)
+			{
+				// load the subfolders for the tree view item to expand
+				folderItem.LoadSubFolders();
+				// Navigate to the selected folder
+				vm.Navigate(folderItem);
+			}
+			else if (treeItem is TreePageItem pageItem)
+			{
+				vm.Navigate(pageItem);
+			}
 			// avoid recursive event propagation
 			if (e != null)
 			{
@@ -154,6 +161,6 @@ namespace FileExplorer.Views
 
 		#endregion Private Methods
 
-		
+
 	}
 }

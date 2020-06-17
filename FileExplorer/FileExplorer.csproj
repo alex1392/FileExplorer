@@ -91,8 +91,10 @@
     </ApplicationDefinition>
     <Compile Include="DataVirtualization\AsyncVirtualizingCollection.cs" />
     <Compile Include="Models\Interfaces\IDialogService.cs" />
+    <Compile Include="Models\Interfaces\ITreeItem.cs" />
     <Compile Include="Models\Items\ListFolderItem.cs" />
     <Compile Include="Models\Items\ListItem.cs" />
+    <Compile Include="Models\Items\TreePageItem.cs" />
     <Compile Include="Models\Providers\FolderChildrenProvider.cs" />
     <Compile Include="Models\Interfaces\ITypeDescriptionProvider.cs" />
     <Compile Include="Utilities\GridViewSort.cs" />

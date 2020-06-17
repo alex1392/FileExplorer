@@ -67,6 +67,7 @@ namespace FileExplorer
 			serviceCollection.AddTransient<ListFileItemViewModel>();
 			serviceCollection.AddTransient<ListFolderItemViewModel>();
 
+			serviceCollection.AddTransient<TreePageItem>();
 		}
 
 		#endregion Private Methods

@@ -11,7 +11,7 @@ namespace FileExplorer.Models
 		string[] GetDirectories(string path);
 
 		FileInfo GetFileInfo(string path);
-
+		string GetFileNameWithoutExtension(string path);
 		string[] GetFiles(string path);
 
 		FileSystemInfo GetFileSystemInfo(string path);

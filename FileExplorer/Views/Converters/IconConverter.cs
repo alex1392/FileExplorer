@@ -26,20 +26,17 @@ namespace FileExplorer.Views.Converters
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (value is TreeFolderItem treeFolderItem)
+			if (!(value is ITreeItem treeItem))
 			{
-				if (treeFolderItem.IconKey != null)
-				{
-					return new BitmapImage(new Uri($"/Resources/{treeFolderItem.IconKey}.ico", UriKind.Relative));
-				}
-				else
-				{
-					return App.Current.TryFindResource("FolderIcon");
-				}
+				return null;
+			}
+			if (treeItem.IconKey != null)
+			{
+				return new BitmapImage(new Uri($"/Resources/{treeItem.IconKey}.ico", UriKind.Relative));
 			}
 			else
 			{
-				return null;
+				return App.Current.TryFindResource("FolderIcon");
 			}
 		}
 

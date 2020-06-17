@@ -3,10 +3,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Media.Animation;
 
 namespace FileExplorer.Models
 {
-	public class TreeFolderItem : Item
+	public class TreeFolderItem : Item, ITreeItem
 	{
 		#region Private Fields
 
@@ -23,7 +24,7 @@ namespace FileExplorer.Models
 		/// </summary>
 		public string IconKey { get; set; }
 
-		public List<Item> SubFolders { get; set; } = new List<Item>
+		public List<Item> SubFolders { get; private set; } = new List<Item>
 		{
 			null
 		};
