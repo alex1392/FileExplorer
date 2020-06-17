@@ -79,7 +79,7 @@
 						<GridViewColumn.CellTemplate>
 							<DataTemplate DataType="{x:Type vm:ListItemViewModel}">
 								<StackPanel Orientation="Horizontal">
-									<Image Source="{Binding Icon, IsAsync=True}"
+									<Image Source="{Binding Icon, IsAsync=True, FallbackValue={StaticResource FileIcon}, TargetNullValue={StaticResource FileIcon}}"
 												 Width="18" />
 									<TextBlock Text="{Binding Item.Name}"
 														 VerticalAlignment="Center"
