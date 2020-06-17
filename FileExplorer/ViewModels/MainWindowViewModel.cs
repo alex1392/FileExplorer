@@ -159,20 +159,36 @@ namespace FileExplorer.ViewModels
 
 		private void SetupTreeItems()
 		{
+			var funcs = new List<Func<string>>
+			{
+				systemFolderProvider.GetDesktop,
+				systemFolderProvider.GetRecent,
+				systemFolderProvider.GetDownloads,
+				systemFolderProvider.GetDocuments,
+				systemFolderProvider.GetPictures,
+				systemFolderProvider.GetMusic,
+				systemFolderProvider.GetVideos,
+			};
+			foreach (var func in funcs)
+			{
+				var path = func.Invoke();
+				SetupTreeItem(path, func.Method.Name.Replace("Get", ""));
+			}
+
 			var drivePaths = systemFolderProvider.GetLogicalDrives();
 			foreach (var drivePath in drivePaths)
 			{
-				var driveItem = serviceProvider.GetService<TreeFolderItem>();
-				driveItem.Path = drivePath;
-				driveItem.IconKey = "Drive";
-				TreeItems.Add(driveItem);
+				SetupTreeItem(drivePath, "Drive");
 			}
 
-			var recentPath = systemFolderProvider.GetRecentFolder();
-			var recentItem = serviceProvider.GetService<TreeFolderItem>();
-			recentItem.Path = recentPath;
-			recentItem.IconKey = "Favorites";
-			TreeItems.Add(recentItem);
+			void SetupTreeItem(string path, string iconKey)
+			{
+				var item = serviceProvider.GetService<TreeFolderItem>();
+				item.Path = path;
+				item.IconKey = iconKey;
+				TreeItems.Add(item);
+			}
+
 		}
 
 		#endregion Private Methods

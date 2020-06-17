@@ -215,7 +215,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\FileExplorer.ico" />
-    <Resource Include="Resources\Favorites.ico" />
+    <Resource Include="Resources\Recent.ico" />
     <Resource Include="Resources\treeview.png" />
     <Resource Include="Resources\Videos.ico" />
     <Resource Include="Resources\Drive.ico" />
