@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace FileExplorer.Views
+namespace FileExplorer.Utilities
 {
 	public class DropDownButtonBehavior : Behavior<Button>
 	{

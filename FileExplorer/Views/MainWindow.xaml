@@ -12,6 +12,7 @@
 								 xmlns:sys="clr-namespace:System;assembly=mscorlib"
 								 xmlns:cycConverter="clr-namespace:Cyc.Mvvm.Converters;assembly=Cyc.Mvvm"
 								 xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+								 xmlns:util="clr-namespace:FileExplorer.Utilities"
 								 mc:Ignorable="d"
 								 d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel, IsDesignTimeCreatable=True}"
 								 Icon="/FileExplorer;component/Resources/Computer.ico"
@@ -120,7 +121,7 @@
 					</MultiBinding>
 				</Button.Content>
 				<i:Interaction.Behaviors>
-					<local:DropDownButtonBehavior />
+					<util:DropDownButtonBehavior />
 				</i:Interaction.Behaviors>
 				<Button.ContextMenu>
 					<ContextMenu>
