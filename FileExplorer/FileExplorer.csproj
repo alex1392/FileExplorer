@@ -103,6 +103,7 @@
     <Compile Include="Models\Commands\GoBackCommand.cs" />
     <Compile Include="Models\Commands\GoForwardCommand.cs" />
     <Compile Include="Models\Commands\GoUpCommand.cs" />
+    <Compile Include="Models\Commands\GoHomeCommand.cs" />
     <Compile Include="ViewModels\ListFileItemViewModel.cs" />
     <Compile Include="ViewModels\ListFolderItemViewModel.cs" />
     <Compile Include="ViewModels\ListItemViewModel.cs" />

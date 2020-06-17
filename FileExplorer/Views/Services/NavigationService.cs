@@ -158,11 +158,6 @@ namespace FileExplorer.Views.Services
 			InternalNavigationService.Navigate(page);
 		}
 
-		public void Navigate(object destination)
-		{
-			InternalNavigationService.Navigate(destination);
-		}
-
 		public void Navigate(Uri uri)
 		{
 			InternalNavigationService.Navigate(uri);

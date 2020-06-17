@@ -92,7 +92,9 @@
 				<Button Command="{Binding RefreshCommand}">
 					<fa:ImageAwesome Icon="Refresh" />
 				</Button>
-
+				<Button Command="{Binding GoHomeCommand}">
+					<fa:ImageAwesome Icon="Home" />
+				</Button>
 			</StackPanel>
 			<ToggleButton Name="PreviewToggleButton"
 										DockPanel.Dock="Right">

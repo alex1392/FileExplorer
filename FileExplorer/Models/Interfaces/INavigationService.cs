@@ -49,8 +49,6 @@ namespace FileExplorer.Models
 		/// <param name="path">The folder path to be navigated.</param>
 		void Navigate(string pageKey, string path);
 
-		void Navigate(object destination);
-
 		void Navigate(Uri uri);
 
 		void Refresh();

@@ -33,12 +33,14 @@ namespace FileExplorer.ViewModels
 
 		public object CurrentContent => navigationService.Content;
 
-		public ICommand GoBackCommand { get; set; }
+		public ICommand GoBackCommand { get; private set; }
 
-		public ICommand GoForwardCommand { get; set; }
+		public ICommand GoForwardCommand { get; private set; }
 
-		public ICommand GoUpCommand { get; set; }
+		public ICommand GoUpCommand { get; private set; }
+		public ICommand GoHomeCommand { get; private set; }
 
+		public ICommand RefreshCommand { get; private set; }
 		public IEnumerable<object> NavigationHistroy
 		{
 			get
@@ -67,8 +69,7 @@ namespace FileExplorer.ViewModels
 
 		public string Path { get; private set; }
 		public IEnumerable<Item> PathItems { get; private set; }
-		public ICommand RefreshCommand { get; set; }
-		public ObservableCollection<ITreeItem> TreeItems { get; set; } = new ObservableCollection<ITreeItem>();
+		public ObservableCollection<ITreeItem> TreeItems { get; private set; } = new ObservableCollection<ITreeItem>();
 		public TreePageItem HomePage { get; private set; }
 
 		#endregion Public Properties
@@ -90,12 +91,14 @@ namespace FileExplorer.ViewModels
 			navigationService.Navigated += NavigationService_Navigated;
 			navigationService.NavigatedPageLoaded += NavigationService_NavigatedPageLoaded;
 
+			SetupHomePage();
+			SetupTreeItems();
+
 			GoBackCommand = new GoBackCommand(navigationService);
 			GoForwardCommand = new GoForwardCommand(navigationService);
 			RefreshCommand = new RefreshCommand(navigationService);
 			GoUpCommand = new GoUpCommand(navigationService);
-			SetupHomePage();
-			SetupTreeItems();
+			GoHomeCommand = new GoHomeCommand(navigationService, HomePage);
 		}
 
 		private void SetupHomePage()
