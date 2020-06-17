@@ -18,7 +18,6 @@ namespace FileExplorer.Views
 	{
 		#region Private Fields
 
-		private readonly IServiceProvider serviceProvider;
 		private readonly MainWindowViewModel vm;
 
 		#endregion Private Fields
@@ -31,10 +30,9 @@ namespace FileExplorer.Views
 			this.Loaded += MainWindow_Loaded;
 		}
 
-		public MainWindow(MainWindowViewModel vm, IServiceProvider serviceProvider) : this()
+		public MainWindow(MainWindowViewModel vm) : this()
 		{
 			this.vm = vm;
-			this.serviceProvider = serviceProvider;
 			DataContext = this.vm;
 		}
 
@@ -102,19 +100,22 @@ namespace FileExplorer.Views
 			if (e.ChangedButton == MouseButton.Left)
 			{
 				PathTextBox.Visibility = Visibility.Visible;
+				Keyboard.Focus(PathTextBox);
 			}
-			// TODO: remove focus when mouse click on any other area
 		}
 
-		private void PathTextBox_KeyUp(object sender, KeyEventArgs e)
+		private void PathTextBox_LostFocus(object sender, RoutedEventArgs e)
 		{
-			// TODO: prevent this event when pressing enter on the message box
+			PathTextBox.Visibility = Visibility.Collapsed;
+		}
+
+		private void PathTextBox_KeyDown(object sender, KeyEventArgs e)
+		{
 			if (e.Key == Key.Enter)
 			{
 				vm.Navigate(PathTextBox.Text);
 			}
 		}
-
 		private void TileViewButton_Click(object sender, RoutedEventArgs e)
 		{
 			if (!(FolderFrame.Content is FolderPage folderPage))
@@ -150,6 +151,9 @@ namespace FileExplorer.Views
 			}
 		}
 
+
 		#endregion Private Methods
+
+		
 	}
 }

@@ -39,7 +39,6 @@ namespace FileExplorer.Views
 		private CollectionView collectionView;
 		private string filterText;
 		private bool isGrouping;
-		private List<ListView> listViews;
 		private string path;
 		private ViewType viewType = ViewType.ListView;
 

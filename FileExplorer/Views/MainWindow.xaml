@@ -166,7 +166,7 @@
 													 Height="{StaticResource IconWidth}"
 													 Foreground="Gray"
 													 Margin="3" />
-					<Grid Width="200">
+					<Grid Width="100">
 						<TextBox x:Name="searchTextBox"
 										 BorderBrush="Transparent"
 										 VerticalAlignment="Center"
@@ -197,6 +197,7 @@
 							Grid.Column="1"
 							BorderBrush="Black">
 				<Grid>
+					<!--TODO: modify scroll bar-->
 					<ListBox Name="PathListBox"
 									 ItemsSource="{Binding PathItems}"
 									 Height="32"
@@ -226,7 +227,8 @@
 									 Height="{Binding ElementName=PathListBox, Path=Height}"
 									 Text="{Binding Path, Mode=OneWay}"
 									 Visibility="Hidden"
-									 KeyUp="PathTextBox_KeyUp" />
+									 KeyDown="PathTextBox_KeyDown"
+									 LostFocus="PathTextBox_LostFocus"/>
 				</Grid>
 			</Border>
 		</DockPanel>
