@@ -68,6 +68,7 @@ namespace FileExplorer
 			serviceCollection.AddTransient<ListFolderItemViewModel>();
 
 			serviceCollection.AddTransient<TreePageItem>();
+			serviceCollection.AddSingleton<MoveDropHandler>();
 		}
 
 		#endregion Private Methods
