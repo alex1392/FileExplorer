@@ -74,7 +74,10 @@
 							util:GridViewSort.AutoSort="True"
 							dd:DragDrop.IsDragSource="True"
 							dd:DragDrop.IsDropTarget="True"
-							dd:DragDrop.DropHandler="{Binding MoveDropHandler}">
+							dd:DragDrop.UseDefaultDragAdorner="True"
+							dd:DragDrop.UseDefaultEffectDataTemplate="True"
+							dd:DragDrop.DragHandler="{Binding FileDragHandler}"
+							dd:DragDrop.DropHandler="{Binding FileDropHandler}">
 			<ListView.View>
 				<GridView>
 					<GridViewColumn Header="Name"

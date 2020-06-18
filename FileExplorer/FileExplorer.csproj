@@ -98,6 +98,7 @@
     <Compile Include="Models\Providers\FolderChildrenProvider.cs" />
     <Compile Include="Models\Interfaces\ITypeDescriptionProvider.cs" />
     <Compile Include="Utilities\GridViewSort.cs" />
+    <Compile Include="ViewModels\FileDragHandler.cs" />
     <Compile Include="ViewModels\FolderPageViewModel.cs" />
     <Compile Include="Models\Interfaces\INavigationService.cs" />
     <Compile Include="Models\Commands\GoBackCommand.cs" />
@@ -109,7 +110,7 @@
     <Compile Include="ViewModels\ListItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Models\Commands\RefreshCommand.cs" />
-    <Compile Include="ViewModels\MoveDropHandler.cs" />
+    <Compile Include="ViewModels\FileDropHandler.cs" />
     <Compile Include="Views\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\ViewTypeConverter.cs" />
     <Compile Include="Utilities\DropDownButtonBehavior.cs" />

@@ -1,5 +1,7 @@
 ﻿using FileExplorer.Models;
+
 using GongSolutions.Wpf.DragDrop;
+
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
@@ -54,7 +56,8 @@ namespace FileExplorer.ViewModels
 		}
 
 		public string Title { get; set; }
-		public IDropTarget MoveDropHandler { get; }
+		public IDropTarget FileDropHandler { get; }
+		public IDragSource FileDragHandler { get; }
 
 		#endregion Public Properties
 
@@ -67,13 +70,14 @@ namespace FileExplorer.ViewModels
 		{
 		}
 
-		public FolderPageViewModel(FolderChildrenProvider folderChildrenProvider, IFileProvider fileProvider, INavigationService navigationService, IServiceProvider serviceProvider, MoveDropHandler moveDropHandler)
+		public FolderPageViewModel(FolderChildrenProvider folderChildrenProvider, IFileProvider fileProvider, INavigationService navigationService, IServiceProvider serviceProvider, FileDropHandler fileDropHandler, FileDragHandler fileDragHandler)
 		{
 			this.folderChildrenProvider = folderChildrenProvider;
 			this.fileProvider = fileProvider;
 			this.navigationService = navigationService;
 			this.serviceProvider = serviceProvider;
-			MoveDropHandler = moveDropHandler;
+			FileDropHandler = fileDropHandler;
+			FileDragHandler = fileDragHandler;
 		}
 
 		#endregion Public Constructors
@@ -115,7 +119,6 @@ namespace FileExplorer.ViewModels
 				ListItems.Add(fileItem);
 			}
 		}
-
 
 		#endregion Private Methods
 	}
