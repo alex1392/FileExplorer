@@ -36,7 +36,7 @@ namespace FileExplorer.Views
 		#region Private Fields
 
 		private readonly FolderPageViewModel vm;
-		private CollectionView collectionView;
+		private ICollectionView collectionView;
 		private string filterText;
 		private bool isGrouping;
 		private string path;
@@ -49,20 +49,11 @@ namespace FileExplorer.Views
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		#endregion Public Events
+		private ICollectionView CollectionView => collectionView 
+			?? (collectionView = CollectionViewSource.GetDefaultView(ItemsListView.ItemsSource));
 
 		#region Public Properties
-
-		public CollectionView CollectionView
-		{
-			get
-			{
-				if (collectionView == null)
-				{
-					collectionView = CollectionViewSource.GetDefaultView(ItemsListView.ItemsSource) as CollectionView;
-				}
-				return collectionView;
-			}
-		}
+		// Make sure to update states properties when refreshing the page.
 
 		public string FilterText
 		{
