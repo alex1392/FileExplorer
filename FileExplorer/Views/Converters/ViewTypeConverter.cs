@@ -6,7 +6,7 @@ using System.Windows.Markup;
 
 namespace FileExplorer.Views.Converters
 {
-	internal class ViewTypeConverter : MarkupExtension, IMultiValueConverter
+	internal class ViewTypeConverter : MarkupExtension, IValueConverter
 	{
 		#region Private Fields
 
@@ -16,22 +16,18 @@ namespace FileExplorer.Views.Converters
 
 		#region Public Methods
 
-		public object Convert(object[] value, Type targetType, object parameter, CultureInfo culture)
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value[0] is ViewType viewType) || !(value[1] is Button button))
+			if (!(value is ListView listView))
 			{
 				return null;
 			}
-			return viewType switch
-			{
-				ViewType.ListView => button.TryFindResource("ListIcon"),
-				ViewType.GridView => button.TryFindResource("GridIcon"),
-				ViewType.TileView => button.TryFindResource("TileIcon"),
-				_ => null,
-			};
+			var type = listView.Name.Replace("Items", "").Replace("View", "");
+			return listView.TryFindResource(type + "Icon");
 		}
 
-		public object[] ConvertBack(object value, Type[] targetType, object parameter, CultureInfo culture)
+
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			throw new NotImplementedException();
 		}

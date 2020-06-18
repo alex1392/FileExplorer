@@ -40,7 +40,7 @@ namespace FileExplorer.Views
 		private string filterText;
 		private bool isGrouping;
 		private string path;
-		private ViewType viewType = ViewType.ListView;
+		private ListView currentView;
 
 		#endregion Private Fields
 
@@ -120,35 +120,21 @@ namespace FileExplorer.Views
 			}
 		}
 
-		public ViewType ViewType
+		public ListView CurrentView
 		{
-			get => viewType;
+			get => currentView ?? (currentView = ItemsListView);
 			set
 			{
-				if (value == viewType)
+				if (currentView == value)
 				{
 					return;
 				}
-				viewType = value;
+				currentView = value;
+
 				HideListViews();
-				switch (viewType)
-				{
-					case ViewType.ListView:
-						ItemsListView.Visibility = Visibility.Visible;
-						break;
+				currentView.Visibility = Visibility.Visible;
 
-					case ViewType.GridView:
-						ItemsGridView.Visibility = Visibility.Visible;
-						break;
-
-					case ViewType.TileView:
-						ItemsTileView.Visibility = Visibility.Visible;
-						break;
-
-					default:
-						break;
-				}
-				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ViewType)));
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentView)));
 			}
 		}
 
@@ -226,12 +212,4 @@ namespace FileExplorer.Views
 
 		#endregion Private Methods
 	}
-
-	public enum ViewType
-	{
-		ListView,
-		GridView,
-		TileView,
-	}
-
 }

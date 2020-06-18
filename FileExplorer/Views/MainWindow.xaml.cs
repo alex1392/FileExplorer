@@ -3,7 +3,6 @@
 using FileExplorer.Models;
 using FileExplorer.ViewModels;
 
-using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -40,13 +39,36 @@ namespace FileExplorer.Views
 
 		#region Private Methods
 
+		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+		{
+			vm.Navigate(vm.HomePage);
+		}
+
 		private void GridViewButton_Click(object sender, RoutedEventArgs e)
 		{
 			if (!(FolderFrame.Content is FolderPage folderPage))
 			{
 				return;
 			}
-			folderPage.ViewType = ViewType.GridView;
+			folderPage.CurrentView = folderPage.ItemsGridView;
+		}
+
+		private void ListViewButton_Click(object sender, RoutedEventArgs e)
+		{
+			if (!(FolderFrame.Content is FolderPage folderPage))
+			{
+				return;
+			}
+			folderPage.CurrentView = folderPage.ItemsListView;
+		}
+
+		private void TileViewButton_Click(object sender, RoutedEventArgs e)
+		{
+			if (!(FolderFrame.Content is FolderPage folderPage))
+			{
+				return;
+			}
+			folderPage.CurrentView = folderPage.ItemsTileView;
 		}
 
 		private void HistoryItem_Selected(object sender, RoutedEventArgs e)
@@ -66,20 +88,6 @@ namespace FileExplorer.Views
 				vm.GoBackCommand.Execute(null);
 				delta++;
 			}
-		}
-
-		private void ListViewButton_Click(object sender, RoutedEventArgs e)
-		{
-			if (!(FolderFrame.Content is FolderPage folderPage))
-			{
-				return;
-			}
-			folderPage.ViewType = ViewType.ListView;
-		}
-
-		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-		{
-			vm.Navigate(vm.HomePage);
 		}
 
 		private void PathItem_Selected(object sender, RoutedEventArgs e)
@@ -116,14 +124,6 @@ namespace FileExplorer.Views
 				vm.Navigate(PathTextBox.Text);
 			}
 		}
-		private void TileViewButton_Click(object sender, RoutedEventArgs e)
-		{
-			if (!(FolderFrame.Content is FolderPage folderPage))
-			{
-				return;
-			}
-			folderPage.ViewType = ViewType.TileView;
-		}
 
 		private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
 		{
@@ -158,9 +158,6 @@ namespace FileExplorer.Views
 			}
 		}
 
-
 		#endregion Private Methods
-
-
 	}
 }
