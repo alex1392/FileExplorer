@@ -43,7 +43,8 @@ namespace FileExplorer.Models
 			}
 			try
 			{
-				Directory.Move(sourcePath, destPath);
+				var name = Path.GetFileName(sourcePath);
+				Directory.Move(sourcePath, Path.Combine(destPath, name));
 			}
 			catch (UnauthorizedAccessException ex)
 			{

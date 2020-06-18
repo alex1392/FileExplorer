@@ -9,6 +9,7 @@
 			xmlns:vm="clr-namespace:FileExplorer.ViewModels"
 			xmlns:util="clr-namespace:FileExplorer.Utilities"
 			xmlns:vwp="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
+			xmlns:dd="urn:gong-wpf-dragdrop"
 			mc:Ignorable="d"
 			d:DataContext="{d:DesignInstance Type=vm:FolderPageViewModel, IsDesignTimeCreatable=True}"
 			d:DesignHeight="450"
@@ -70,7 +71,10 @@
 	<Grid>
 		<ListView Name="ItemsListView"
 							Visibility="Visible"
-							util:GridViewSort.AutoSort="True">
+							util:GridViewSort.AutoSort="True"
+							dd:DragDrop.IsDragSource="True"
+							dd:DragDrop.IsDropTarget="True"
+							dd:DragDrop.DropHandler="{Binding }">
 			<ListView.View>
 				<GridView>
 					<GridViewColumn Header="Name"
