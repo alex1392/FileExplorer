@@ -69,6 +69,11 @@ namespace FileExplorer.Views
 				RefreshPage();
 
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FilterText)));
+
+				void RefreshPage()
+				{
+					CollectionView?.Refresh();
+				}
 			}
 		}
 
@@ -126,6 +131,19 @@ namespace FileExplorer.Views
 				currentView.Visibility = Visibility.Visible;
 
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentView)));
+
+				void HideListViews()
+				{
+					foreach (var view in new List<ListView>
+					{
+						ItemsListView,
+						ItemsGridView,
+						ItemsTileView,
+					})
+					{
+						view.Visibility = Visibility.Collapsed;
+					}
+				}
 			}
 		}
 
@@ -154,41 +172,29 @@ namespace FileExplorer.Views
 		#endregion Public Methods
 
 		#region Private Methods
-		private void RefreshPage()
 		{
-			CollectionView?.Refresh();
 		}
 
-		private void ApplyFilter()
 		{
-			if (CollectionView != null)
-			{
-				CollectionView.Filter = item => 
-				{
-					if (string.IsNullOrWhiteSpace(FilterText))
-					{
-						return true;
-					}
-					return (item as ListItem).Name.IndexOf(FilterText, StringComparison.OrdinalIgnoreCase) >= 0;
-				};
-			}
 		}
 
 		private void FolderPage_Loaded(object sender, RoutedEventArgs e)
 		{
 			ApplyFilter();
-		}
 
-		private void HideListViews()
-		{
-			foreach (var view in new List<ListView>
-					{
-						ItemsListView,
-						ItemsGridView,
-						ItemsTileView,
-					})
+			void ApplyFilter()
 			{
-				view.Visibility = Visibility.Collapsed;
+				if (CollectionView != null)
+				{
+					CollectionView.Filter = item =>
+					{
+						if (string.IsNullOrWhiteSpace(FilterText))
+						{
+							return true;
+						}
+						return (item as ListItemViewModel).Item.Name.IndexOf(FilterText, StringComparison.OrdinalIgnoreCase) >= 0;
+					};
+				}
 			}
 		}
 
