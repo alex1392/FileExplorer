@@ -16,6 +16,7 @@ namespace FileExplorer.Views.Services
 		#region Private Fields
 
 		private readonly IFileProvider fileProvider;
+		private readonly IDialogService dialogService;
 		private readonly IServiceProvider serviceProvider;
 		private Frame internalFrame;
 		private Navigation::NavigationService internalNavigationService;
@@ -99,10 +100,11 @@ namespace FileExplorer.Views.Services
 
 		#region Public Constructors
 
-		public NavigationService(IServiceProvider serviceProvider, IFileProvider fileProvider)
+		public NavigationService(IServiceProvider serviceProvider, IFileProvider fileProvider, IDialogService dialogService)
 		{
 			this.serviceProvider = serviceProvider;
 			this.fileProvider = fileProvider;
+			this.dialogService = dialogService;
 		}
 
 		#endregion Public Constructors
@@ -148,10 +150,9 @@ namespace FileExplorer.Views.Services
 				_ => throw new InvalidOperationException("Cannot recognize given pageKey.")
 			};
 			// check if destination path is exist
-			var fileProvider = serviceProvider.GetService<IFileProvider>();
 			if (!fileProvider.IsDirectoryExists(path))
 			{
-				serviceProvider.GetService<IDialogService>().ShowMessage("Specified folder path does not exist.");
+				dialogService.ShowMessage("Specified folder path does not exist.");
 				return;
 			}
 			page.Path = path;
