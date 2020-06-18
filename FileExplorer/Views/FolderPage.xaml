@@ -15,69 +15,76 @@
 			d:DesignHeight="450"
 			d:DesignWidth="800"
 			Title="{Binding Title}">
-	<Page.Resources>
-		<GroupStyle x:Key="GroupStyleKey">
-			<GroupStyle.ContainerStyle>
-				<Style TargetType="{x:Type GroupItem}">
-					<Setter Property="Template">
-						<Setter.Value>
-							<ControlTemplate>
-								<Expander IsExpanded="True">
-									<Expander.Header>
-										<StackPanel Orientation="Horizontal">
-											<TextBlock Text="{Binding Name}"
-																 FontWeight="Bold"
-																 Foreground="Gray"
-																 FontSize="22"
-																 VerticalAlignment="Bottom" />
-											<TextBlock Text="{Binding ItemCount}"
-																 FontSize="22"
-																 Foreground="Green"
-																 FontWeight="Bold"
-																 FontStyle="Italic"
-																 Margin="10,0,0,0"
-																 VerticalAlignment="Bottom" />
-											<TextBlock Text=" item(s)"
-																 FontSize="22"
-																 Foreground="Silver"
-																 FontStyle="Italic"
-																 VerticalAlignment="Bottom" />
-										</StackPanel>
-									</Expander.Header>
-									<ItemsPresenter />
-								</Expander>
-							</ControlTemplate>
-						</Setter.Value>
-					</Setter>
-				</Style>
-			</GroupStyle.ContainerStyle>
-		</GroupStyle>
-		<Style x:Key="ItemContainerStyleKey" 
-					 TargetType="ListViewItem">
-			<EventSetter Event="MouseDoubleClick"
-									 Handler="ListViewItem_MouseDoubleClick" />
-			<Setter Property="HorizontalContentAlignment"
-							Value="Stretch" />
-		</Style>
-		<Style TargetType="ListView">
-			<Setter Property="ItemsSource"
-							Value="{Binding ListItems}" />
-			<Setter Property="VirtualizingPanel.IsVirtualizingWhenGrouping"
-							Value="True" />
-			<Setter Property="ItemContainerStyle"
-							Value="{StaticResource ItemContainerStyleKey}" />
-		</Style>
-	</Page.Resources>
 	<Grid>
+		<Grid.Resources>
+			<GroupStyle x:Key="GroupStyleKey">
+				<GroupStyle.ContainerStyle>
+					<Style TargetType="{x:Type GroupItem}">
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate>
+									<Expander IsExpanded="True">
+										<Expander.Header>
+											<StackPanel Orientation="Horizontal">
+												<TextBlock Text="{Binding Name}"
+																	 FontWeight="Bold"
+																	 Foreground="Gray"
+																	 FontSize="22"
+																	 VerticalAlignment="Bottom" />
+												<TextBlock Text="{Binding ItemCount}"
+																	 FontSize="22"
+																	 Foreground="Green"
+																	 FontWeight="Bold"
+																	 FontStyle="Italic"
+																	 Margin="10,0,0,0"
+																	 VerticalAlignment="Bottom" />
+												<TextBlock Text=" item(s)"
+																	 FontSize="22"
+																	 Foreground="Silver"
+																	 FontStyle="Italic"
+																	 VerticalAlignment="Bottom" />
+											</StackPanel>
+										</Expander.Header>
+										<ItemsPresenter />
+									</Expander>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</GroupStyle.ContainerStyle>
+			</GroupStyle>
+			<Style x:Key="ItemContainerStyleKey"
+						 TargetType="ListViewItem">
+				<EventSetter Event="MouseDoubleClick"
+										 Handler="ListViewItem_MouseDoubleClick" />
+				<Setter Property="HorizontalContentAlignment"
+								Value="Stretch" />
+			</Style>
+			<Style TargetType="ListView">
+				<Setter Property="ItemsSource"
+								Value="{Binding ListItems}" />
+				<Setter Property="VirtualizingPanel.IsVirtualizingWhenGrouping"
+								Value="True" />
+				<Setter Property="ItemContainerStyle"
+								Value="{StaticResource ItemContainerStyleKey}" />
+				<Setter Property="Visibility"
+								Value="Collapsed" />
+				<Setter Property="dd:DragDrop.IsDragSource"
+								Value="True" />
+				<Setter Property="dd:DragDrop.IsDropTarget"
+								Value="True" />
+				<Setter Property="dd:DragDrop.UseDefaultDragAdorner"
+								Value="True" />
+				<Setter Property="dd:DragDrop.UseDefaultEffectDataTemplate"
+								Value="True" />
+				<Setter Property="dd:DragDrop.DragHandler"
+								Value="{Binding FileDragHandler}" />
+				<Setter Property="dd:DragDrop.DropHandler"
+								Value="{Binding FileDropHandler}" />
+			</Style>
+		</Grid.Resources>
 		<ListView Name="ItemsListView"
-							Visibility="Visible"
-							util:GridViewSort.AutoSort="True"
-							dd:DragDrop.IsDragSource="True"
-							dd:DragDrop.IsDropTarget="True"
-							dd:DragDrop.UseDefaultDragAdorner="True"
-							dd:DragDrop.UseDefaultEffectDataTemplate="True"
-							dd:DragDrop.DragHandler="{Binding FileDragHandler}"
-							dd:DragDrop.DropHandler="{Binding FileDropHandler}">
+							util:GridViewSort.AutoSort="True">
 			<ListView.View>
 				<GridView>
 					<GridViewColumn Header="Name"
@@ -119,8 +126,7 @@
 				<StaticResourceExtension ResourceKey="GroupStyleKey" />
 			</ListView.GroupStyle>
 		</ListView>
-		<ListView Name="ItemsGridView"
-							Visibility="Collapsed">
+		<ListView Name="ItemsGridView">
 			<ListView.ItemTemplate>
 				<DataTemplate DataType="{x:Type vm:ListItemViewModel}">
 					<StackPanel Orientation="Vertical">
@@ -142,8 +148,7 @@
 				<StaticResourceExtension ResourceKey="GroupStyleKey" />
 			</ListView.GroupStyle>
 		</ListView>
-		<ListView Name="ItemsTileView"
-							Visibility="Collapsed">
+		<ListView Name="ItemsTileView">
 			<ListView.GroupStyle>
 				<StaticResourceExtension ResourceKey="GroupStyleKey" />
 			</ListView.GroupStyle>
