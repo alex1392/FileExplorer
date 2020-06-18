@@ -165,7 +165,21 @@ namespace FileExplorer.Views.Services
 
 		public void Refresh()
 		{
-			InternalNavigationService.Refresh();
+			if (Content is FolderPage folderPage)
+			{
+				this.Navigated += RemoveBackEntry;
+				Navigate(nameof(FolderPage), folderPage.Path);
+			}
+			else
+			{
+				InternalNavigationService.Refresh();
+			}
+
+			void RemoveBackEntry(object sender, object e)
+			{
+				InternalFrame.RemoveBackEntry();
+				this.Navigated -= RemoveBackEntry;
+			}
 		}
 
 		#endregion Public Methods
