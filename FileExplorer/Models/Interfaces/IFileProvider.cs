@@ -4,6 +4,8 @@ namespace FileExplorer.Models
 {
 	public interface IFileProvider
 	{
+		void Copy(string sourcePath, string destPath);
+		void Delete(string path);
 		#region Public Methods
 
 		(string[], string[]) GetChildren(string path);
@@ -21,6 +23,7 @@ namespace FileExplorer.Models
 		bool IsDirectoryExists(string path);
 
 		bool IsFileExists(string path);
+		void Move(string sourcePath, string destPath);
 
 		#endregion Public Methods
 	}

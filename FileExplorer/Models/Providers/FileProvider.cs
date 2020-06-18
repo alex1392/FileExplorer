@@ -1,9 +1,22 @@
 ﻿using System;
 using System.IO;
+using System.Security.Cryptography;
+using System.Windows;
 
 namespace FileExplorer.Models
 {
-	internal class FileProvider : IFileProvider
+	[Serializable]
+	public class PathNotFoundException : Exception
+	{
+		public PathNotFoundException() { }
+		public PathNotFoundException(string message) : base(message) { }
+		public PathNotFoundException(string message, Exception inner) : base(message, inner) { }
+		protected PathNotFoundException(
+		  System.Runtime.Serialization.SerializationInfo info,
+		  System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+	}
+
+	public class FileProvider : IFileProvider
 	{
 		#region Private Fields
 
@@ -21,6 +34,104 @@ namespace FileExplorer.Models
 		#endregion Public Constructors
 
 		#region Public Methods
+
+		public void Move(string sourcePath, string destPath)
+		{
+			if (sourcePath == destPath)
+			{
+				return;
+			}
+			try
+			{
+				Directory.Move(sourcePath, destPath);
+			}
+			catch (UnauthorizedAccessException ex)
+			{
+				dialogService.ShowMessage(ex.Message);
+			}
+			catch (IOException ex)
+			{
+				dialogService.ShowMessage(ex.Message);
+			}
+		}
+
+		public void Copy(string sourcePath, string destPath)
+		{
+			if (File.Exists(sourcePath))
+			{
+				CopyFile(sourcePath, destPath);
+			}
+			else if (Directory.Exists(sourcePath))
+			{
+				CopyFolder(sourcePath, destPath);
+			}
+			else
+			{
+				throw new PathNotFoundException();
+			}
+
+			static string RenamePath(string path)
+			{
+				var i = 2;
+				var ext = Path.GetExtension(path);
+				var dir = Path.GetDirectoryName(path);
+				var name = Path.GetFileNameWithoutExtension(path);
+				while (File.Exists(path) || Directory.Exists(path))
+				{
+					path = Path.Combine(dir, $"{name} ({i})", ext);
+					i++;
+				}
+				return path;
+			}
+
+			static void CopyFolder(string sourcePath, string destPath)
+			{
+				if (Directory.Exists(destPath))
+				{
+					destPath = RenamePath(destPath);
+				}
+				Directory.CreateDirectory(destPath);
+
+				var folders = Directory.GetDirectories(sourcePath);
+				foreach (var folder in folders)
+				{
+					var name = Path.GetFileName(folder);
+					CopyFolder(folder, Path.Combine(destPath, name));
+				}
+
+				var files = Directory.GetFiles(sourcePath);
+				foreach (var file in files)
+				{
+					var name = Path.GetFileName(file);
+					CopyFile(file, Path.Combine(destPath, name));
+				}
+			}
+
+			static void CopyFile(string sourcePath, string destPath)
+			{
+				if (File.Exists(destPath))
+				{
+					destPath = RenamePath(destPath);
+				}
+				File.Copy(sourcePath, destPath);
+			}
+		}
+
+		public void Delete(string path)
+		{
+			if (File.Exists(path))
+			{
+				File.Delete(path);
+			}
+			else if (Directory.Exists(path))
+			{
+				Directory.Delete(path, recursive: true);
+			}
+			else
+			{
+				throw new PathNotFoundException();
+			}
+		}
 
 		public (string[], string[]) GetChildren(string path)
 		{
@@ -68,20 +179,18 @@ namespace FileExplorer.Models
 
 		public FileSystemInfo GetFileSystemInfo(string path)
 		{
-			FileSystemInfo info;
 			if (Directory.Exists(path))
 			{
-				info = new DirectoryInfo(path);
+				return new DirectoryInfo(path);
 			}
 			else if (File.Exists(path))
 			{
-				info = new FileInfo(path);
+				return new FileInfo(path);
 			}
 			else
 			{
-				throw new InvalidOperationException("Given path is not exist.");
+				throw new PathNotFoundException();
 			}
-			return info;
 		}
 
 		public string GetParent(string path)
