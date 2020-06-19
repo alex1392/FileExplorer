@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 using System;
 using System.Collections;
+using System.Linq;
+using System.Reflection;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 
@@ -168,20 +170,38 @@ namespace FileExplorer.Views.Services
 		{
 			if (Content is FolderPage folderPage)
 			{
-				this.Navigated += RemoveBackEntry;
+				this.Navigated += RefreshNavigated;
+				this.NavigatedPageLoaded += RefreshNavigatedPageLoaded;
 				Navigate(nameof(FolderPage), folderPage.Path);
+
 			}
 			else
 			{
 				InternalNavigationService.Refresh();
 			}
 
-			void RemoveBackEntry(object sender, object e)
+			void RefreshNavigated(object sender, object e)
 			{
 				InternalFrame.RemoveBackEntry();
-				this.Navigated -= RemoveBackEntry;
+
+				this.Navigated -= RefreshNavigated;
+			}
+
+			void RefreshNavigatedPageLoaded(object sender, EventArgs e)
+			{
+				// recover previous state of the page
+				var navigatedPage = Content as FolderPage;
+				navigatedPage.IsGrouping = folderPage.IsGrouping;
+				navigatedPage.FilterText = folderPage.FilterText;
+				ListView listView = navigatedPage.GetType()
+							 .GetField(folderPage.CurrentView.Name, BindingFlags.NonPublic | BindingFlags.Instance)
+							 .GetValue(navigatedPage) as ListView;
+				navigatedPage.CurrentView = listView;
+
+				this.NavigatedPageLoaded -= RefreshNavigatedPageLoaded;
 			}
 		}
+
 
 		#endregion Public Methods
 
