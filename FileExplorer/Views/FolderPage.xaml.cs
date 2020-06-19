@@ -17,8 +17,12 @@ namespace FileExplorer.Views
 	/// </summary>
 	public partial class FolderPage : Page, INotifyPropertyChanged
 	{
-		class ItemTypeConverter : IValueConverter
+		#region Private Classes
+
+		private class ItemTypeConverter : IValueConverter
 		{
+			#region Public Methods
+
 			public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 			{
 				if (!(value is ListItem listItem))
@@ -32,7 +36,12 @@ namespace FileExplorer.Views
 			{
 				throw new NotImplementedException();
 			}
+
+			#endregion Public Methods
 		}
+
+		#endregion Private Classes
+
 		#region Private Fields
 
 		private readonly FolderPageViewModel vm;
@@ -154,7 +163,13 @@ namespace FileExplorer.Views
 		public FolderPage()
 		{
 			InitializeComponent();
+
 			Loaded += FolderPage_Loaded;
+
+			CommandBindings.Add(new CommandBinding(ApplicationCommands.Copy, DoCopy, CanDoCopy));
+			CommandBindings.Add(new CommandBinding(ApplicationCommands.Paste, DoPaste, CanDoPaste));
+			CommandBindings.Add(new CommandBinding(ApplicationCommands.Cut, DoCut, CanDoCut));
+			CommandBindings.Add(new CommandBinding(ApplicationCommands.Delete, DoDelete, CanDoDelete));
 		}
 
 		public FolderPage(FolderPageViewModel vm) : this()
@@ -163,19 +178,48 @@ namespace FileExplorer.Views
 			DataContext = this.vm;
 		}
 
+
 		#endregion Public Constructors
 
-		#region Public Methods
-
-
-
-		#endregion Public Methods
-
 		#region Private Methods
+
+		private void DoDelete(object sender, ExecutedRoutedEventArgs e)
+		{
+			throw new NotImplementedException();
+		}
+
+		private void CanDoDelete(object sender, CanExecuteRoutedEventArgs e)
+		{
+			throw new NotImplementedException();
+		}
+
+		private void DoCut(object sender, ExecutedRoutedEventArgs e)
+		{
+			throw new NotImplementedException();
+		}
+
+		private void CanDoCut(object sender, CanExecuteRoutedEventArgs e)
+		{
+			throw new NotImplementedException();
+		}
+
+		private void DoPaste(object sender, ExecutedRoutedEventArgs e)
+		{
+			throw new NotImplementedException();
+		}
+
+		private void CanDoPaste(object sender, CanExecuteRoutedEventArgs e)
+		{
+			throw new NotImplementedException();
+		}
+
+		private void CanDoCopy(object sender, CanExecuteRoutedEventArgs e)
 		{
 		}
 
+		private void DoCopy(object sender, ExecutedRoutedEventArgs e)
 		{
+			throw new NotImplementedException();
 		}
 
 		private void FolderPage_Loaded(object sender, RoutedEventArgs e)
