@@ -118,7 +118,7 @@ namespace FileExplorer.Views
 
 		public ListView CurrentView
 		{
-			get => currentView ?? (currentView = ItemsListView);
+			get => currentView ?? (CurrentView = ItemsListView);
 			set
 			{
 				if (currentView == value)
