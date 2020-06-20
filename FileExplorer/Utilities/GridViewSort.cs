@@ -41,9 +41,9 @@ namespace FileExplorer.Utilities
 
 				if (_sortGlyph != null)
 				{
-					double x = _columnHeader.ActualWidth - 13;
-					double y = _columnHeader.ActualHeight / 2 - 5;
-					Rect rect = new Rect(x, y, 10, 10);
+					var x = _columnHeader.ActualWidth - 13;
+					var y = _columnHeader.ActualHeight / 2 - 5;
+					var rect = new Rect(x, y, 10, 10);
 					drawingContext.DrawImage(_sortGlyph, rect);
 				}
 				else
@@ -58,32 +58,32 @@ namespace FileExplorer.Utilities
 
 			private Geometry GetDefaultGlyph()
 			{
-				double x1 = _columnHeader.ActualWidth - 13;
-				double x2 = x1 + 10;
-				double x3 = x1 + 5;
-				double y1 = _columnHeader.ActualHeight / 2 - 3;
-				double y2 = y1 + 5;
+				var x1 = _columnHeader.ActualWidth - 13;
+				var x2 = x1 + 10;
+				var x3 = x1 + 5;
+				var y1 = _columnHeader.ActualHeight / 2 - 3;
+				var y2 = y1 + 5;
 
 				if (_direction == ListSortDirection.Ascending)
 				{
-					double tmp = y1;
+					var tmp = y1;
 					y1 = y2;
 					y2 = tmp;
 				}
 
-				PathSegmentCollection pathSegmentCollection = new PathSegmentCollection();
+				var pathSegmentCollection = new PathSegmentCollection();
 				pathSegmentCollection.Add(new LineSegment(new Point(x2, y1), true));
 				pathSegmentCollection.Add(new LineSegment(new Point(x3, y2), true));
 
-				PathFigure pathFigure = new PathFigure(
+				var pathFigure = new PathFigure(
 					new Point(x1, y1),
 					pathSegmentCollection,
 					true);
 
-				PathFigureCollection pathFigureCollection = new PathFigureCollection();
+				var pathFigureCollection = new PathFigureCollection();
 				pathFigureCollection.Add(pathFigure);
 
-				PathGeometry pathGeometry = new PathGeometry(pathFigureCollection);
+				var pathGeometry = new PathGeometry(pathFigureCollection);
 				return pathGeometry;
 			}
 
@@ -104,13 +104,13 @@ namespace FileExplorer.Utilities
 					false,
 					(o, e) =>
 					{
-						ListView listView = o as ListView;
+						var listView = o as ListView;
 						if (listView != null)
 						{
 							if (GetCommand(listView) == null) // Don't change click handler if a command is set
 							{
-								bool oldValue = (bool)e.OldValue;
-								bool newValue = (bool)e.NewValue;
+								var oldValue = (bool)e.OldValue;
+								var newValue = (bool)e.NewValue;
 								if (oldValue && !newValue)
 								{
 									listView.RemoveHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
@@ -135,7 +135,7 @@ namespace FileExplorer.Utilities
 					null,
 					(o, e) =>
 					{
-						ItemsControl listView = o as ItemsControl;
+						var listView = o as ItemsControl;
 						if (listView != null)
 						{
 							if (!GetAutoSort(listView)) // Don't change click handler if AutoSort enabled
@@ -189,10 +189,10 @@ namespace FileExplorer.Utilities
 
 		public static void ApplySort(ICollectionView view, string propertyName, ListView listView, GridViewColumnHeader sortedColumnHeader)
 		{
-			ListSortDirection direction = ListSortDirection.Ascending;
+			var direction = ListSortDirection.Ascending;
 			if (view.SortDescriptions.Count > 0)
 			{
-				SortDescription currentSort = view.SortDescriptions[0];
+				var currentSort = view.SortDescriptions[0];
 				if (currentSort.PropertyName == propertyName)
 				{
 					if (currentSort.Direction == ListSortDirection.Ascending)
@@ -202,7 +202,7 @@ namespace FileExplorer.Utilities
 				}
 				view.SortDescriptions.Clear();
 
-				GridViewColumnHeader currentSortedColumnHeader = GetSortedColumnHeader(listView);
+				var currentSortedColumnHeader = GetSortedColumnHeader(listView);
 				if (currentSortedColumnHeader != null)
 				{
 					RemoveSortGlyph(currentSortedColumnHeader);
@@ -222,7 +222,7 @@ namespace FileExplorer.Utilities
 
 		public static T GetAncestor<T>(DependencyObject reference) where T : DependencyObject
 		{
-			DependencyObject parent = VisualTreeHelper.GetParent(reference);
+			var parent = VisualTreeHelper.GetParent(reference);
 			while (!(parent is T))
 			{
 				parent = VisualTreeHelper.GetParent(parent);
@@ -299,7 +299,7 @@ namespace FileExplorer.Utilities
 
 		private static void AddSortGlyph(GridViewColumnHeader columnHeader, ListSortDirection direction, ImageSource sortGlyph)
 		{
-			AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(columnHeader);
+			var adornerLayer = AdornerLayer.GetAdornerLayer(columnHeader);
 			adornerLayer.Add(
 				new SortGlyphAdorner(
 					columnHeader,
@@ -310,16 +310,16 @@ namespace FileExplorer.Utilities
 
 		private static void ColumnHeader_Click(object sender, RoutedEventArgs e)
 		{
-			GridViewColumnHeader headerClicked = e.OriginalSource as GridViewColumnHeader;
+			var headerClicked = e.OriginalSource as GridViewColumnHeader;
 			if (headerClicked != null && headerClicked.Column != null)
 			{
-				string propertyName = GetPropertyName(headerClicked.Column);
+				var propertyName = GetPropertyName(headerClicked.Column);
 				if (!string.IsNullOrEmpty(propertyName))
 				{
-					ListView listView = GetAncestor<ListView>(headerClicked);
+					var listView = GetAncestor<ListView>(headerClicked);
 					if (listView != null)
 					{
-						ICommand command = GetCommand(listView);
+						var command = GetCommand(listView);
 						if (command != null)
 						{
 							if (command.CanExecute(propertyName))
@@ -343,11 +343,11 @@ namespace FileExplorer.Utilities
 
 		private static void RemoveSortGlyph(GridViewColumnHeader columnHeader)
 		{
-			AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(columnHeader);
-			Adorner[] adorners = adornerLayer.GetAdorners(columnHeader);
+			var adornerLayer = AdornerLayer.GetAdornerLayer(columnHeader);
+			var adorners = adornerLayer.GetAdorners(columnHeader);
 			if (adorners != null)
 			{
-				foreach (Adorner adorner in adorners)
+				foreach (var adorner in adorners)
 				{
 					if (adorner is SortGlyphAdorner)
 						adornerLayer.Remove(adorner);

@@ -73,11 +73,11 @@ namespace FileExplorer.Models
 			static string GetDownLoadPath(KnownFolderFlags flags,
 			   bool defaultUser)
 			{
-				int result = SHGetKnownFolderPath(new Guid("{374DE290-123F-4565-9164-39C4925E467B}"),
-					(uint)flags, new IntPtr(defaultUser ? -1 : 0), out IntPtr outPath);
+				var result = SHGetKnownFolderPath(new Guid("{374DE290-123F-4565-9164-39C4925E467B}"),
+					(uint)flags, new IntPtr(defaultUser ? -1 : 0), out var outPath);
 				if (result >= 0)
 				{
-					string path = Marshal.PtrToStringUni(outPath);
+					var path = Marshal.PtrToStringUni(outPath);
 					Marshal.FreeCoTaskMem(outPath);
 					return path;
 				}
