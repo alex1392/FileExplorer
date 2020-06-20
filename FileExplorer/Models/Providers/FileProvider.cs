@@ -35,16 +35,17 @@ namespace FileExplorer.Models
 
 		#region Public Methods
 
-		public void Move(string sourcePath, string destPath)
+		public bool Move(string sourcePath, string destPath)
 		{
 			if (sourcePath == destPath)
 			{
-				return;
+				return false;
 			}
 			try
 			{
 				var name = Path.GetFileName(sourcePath);
 				Directory.Move(sourcePath, Path.Combine(destPath, name));
+				return true;
 			}
 			catch (UnauthorizedAccessException ex)
 			{
@@ -54,8 +55,10 @@ namespace FileExplorer.Models
 			{
 				dialogService.ShowMessage(ex.Message);
 			}
+			return false;
 		}
 
+		//TODO: handle exceptions
 		public void Copy(string sourcePath, string destPath)
 		{
 			if (File.Exists(sourcePath))
@@ -212,6 +215,11 @@ namespace FileExplorer.Models
 		public string GetFileNameWithoutExtension(string path)
 		{
 			return Path.GetFileNameWithoutExtension(path);
+		}
+
+		public string GetFileName(string path)
+		{
+			return Path.GetFileName(path);
 		}
 
 		#endregion Public Methods

@@ -23,7 +23,8 @@ namespace FileExplorer.Models
 		bool IsDirectoryExists(string path);
 
 		bool IsFileExists(string path);
-		void Move(string sourcePath, string destPath);
+		bool Move(string sourcePath, string destPath);
+		string GetFileName(string path);
 
 		#endregion Public Methods
 	}
