@@ -1,11 +1,10 @@
 ﻿using FileExplorer.Models;
 using FileExplorer.ViewModels;
+
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
 using System.Collections;
-using System.Linq;
-using System.Reflection;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 
@@ -27,8 +26,6 @@ namespace FileExplorer.Views.Services
 
 		#region Public Events
 
-
-
 		public event EventHandler<string> Navigated;
 
 		public event EventHandler NavigatedPageLoaded;
@@ -36,11 +33,6 @@ namespace FileExplorer.Views.Services
 		#endregion Public Events
 
 		#region Public Properties
-
-		public IEnumerable BackStack => InternalFrame.BackStack;
-		public bool CanGoBack => InternalNavigationService.CanGoBack;
-
-		public bool CanGoForward => InternalNavigationService.CanGoForward;
 
 		public bool CanGoUp
 		{
@@ -70,8 +62,6 @@ namespace FileExplorer.Views.Services
 			}
 		}
 
-		public IEnumerable ForwardStack => InternalFrame.ForwardStack;
-
 		public Frame InternalFrame => internalFrame
 			//Lazy initialization of dependency
 			?? (internalFrame = serviceProvider.GetService<MainWindow>().FolderFrame);
@@ -90,6 +80,12 @@ namespace FileExplorer.Views.Services
 				return internalNavigationService;
 			}
 		}
+
+		public IEnumerable BackStack => InternalFrame.BackStack;
+		public bool CanGoBack => InternalNavigationService.CanGoBack;
+
+		public bool CanGoForward => InternalNavigationService.CanGoForward;
+		public IEnumerable ForwardStack => InternalFrame.ForwardStack;
 
 		#endregion Public Properties
 
@@ -168,7 +164,6 @@ namespace FileExplorer.Views.Services
 			}
 			InternalNavigationService.Refresh();
 		}
-
 
 		#endregion Public Methods
 

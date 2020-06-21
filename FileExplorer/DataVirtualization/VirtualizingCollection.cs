@@ -233,11 +233,6 @@ namespace FileExplorer.DataVirtualization
 			throw new NotSupportedException();
 		}
 
-		int IList.Add(object value)
-		{
-			throw new NotSupportedException();
-		}
-
 		/// <summary>
 		/// Cleans up any stale pages that have not been accessed in the period dictated by PageTimeout.
 		/// </summary>
@@ -265,11 +260,6 @@ namespace FileExplorer.DataVirtualization
 		public void Clear()
 		{
 			throw new NotSupportedException();
-		}
-
-		bool IList.Contains(object value)
-		{
-			return Contains((T)value);
 		}
 
 		/// <summary>
@@ -309,11 +299,6 @@ namespace FileExplorer.DataVirtualization
 			throw new NotSupportedException();
 		}
 
-		void ICollection.CopyTo(Array array, int index)
-		{
-			throw new NotSupportedException();
-		}
-
 		/// <summary>
 		/// Returns an enumerator that iterates through the collection.
 		/// </summary>
@@ -329,22 +314,6 @@ namespace FileExplorer.DataVirtualization
 			{
 				yield return this[i];
 			}
-		}
-
-		/// <summary>
-		/// Returns an enumerator that iterates through a collection.
-		/// </summary>
-		/// <returns>
-		/// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
-		/// </returns>
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
-
-		int IList.IndexOf(object value)
-		{
-			return IndexOf((T)value);
 		}
 
 		/// <summary>
@@ -375,16 +344,6 @@ namespace FileExplorer.DataVirtualization
 			throw new NotSupportedException();
 		}
 
-		void IList.Insert(int index, object value)
-		{
-			Insert(index, (T)value);
-		}
-
-		void IList.Remove(object value)
-		{
-			throw new NotSupportedException();
-		}
-
 		/// <summary>
 		/// Not supported.
 		/// </summary>
@@ -411,6 +370,47 @@ namespace FileExplorer.DataVirtualization
 		/// The <see cref="T:System.Collections.Generic.IList`1"/> is read-only.
 		/// </exception>
 		public void RemoveAt(int index)
+		{
+			throw new NotSupportedException();
+		}
+
+		int IList.Add(object value)
+		{
+			throw new NotSupportedException();
+		}
+
+		bool IList.Contains(object value)
+		{
+			return Contains((T)value);
+		}
+
+		void ICollection.CopyTo(Array array, int index)
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <summary>
+		/// Returns an enumerator that iterates through a collection.
+		/// </summary>
+		/// <returns>
+		/// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+		/// </returns>
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
+
+		int IList.IndexOf(object value)
+		{
+			return IndexOf((T)value);
+		}
+
+		void IList.Insert(int index, object value)
+		{
+			Insert(index, (T)value);
+		}
+
+		void IList.Remove(object value)
 		{
 			throw new NotSupportedException();
 		}

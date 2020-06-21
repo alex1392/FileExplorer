@@ -2,10 +2,14 @@
 
 namespace FileExplorer.Models
 {
-	public interface ITreeItem 
+	public interface ITreeItem
 	{
+		#region Public Properties
+
 		List<Item> SubFolders { get; }
 		string IconKey { get; }
 		string Name { get; }
+
+		#endregion Public Properties
 	}
 }

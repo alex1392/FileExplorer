@@ -3,10 +3,8 @@ using FileExplorer.ViewModels;
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -52,7 +50,6 @@ namespace FileExplorer.Views
 		private bool isGrouping;
 		private string path;
 		private ListView currentView;
-		
 
 		#endregion Private Fields
 
@@ -61,10 +58,16 @@ namespace FileExplorer.Views
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		#endregion Public Events
-		private ICollectionView CollectionView => collectionView 
+
+		#region Private Properties
+
+		private ICollectionView CollectionView => collectionView
 			?? (collectionView = CollectionViewSource.GetDefaultView(ItemsListView.ItemsSource));
 
+		#endregion Private Properties
+
 		#region Public Properties
+
 		public string FilterText
 		{
 			get => filterText;
@@ -173,7 +176,6 @@ namespace FileExplorer.Views
 			DataContext = this.vm;
 		}
 
-
 		#endregion Public Constructors
 
 		#region Private Methods
@@ -208,6 +210,5 @@ namespace FileExplorer.Views
 		}
 
 		#endregion Private Methods
-		
 	}
 }

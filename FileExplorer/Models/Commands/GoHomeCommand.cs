@@ -5,8 +5,20 @@ namespace FileExplorer.Models
 {
 	public class GoHomeCommand : ICommand
 	{
+		#region Private Fields
+
 		private readonly INavigationService navigationService;
 		private readonly TreePageItem homePage;
+
+		#endregion Private Fields
+
+		#region Public Events
+
+		public event EventHandler CanExecuteChanged;
+
+		#endregion Public Events
+
+		#region Public Constructors
 
 		public GoHomeCommand(INavigationService navigationService, TreePageItem homePage)
 		{
@@ -14,7 +26,9 @@ namespace FileExplorer.Models
 			this.homePage = homePage;
 		}
 
-		public event EventHandler CanExecuteChanged;
+		#endregion Public Constructors
+
+		#region Public Methods
 
 		public bool CanExecute(object parameter)
 		{
@@ -25,5 +39,7 @@ namespace FileExplorer.Models
 		{
 			navigationService.Navigate(homePage.Uri);
 		}
+
+		#endregion Public Methods
 	}
 }

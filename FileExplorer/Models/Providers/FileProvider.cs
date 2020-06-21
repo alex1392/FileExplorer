@@ -1,19 +1,28 @@
 ﻿using System;
 using System.IO;
-using System.Security.Cryptography;
-using System.Windows;
 
 namespace FileExplorer.Models
 {
 	[Serializable]
 	public class PathNotFoundException : Exception
 	{
+		#region Public Constructors
+
 		public PathNotFoundException() { }
+
 		public PathNotFoundException(string message) : base(message) { }
+
 		public PathNotFoundException(string message, Exception inner) : base(message, inner) { }
+
+		#endregion Public Constructors
+
+		#region Protected Constructors
+
 		protected PathNotFoundException(
 		  System.Runtime.Serialization.SerializationInfo info,
 		  System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+
+		#endregion Protected Constructors
 	}
 
 	public class FileProvider : IFileProvider
@@ -34,6 +43,7 @@ namespace FileExplorer.Models
 		#endregion Public Constructors
 
 		#region Public Methods
+
 		/// <summary>
 		/// Move file or folder.
 		/// </summary>
@@ -157,7 +167,7 @@ namespace FileExplorer.Models
 				return null;
 			}
 		}
-		
+
 		/// <summary>
 		/// Delete file or folder (recursively).
 		/// </summary>

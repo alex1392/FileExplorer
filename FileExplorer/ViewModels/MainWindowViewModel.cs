@@ -42,6 +42,7 @@ namespace FileExplorer.ViewModels
 		public ICommand GoUpCommand { get; private set; }
 		public ICommand GoHomeCommand { get; private set; }
 		public ICommand RefreshCommand { get; private set; }
+
 		public IEnumerable<object> NavigationHistroy
 		{
 			get
@@ -67,11 +68,11 @@ namespace FileExplorer.ViewModels
 				return list;
 			}
 		}
+
 		public string CurrentPath { get; private set; }
 		public IEnumerable<Item> PathItems { get; private set; }
 		public ObservableCollection<ITreeItem> TreeItems { get; private set; } = new ObservableCollection<ITreeItem>();
 		public TreePageItem HomePage { get; private set; }
-
 
 		#endregion Public Properties
 
@@ -136,7 +137,6 @@ namespace FileExplorer.ViewModels
 					item.IconKey = iconKey;
 					TreeItems.Add(item);
 				}
-
 			}
 			void SetupCommands(INavigationService navigationService)
 			{
@@ -145,14 +145,13 @@ namespace FileExplorer.ViewModels
 				RefreshCommand = new RefreshCommand(navigationService);
 				GoUpCommand = new GoUpCommand(navigationService);
 				GoHomeCommand = new GoHomeCommand(navigationService, HomePage);
-
 			}
 		}
-
 
 		#endregion Public Constructors
 
 		#region Public Methods
+
 		public bool Paste(List<string> sourcePaths, string destPath, PasteType type)
 		{
 			PasteCommand command = type switch
@@ -166,12 +165,15 @@ namespace FileExplorer.ViewModels
 			undoRedoManager.Execute(command);
 			return command.IsExecutionSuccessful;
 		}
+
 		public bool CanRedo(object parameter) => undoRedoManager.RedoCommand.CanExecute(parameter);
 
 		public bool CanUndo(object parameter) => undoRedoManager.UndoCommand.CanExecute(parameter);
+
 		public void Redo(object parameter) => undoRedoManager.RedoCommand.Execute(parameter);
 
 		public void Undo(object parameter) => undoRedoManager.UndoCommand.Execute(parameter);
+
 		public void Navigate(Uri uri)
 		{
 			navigationService.Navigate(uri);
@@ -196,13 +198,12 @@ namespace FileExplorer.ViewModels
 
 		#region Private Methods
 
-
 		private void NavigationService_Navigated(object sender, string path)
 		{
 			CurrentPath = path;
 			PathItems = GetPathItems(path);
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PathItems)));
-			
+
 			IEnumerable<Item> GetPathItems(string path)
 			{
 				if (path == null)
@@ -229,8 +230,6 @@ namespace FileExplorer.ViewModels
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NavigationHistroy)));
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentContent)));
 		}
-
-
 
 		#endregion Private Methods
 	}

@@ -2,7 +2,7 @@
 
 using FileExplorer.Models;
 using FileExplorer.ViewModels;
-using System;
+
 using System.Collections.Specialized;
 using System.Linq;
 using System.Windows;
@@ -22,6 +22,8 @@ namespace FileExplorer.Views
 		private readonly MainWindowViewModel vm;
 
 		#endregion Private Fields
+
+		private PasteType pasteType;
 		private ListView CurrentView => (vm.CurrentContent as FolderPage).CurrentView;
 
 		#region Public Constructors
@@ -162,7 +164,7 @@ namespace FileExplorer.Views
 		}
 
 		#endregion Private Methods
-		private PasteType pasteType;
+
 		private void Undo(object sender, ExecutedRoutedEventArgs e)
 		{
 			vm.Undo(e.Parameter);
@@ -196,7 +198,6 @@ namespace FileExplorer.Views
 			SetClipBoard();
 			pasteType = PasteType.Copy;
 		}
-
 
 		private void CanCopy(object sender, CanExecuteRoutedEventArgs e)
 		{

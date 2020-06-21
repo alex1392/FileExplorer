@@ -1,25 +1,36 @@
 ﻿using FileExplorer.Models;
+
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace FileExplorer.ViewModels
 {
 	public abstract class ListItemViewModel : INotifyPropertyChanged
 	{
-		private ImageSource icon;
+		#region Protected Fields
+
 		protected readonly IServiceProvider serviceProvider;
 		protected readonly IDispatcherService dispatcherService;
 
-		public ImageSource Icon => icon ?? (icon = GetIcon());
+		#endregion Protected Fields
 
+		#region Private Fields
+
+		private ImageSource icon;
 		private string path;
+
+		#endregion Private Fields
+
+		#region Public Events
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		#endregion Public Events
+
+		#region Public Properties
+
+		public ImageSource Icon => icon ?? (icon = GetIcon());
 
 		public string Path
 		{
@@ -37,13 +48,12 @@ namespace FileExplorer.ViewModels
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Path)));
 			}
 		}
+
 		public ListItem Item { get; protected set; }
 
-		protected abstract void SetItem();
+		#endregion Public Properties
 
-		protected abstract ImageSource GetIcon();
-
-		public event PropertyChangedEventHandler PropertyChanged;
+		#region Public Constructors
 
 		public ListItemViewModel(IServiceProvider serviceProvider)
 		{
@@ -54,5 +64,15 @@ namespace FileExplorer.ViewModels
 		{
 			this.dispatcherService = dispatcherService;
 		}
+
+		#endregion Public Constructors
+
+		#region Protected Methods
+
+		protected abstract void SetItem();
+
+		protected abstract ImageSource GetIcon();
+
+		#endregion Protected Methods
 	}
 }

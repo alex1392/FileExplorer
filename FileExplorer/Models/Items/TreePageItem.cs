@@ -1,19 +1,25 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace FileExplorer.Models
 {
 	public class TreePageItem : ITreeItem
 	{
+		#region Private Fields
+
 		private readonly IFileProvider fileProvider;
 		private Uri uri;
+
+		#endregion Private Fields
+
+		#region Public Properties
 
 		public List<Item> SubFolders => new List<Item>();
 
 		public string IconKey { get; set; }
 
 		public string Name { get; private set; }
+
 		/// <summary>
 		/// property injection
 		/// </summary>
@@ -30,9 +36,15 @@ namespace FileExplorer.Models
 			}
 		}
 
+		#endregion Public Properties
+
+		#region Public Constructors
+
 		public TreePageItem(IFileProvider fileProvider)
 		{
 			this.fileProvider = fileProvider;
 		}
+
+		#endregion Public Constructors
 	}
 }

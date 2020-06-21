@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -7,10 +6,21 @@ namespace FileExplorer.Models
 {
 	public class CopyPasteCommand : PasteCommand
 	{
+		#region Public Properties
+
 		public List<string> CopyedPaths { get; set; } = new List<string>();
+
+		#endregion Public Properties
+
+		#region Public Constructors
+
 		public CopyPasteCommand(IFileProvider fileProvider, INavigationService navigationService) : base(fileProvider, navigationService)
 		{
 		}
+
+		#endregion Public Constructors
+
+		#region Public Methods
 
 		public override bool CanExecute(object parameter = null)
 		{
@@ -33,7 +43,7 @@ namespace FileExplorer.Models
 				{
 					unsuccessPaths.Add(path);
 				}
-				else 
+				else
 				{
 					CopyedPaths.Add(result);
 				}
@@ -82,7 +92,7 @@ namespace FileExplorer.Models
 				navigationService.Refresh();
 			}
 		}
-	}
 
-	
+		#endregion Public Methods
+	}
 }

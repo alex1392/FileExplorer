@@ -1,11 +1,10 @@
-﻿
-using System;
+﻿using System;
 using System.Windows.Input;
 
 namespace FileExplorer.Models
 {
-	internal class RelayCommand : ICommand {
-
+	internal class RelayCommand : ICommand
+	{
 		#region Private Fields
 
 		private readonly Action action;

@@ -1,14 +1,10 @@
 ﻿using FileExplorer.Models;
 
 using System;
-using System.Drawing;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Data;
-using System.Windows.Interop;
 using System.Windows.Markup;
 using System.Windows.Media.Imaging;
-using FontAwesome.WPF;
 
 namespace FileExplorer.Views.Converters
 {

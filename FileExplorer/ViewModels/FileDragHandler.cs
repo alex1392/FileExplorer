@@ -1,5 +1,6 @@
 ﻿using GongSolutions.Wpf.DragDrop;
 using GongSolutions.Wpf.DragDrop.Utilities;
+
 using System;
 using System.Collections.Specialized;
 using System.Linq;
@@ -9,7 +10,14 @@ namespace FileExplorer.ViewModels
 {
 	public class FileDragHandler : IDragSource
 	{
+		#region Private Fields
+
 		private bool alreadyDropped = false;
+
+		#endregion Private Fields
+
+		#region Public Methods
+
 		public bool CanStartDrag(IDragInfo dragInfo)
 		{
 			return true;
@@ -17,7 +25,6 @@ namespace FileExplorer.ViewModels
 
 		public void DragCancelled()
 		{
-
 		}
 
 		public void DragDropOperationFinished(DragDropEffects operationResult, IDragInfo dragInfo)
@@ -70,5 +77,7 @@ namespace FileExplorer.ViewModels
 		{
 			throw exception;
 		}
+
+		#endregion Public Methods
 	}
 }

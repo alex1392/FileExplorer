@@ -26,7 +26,6 @@ namespace FileExplorer.Views.Converters
 			return listView.TryFindResource(type + "Icon");
 		}
 
-
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			throw new NotImplementedException();

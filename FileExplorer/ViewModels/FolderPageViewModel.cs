@@ -1,4 +1,5 @@
 ﻿using FileExplorer.Models;
+
 using GongSolutions.Wpf.DragDrop;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -9,11 +10,6 @@ using System.ComponentModel;
 
 namespace FileExplorer.ViewModels
 {
-	public enum PasteType
-	{
-		Cut,
-		Copy,
-	}
 	public class FolderPageViewModel : INotifyPropertyChanged
 	{
 		#region Private Fields
@@ -89,6 +85,7 @@ namespace FileExplorer.ViewModels
 		#endregion Public Constructors
 
 		#region Public Methods
+
 		public void MoveFile(string sourcePath, string destPath)
 		{
 			var command = serviceProvider.GetService<MoveFileCommand>();
@@ -131,13 +128,11 @@ namespace FileExplorer.ViewModels
 		}
 
 		#endregion Public Methods
-
-		#region Private Methods
-
-
-
-		#endregion Private Methods
 	}
 
-
+	public enum PasteType
+	{
+		Cut,
+		Copy,
+	}
 }

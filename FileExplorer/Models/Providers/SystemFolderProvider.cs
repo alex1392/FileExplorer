@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 
 namespace FileExplorer.Models
@@ -108,9 +107,7 @@ namespace FileExplorer.Models
 			NoAppcontainerRedirection = 0x00010000,
 			AliasOnly = 0x80000000
 		}
-		
-		#endregion
+
+		#endregion SHGetKnownFolderPath
 	}
-
-
 }

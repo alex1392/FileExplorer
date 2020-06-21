@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
@@ -8,8 +7,14 @@ namespace FileExplorer.Models
 {
 	public class UndoRedoManager
 	{
+		#region Private Fields
+
 		private readonly List<IUndoCommand> commands = new List<IUndoCommand>();
 		private int index = -1;
+
+		#endregion Private Fields
+
+		#region Public Properties
 
 		public IUndoCommand CurrentCommand
 		{
@@ -27,6 +32,10 @@ namespace FileExplorer.Models
 		public ICommand UndoCommand { get; private set; }
 		public ICommand RedoCommand { get; private set; }
 
+		#endregion Public Properties
+
+		#region Public Constructors
+
 		public UndoRedoManager(int capacity = 10)
 		{
 			Capacity = capacity;
@@ -34,6 +43,11 @@ namespace FileExplorer.Models
 			UndoCommand = new RelayCommand(Undo, CanUndo);
 			RedoCommand = new RelayCommand(Redo, CanRedo);
 		}
+
+		#endregion Public Constructors
+
+		#region Public Methods
+
 		public IEnumerable<IUndoCommand> GetUndoEnumerble() => commands.Take(index + 1);
 
 		public IEnumerable<IUndoCommand> GetRedoEnumerable() => commands.Skip(index + 1);
@@ -60,8 +74,14 @@ namespace FileExplorer.Models
 			}
 		}
 
+		#endregion Public Methods
+
+		#region Private Methods
+
 		private bool CanUndo() => index >= 0;
+
 		private bool CanRedo() => index < commands.Count - 1;
+
 		private void Undo()
 		{
 			if (!CanUndo())
@@ -78,6 +98,7 @@ namespace FileExplorer.Models
 			// move the index to the previous command
 			index--;
 		}
+
 		private void Redo()
 		{
 			if (!CanRedo())
@@ -89,7 +110,7 @@ namespace FileExplorer.Models
 			// if redo is not successful
 			if (!CurrentCommand.IsExecutionSuccessful)
 			{
-				// remove the current command 
+				// remove the current command
 				commands.Remove(CurrentCommand);
 				// if removal of command causes index out of boundary
 				if (index == commands.Count)
@@ -99,5 +120,7 @@ namespace FileExplorer.Models
 				}
 			}
 		}
+
+		#endregion Private Methods
 	}
 }
