@@ -206,7 +206,10 @@ namespace FileExplorer.Views
 			{
 				return;
 			}
-			vm.Navigate(folderVM.Item);
+			if (e.ChangedButton == MouseButton.Left)
+			{
+				vm.Navigate(folderVM.Item);
+			}
 		}
 
 		#endregion Private Methods
