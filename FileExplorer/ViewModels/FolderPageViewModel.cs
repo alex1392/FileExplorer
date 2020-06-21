@@ -51,28 +51,11 @@ namespace FileExplorer.ViewModels
 				}
 				path = value;
 
-				SetupListItems(path);
+				SetupListItems();
 
 				var info = fileProvider.GetFileSystemInfo(path);
 				Title = info.Name;
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Title)));
-
-				void SetupListItems(string path)
-				{
-					var (folderPaths, filePaths) = fileProvider.GetChildren(path);
-					foreach (var folderPath in folderPaths)
-					{
-						var folderItem = serviceProvider.GetService<ListFolderItemViewModel>();
-						folderItem.Path = folderPath;
-						ListItems.Add(folderItem);
-					}
-					foreach (var filePath in filePaths)
-					{
-						var fileItem = serviceProvider.GetService<ListFileItemViewModel>();
-						fileItem.Path = filePath;
-						ListItems.Add(fileItem);
-					}
-				}
 			}
 		}
 
@@ -113,7 +96,7 @@ namespace FileExplorer.ViewModels
 			command.DestPath = destPath;
 			undoRedoManager.Execute(command);
 		}
-		
+
 		public void Navigate(ListFolderItem folderItem)
 		{
 			navigationService.Navigate("FolderPage", folderItem.Path);
@@ -129,6 +112,23 @@ namespace FileExplorer.ViewModels
 			navigationService.Navigate("FolderPage", path);
 		}
 
+		public void SetupListItems()
+		{
+			ListItems.Clear();
+			var (folderPaths, filePaths) = fileProvider.GetChildren(path);
+			foreach (var folderPath in folderPaths)
+			{
+				var folderItem = serviceProvider.GetService<ListFolderItemViewModel>();
+				folderItem.Path = folderPath;
+				ListItems.Add(folderItem);
+			}
+			foreach (var filePath in filePaths)
+			{
+				var fileItem = serviceProvider.GetService<ListFileItemViewModel>();
+				fileItem.Path = filePath;
+				ListItems.Add(fileItem);
+			}
+		}
 
 		#endregion Public Methods
 
@@ -139,5 +139,5 @@ namespace FileExplorer.ViewModels
 		#endregion Private Methods
 	}
 
-	
+
 }

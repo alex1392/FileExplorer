@@ -1,5 +1,5 @@
 ﻿using FileExplorer.Models;
-
+using FileExplorer.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
@@ -161,38 +161,12 @@ namespace FileExplorer.Views.Services
 
 		public void Refresh()
 		{
-			if (Content is FolderPage folderPage)
+			if (Content is FolderPage folderPage &&
+				folderPage.DataContext is FolderPageViewModel vm)
 			{
-				this.Navigated += RefreshNavigated;
-				this.NavigatedPageLoaded += RefreshNavigatedPageLoaded;
-				Navigate(nameof(FolderPage), folderPage.Path);
-
+				vm.SetupListItems();
 			}
-			else
-			{
-				InternalNavigationService.Refresh();
-			}
-
-			void RefreshNavigated(object sender, object e)
-			{
-				InternalFrame.RemoveBackEntry();
-
-				this.Navigated -= RefreshNavigated;
-			}
-
-			void RefreshNavigatedPageLoaded(object sender, EventArgs e)
-			{
-				// recover previous state of the page
-				var navigatedPage = Content as FolderPage;
-				navigatedPage.IsGrouping = folderPage.IsGrouping;
-				navigatedPage.FilterText = folderPage.FilterText;
-				var listView = navigatedPage.GetType()
-							 .GetField(folderPage.CurrentView.Name, BindingFlags.NonPublic | BindingFlags.Instance)
-							 .GetValue(navigatedPage) as ListView;
-				navigatedPage.CurrentView = listView;
-
-				this.NavigatedPageLoaded -= RefreshNavigatedPageLoaded;
-			}
+			InternalNavigationService.Refresh();
 		}
 
 

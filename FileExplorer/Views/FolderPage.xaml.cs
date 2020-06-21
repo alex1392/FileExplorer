@@ -65,8 +65,6 @@ namespace FileExplorer.Views
 			?? (collectionView = CollectionViewSource.GetDefaultView(ItemsListView.ItemsSource));
 
 		#region Public Properties
-		// Make sure to update states properties when refreshing the page.
-
 		public string FilterText
 		{
 			get => filterText;
