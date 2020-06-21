@@ -4,8 +4,8 @@ namespace FileExplorer.Models
 {
 	public interface IFileProvider
 	{
-		void Copy(string sourcePath, string destPath);
-		void Delete(string path);
+		string Copy(string sourcePath, string destPath);
+		bool Delete(string path);
 		#region Public Methods
 
 		(string[], string[]) GetChildren(string path);

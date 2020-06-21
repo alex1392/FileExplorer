@@ -1,21 +1,13 @@
-﻿using FileExplorer.Models;
-using GongSolutions.Wpf.DragDrop;
-using System.Collections;
-using System.Collections.Generic;
+﻿using GongSolutions.Wpf.DragDrop;
 using System.Windows;
 
 namespace FileExplorer.ViewModels
 {
+
 	public class FileDropHandler : IDropTarget
 	{
-		private readonly IFileProvider fileProvider;
-		private readonly INavigationService navigationService;
-
-		public FileDropHandler(IFileProvider fileProvider, INavigationService navigationService)
-		{
-			this.fileProvider = fileProvider;
-			this.navigationService = navigationService;
-		}
+		public FolderPageViewModel FolderPageVM { get; set; }
+		
 		public void DragOver(IDropInfo dropInfo)
 		{
 			if (dropInfo.TargetItem is ListFolderItemViewModel targetFolder)
@@ -27,7 +19,7 @@ namespace FileExplorer.ViewModels
 
 		public void Drop(IDropInfo dropInfo)
 		{
-			if (!(dropInfo.DragInfo.DataObject is DataObject data))
+			if (!(dropInfo.Data is DataObject data))
 			{
 				return;
 			}
@@ -37,18 +29,16 @@ namespace FileExplorer.ViewModels
 			}
 			var paths = data.GetFileDropList();
 			foreach (var path in paths)
-			{
+			{	// if drop to a folder
 				if (dropInfo.TargetItem is ListFolderItemViewModel targetFolderVM)
-				{
-					fileProvider.Move(path, targetFolderVM.Path);
+				{	// move file to the target folder
+					FolderPageVM.MoveFile(path, targetFolderVM.Path);
 				}
-				else if (dropInfo.TargetItem is ListFileItemViewModel targetFileVM)
-				{
-					var parentPath = fileProvider.GetParent(targetFileVM.Path);
-					fileProvider.Move(path, parentPath);
+				else // if drop to empty area or file item
+				{	// move file to the current folder
+					FolderPageVM.MoveFile(path, FolderPageVM.Path);
 				}
 			}
-			navigationService.Refresh();
 		}
 
 	}

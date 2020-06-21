@@ -47,7 +47,7 @@ namespace FileExplorer
 			serviceCollection.AddSingleton<IFileProvider, FileProvider>();
 			serviceCollection.AddSingleton<ISystemFolderProvider, SystemFolderProvider>();
 
-			serviceCollection.AddSingleton<INavigationService, NavigationService>();
+			serviceCollection.AddSingleton<INavigationService, FolderNavigationService>();
 			serviceCollection.AddSingleton<IDialogService, DialogService>();
 			serviceCollection.AddSingleton<ITypeDescriptionProvider, TypeDescriptionProvider>();
 			serviceCollection.AddSingleton<IDispatcherService, DispatcherService>();
@@ -70,6 +70,10 @@ namespace FileExplorer
 			serviceCollection.AddTransient<TreePageItem>();
 			serviceCollection.AddSingleton<FileDropHandler>();
 			serviceCollection.AddSingleton<FileDragHandler>();
+			serviceCollection.AddTransient<MoveFileCommand>();
+			serviceCollection.AddSingleton<UndoRedoManager>(sp => new UndoRedoManager(capacity: 10));
+			serviceCollection.AddTransient<CutPasteCommand>();
+			serviceCollection.AddTransient<CopyPasteCommand>();
 		}
 
 		#endregion Private Methods

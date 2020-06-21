@@ -90,6 +90,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DataVirtualization\AsyncVirtualizingCollection.cs" />
+    <Compile Include="Models\UndoRedoManager.cs" />
+    <Compile Include="Models\Commands\RelayCommand.cs" />
     <Compile Include="Models\Interfaces\IDialogService.cs" />
     <Compile Include="Models\Interfaces\ITreeItem.cs" />
     <Compile Include="Models\Items\ListFolderItem.cs" />
@@ -98,6 +100,8 @@
     <Compile Include="Models\Providers\FolderChildrenProvider.cs" />
     <Compile Include="Models\Interfaces\ITypeDescriptionProvider.cs" />
     <Compile Include="Utilities\GridViewSort.cs" />
+    <Compile Include="Models\Commands\CopyPasteCommand.cs" />
+    <Compile Include="Models\Commands\CutPasteCommand.cs" />
     <Compile Include="ViewModels\FileDragHandler.cs" />
     <Compile Include="ViewModels\FolderPageViewModel.cs" />
     <Compile Include="Models\Interfaces\INavigationService.cs" />
@@ -105,12 +109,15 @@
     <Compile Include="Models\Commands\GoForwardCommand.cs" />
     <Compile Include="Models\Commands\GoUpCommand.cs" />
     <Compile Include="Models\Commands\GoHomeCommand.cs" />
+    <Compile Include="Models\Interfaces\IEditCommand.cs" />
     <Compile Include="ViewModels\ListFileItemViewModel.cs" />
     <Compile Include="ViewModels\ListFolderItemViewModel.cs" />
     <Compile Include="ViewModels\ListItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Models\Commands\RefreshCommand.cs" />
     <Compile Include="ViewModels\FileDropHandler.cs" />
+    <Compile Include="Models\Commands\MoveFileCommand.cs" />
+    <Compile Include="Models\Commands\PasteCommand.cs" />
     <Compile Include="Views\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\ViewTypeConverter.cs" />
     <Compile Include="Utilities\DropDownButtonBehavior.cs" />
@@ -125,7 +132,7 @@
     <Compile Include="Views\Services\DispatcherService.cs" />
     <Compile Include="Views\Services\DialogService.cs" />
     <Compile Include="Models\Interfaces\IDispatcherService.cs" />
-    <Compile Include="Views\Services\NavigationService.cs" />
+    <Compile Include="Views\Services\FolderNavigationService.cs" />
     <Compile Include="Views\FolderPage.xaml.cs">
       <DependentUpon>FolderPage.xaml</DependentUpon>
     </Compile>

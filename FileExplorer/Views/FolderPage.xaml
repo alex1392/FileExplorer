@@ -15,6 +15,9 @@
 			d:DesignHeight="450"
 			d:DesignWidth="800"
 			Title="{Binding Title}">
+	<Page.CommandBindings>
+		
+	</Page.CommandBindings>
 	<Grid>
 		<Grid.Resources>
 			<GroupStyle x:Key="GroupStyleKey">

@@ -19,7 +19,23 @@
 								 Title="MainWindow"
 								 Height="450"
 								 Width="800">
-
+	<Window.CommandBindings>
+		<CommandBinding Command="ApplicationCommands.Undo"
+										Executed="Undo"
+										CanExecute="CanUndo" />
+		<CommandBinding Command="ApplicationCommands.Redo"
+										Executed="Redo"
+										CanExecute="CanRedo" />
+		<CommandBinding Command="ApplicationCommands.Copy"
+										Executed="Copy"
+										CanExecute="CanCopy" />
+		<CommandBinding Command="ApplicationCommands.Cut"
+										Executed="Cut"
+										CanExecute="CanCut" />
+		<CommandBinding Command="ApplicationCommands.Paste"
+										Executed="Paste"
+										CanExecute="CanPaste" />
+	</Window.CommandBindings>
 	<DockPanel>
 		<DockPanel Name="MenuBar"
 							 DockPanel.Dock="Top"
@@ -147,7 +163,7 @@
 					</ContextMenu>
 				</Button.ContextMenu>
 			</Button>
-			<Border Name="searchBoxBorder" 
+			<Border Name="searchBoxBorder"
 							DockPanel.Dock="Right"
 							Background="White"
 							BorderBrush="#FFABADB3"
@@ -163,7 +179,7 @@
 										 VerticalAlignment="Center"
 										 VerticalContentAlignment="Center"
 										 Height="{Binding ElementName=MenuBar, Path=Height}"
-										 Text="{Binding ElementName=FolderFrame, Path=Content.FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+										 Text="{Binding ElementName=FolderFrame, Path=Content.FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 						<TextBlock VerticalAlignment="Center"
 											 Foreground="Gray"
 											 Padding="3"
@@ -219,7 +235,7 @@
 									 Text="{Binding Path, Mode=OneWay}"
 									 Visibility="Hidden"
 									 KeyDown="PathTextBox_KeyDown"
-									 LostFocus="PathTextBox_LostFocus"/>
+									 LostFocus="PathTextBox_LostFocus" />
 				</Grid>
 			</Border>
 		</DockPanel>
@@ -250,7 +266,7 @@
 		</TreeView>
 		<Frame Name="FolderFrame"
 					 NavigationUIVisibility="Hidden" />
-		
+
 	</DockPanel>
 
 </fd:RevealWindow>

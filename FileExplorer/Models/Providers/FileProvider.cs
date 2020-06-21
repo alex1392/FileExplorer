@@ -34,7 +34,12 @@ namespace FileExplorer.Models
 		#endregion Public Constructors
 
 		#region Public Methods
-
+		/// <summary>
+		/// Move file or folder.
+		/// </summary>
+		/// <param name="sourcePath">Path of file or folder to be moved.</param>
+		/// <param name="destPath">Path of the target folder.</param>
+		/// <returns>Return bool indicates of this operation is successful.</returns>
 		public bool Move(string sourcePath, string destPath)
 		{
 			if (sourcePath == destPath)
@@ -58,16 +63,21 @@ namespace FileExplorer.Models
 			return false;
 		}
 
-		//TODO: handle exceptions
-		public void Copy(string sourcePath, string destPath)
+		/// <summary>
+		/// Copy file or folder.
+		/// </summary>
+		/// <param name="sourcePath">Path of file or folder to be copyed.</param>
+		/// <param name="destPath">Path of the destination of file or folder to be copyed.</param>
+		/// <returns>The path that has been copyed, returns null if this operation was failed.</returns>
+		public string Copy(string sourcePath, string destPath)
 		{
 			if (File.Exists(sourcePath))
 			{
-				CopyFile(sourcePath, destPath);
+				return CopyFile(sourcePath, destPath);
 			}
 			else if (Directory.Exists(sourcePath))
 			{
-				CopyFolder(sourcePath, destPath);
+				return CopyFolder(sourcePath, destPath);
 			}
 			else
 			{
@@ -82,19 +92,32 @@ namespace FileExplorer.Models
 				var name = Path.GetFileNameWithoutExtension(path);
 				while (File.Exists(path) || Directory.Exists(path))
 				{
-					path = Path.Combine(dir, $"{name} ({i})", ext);
+					path = Path.Combine(dir, $"{name} ({i}){ext}");
 					i++;
 				}
 				return path;
 			}
 
-			static void CopyFolder(string sourcePath, string destPath)
+			string CopyFolder(string sourcePath, string destPath)
 			{
 				if (Directory.Exists(destPath))
 				{
 					destPath = RenamePath(destPath);
 				}
-				Directory.CreateDirectory(destPath);
+				try
+				{
+					Directory.CreateDirectory(destPath);
+				}
+				catch (UnauthorizedAccessException ex)
+				{
+					dialogService.ShowMessage(ex.Message);
+					return null;
+				}
+				catch (IOException ex)
+				{
+					dialogService.ShowMessage(ex.Message);
+					return null;
+				}
 
 				var folders = Directory.GetDirectories(sourcePath);
 				foreach (var folder in folders)
@@ -109,32 +132,60 @@ namespace FileExplorer.Models
 					var name = Path.GetFileName(file);
 					CopyFile(file, Path.Combine(destPath, name));
 				}
+				return destPath;
 			}
 
-			static void CopyFile(string sourcePath, string destPath)
+			string CopyFile(string sourcePath, string destPath)
 			{
 				if (File.Exists(destPath))
 				{
 					destPath = RenamePath(destPath);
 				}
-				File.Copy(sourcePath, destPath);
+				try
+				{
+					File.Copy(sourcePath, destPath);
+					return destPath;
+				}
+				catch (UnauthorizedAccessException ex)
+				{
+					dialogService.ShowMessage(ex.Message);
+				}
+				catch (IOException ex)
+				{
+					dialogService.ShowMessage(ex.Message);
+				}
+				return null;
 			}
 		}
-
-		public void Delete(string path)
+		
+		/// <summary>
+		/// Delete file or folder (recursively).
+		/// </summary>
+		/// <param name="path">Path of file or folder to be deleted.</param>
+		/// <returns>Bool indicates this operation is successful or not.</returns>
+		public bool Delete(string path)
 		{
-			if (File.Exists(path))
+			try
 			{
-				File.Delete(path);
+				if (File.Exists(path))
+				{
+					File.Delete(path);
+				}
+				else if (Directory.Exists(path))
+				{
+					Directory.Delete(path, recursive: true);
+				}
+				return true;
 			}
-			else if (Directory.Exists(path))
+			catch (UnauthorizedAccessException ex)
 			{
-				Directory.Delete(path, recursive: true);
+				dialogService.ShowMessage(ex.Message);
 			}
-			else
+			catch (IOException ex)
 			{
-				throw new PathNotFoundException();
+				dialogService.ShowMessage(ex.Message);
 			}
+			return false;
 		}
 
 		public (string[], string[]) GetChildren(string path)

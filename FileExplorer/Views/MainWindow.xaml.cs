@@ -2,7 +2,9 @@
 
 using FileExplorer.Models;
 using FileExplorer.ViewModels;
-
+using System;
+using System.Collections.Specialized;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -20,6 +22,7 @@ namespace FileExplorer.Views
 		private readonly MainWindowViewModel vm;
 
 		#endregion Private Fields
+		private ListView CurrentView => (vm.CurrentContent as FolderPage).CurrentView;
 
 		#region Public Constructors
 
@@ -96,7 +99,7 @@ namespace FileExplorer.Views
 			{
 				return;
 			}
-			if (item.Path == vm.Path)
+			if (item.Path == vm.CurrentPath)
 			{
 				return;
 			}
@@ -159,5 +162,71 @@ namespace FileExplorer.Views
 		}
 
 		#endregion Private Methods
+		private PasteType pasteType;
+		private void Undo(object sender, ExecutedRoutedEventArgs e)
+		{
+			vm.Undo(e.Parameter);
+		}
+
+		private void Redo(object sender, ExecutedRoutedEventArgs e)
+		{
+			vm.Redo(e.Parameter);
+		}
+
+		private void CanRedo(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = vm.CanRedo(e.Parameter);
+		}
+
+		private void CanUndo(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = vm.CanUndo(e.Parameter);
+		}
+
+		private void SetClipBoard()
+		{
+			Clipboard.Clear();
+			var paths = new StringCollection();
+			paths.AddRange(CurrentView.SelectedItems.OfType<ListItemViewModel>().Select(vm => vm.Path).ToArray());
+			Clipboard.SetFileDropList(paths);
+		}
+
+		private void Copy(object sender, ExecutedRoutedEventArgs e)
+		{
+			SetClipBoard();
+			pasteType = PasteType.Copy;
+		}
+
+
+		private void CanCopy(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = CurrentView.SelectedItems.Count > 0;
+		}
+
+		private void Cut(object sender, ExecutedRoutedEventArgs e)
+		{
+			SetClipBoard();
+			pasteType = PasteType.Cut;
+		}
+
+		private void CanCut(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = CurrentView.SelectedItems.Count > 0;
+		}
+
+		private void Paste(object sender, ExecutedRoutedEventArgs e)
+		{
+			var sourcePaths = Clipboard.GetFileDropList().OfType<string>().ToList();
+			var isSuccessful = vm.Paste(sourcePaths, vm.CurrentPath, pasteType);
+			if (isSuccessful)
+			{
+				Clipboard.Clear();
+			}
+		}
+
+		private void CanPaste(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = Clipboard.GetFileDropList().Count > 0;
+		}
 	}
 }

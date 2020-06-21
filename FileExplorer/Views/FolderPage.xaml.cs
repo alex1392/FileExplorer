@@ -3,8 +3,10 @@ using FileExplorer.ViewModels;
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -50,6 +52,7 @@ namespace FileExplorer.Views
 		private bool isGrouping;
 		private string path;
 		private ListView currentView;
+		
 
 		#endregion Private Fields
 
@@ -163,13 +166,7 @@ namespace FileExplorer.Views
 		public FolderPage()
 		{
 			InitializeComponent();
-
 			Loaded += FolderPage_Loaded;
-
-			CommandBindings.Add(new CommandBinding(ApplicationCommands.Copy, DoCopy, CanDoCopy));
-			CommandBindings.Add(new CommandBinding(ApplicationCommands.Paste, DoPaste, CanDoPaste));
-			CommandBindings.Add(new CommandBinding(ApplicationCommands.Cut, DoCut, CanDoCut));
-			CommandBindings.Add(new CommandBinding(ApplicationCommands.Delete, DoDelete, CanDoDelete));
 		}
 
 		public FolderPage(FolderPageViewModel vm) : this()
@@ -182,45 +179,6 @@ namespace FileExplorer.Views
 		#endregion Public Constructors
 
 		#region Private Methods
-
-		private void DoDelete(object sender, ExecutedRoutedEventArgs e)
-		{
-			throw new NotImplementedException();
-		}
-
-		private void CanDoDelete(object sender, CanExecuteRoutedEventArgs e)
-		{
-			throw new NotImplementedException();
-		}
-
-		private void DoCut(object sender, ExecutedRoutedEventArgs e)
-		{
-			throw new NotImplementedException();
-		}
-
-		private void CanDoCut(object sender, CanExecuteRoutedEventArgs e)
-		{
-			throw new NotImplementedException();
-		}
-
-		private void DoPaste(object sender, ExecutedRoutedEventArgs e)
-		{
-			throw new NotImplementedException();
-		}
-
-		private void CanDoPaste(object sender, CanExecuteRoutedEventArgs e)
-		{
-			throw new NotImplementedException();
-		}
-
-		private void CanDoCopy(object sender, CanExecuteRoutedEventArgs e)
-		{
-		}
-
-		private void DoCopy(object sender, ExecutedRoutedEventArgs e)
-		{
-			throw new NotImplementedException();
-		}
 
 		private void FolderPage_Loaded(object sender, RoutedEventArgs e)
 		{
@@ -252,5 +210,6 @@ namespace FileExplorer.Views
 		}
 
 		#endregion Private Methods
+		
 	}
 }

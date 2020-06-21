@@ -19,6 +19,8 @@ namespace FileExplorer.ViewModels
 
 		private readonly INavigationService navigationService;
 		private readonly IServiceProvider serviceProvider;
+		private readonly IFileProvider fileProvider;
+		private readonly UndoRedoManager undoRedoManager;
 		private readonly ISystemFolderProvider systemFolderProvider;
 
 		#endregion Private Fields
@@ -39,7 +41,6 @@ namespace FileExplorer.ViewModels
 
 		public ICommand GoUpCommand { get; private set; }
 		public ICommand GoHomeCommand { get; private set; }
-
 		public ICommand RefreshCommand { get; private set; }
 		public IEnumerable<object> NavigationHistroy
 		{
@@ -66,11 +67,11 @@ namespace FileExplorer.ViewModels
 				return list;
 			}
 		}
-
-		public string Path { get; private set; }
+		public string CurrentPath { get; private set; }
 		public IEnumerable<Item> PathItems { get; private set; }
 		public ObservableCollection<ITreeItem> TreeItems { get; private set; } = new ObservableCollection<ITreeItem>();
 		public TreePageItem HomePage { get; private set; }
+
 
 		#endregion Public Properties
 
@@ -83,36 +84,94 @@ namespace FileExplorer.ViewModels
 		{
 		}
 
-		public MainWindowViewModel(ISystemFolderProvider systemFolderProvider, INavigationService navigationService, IServiceProvider serviceProvider)
+		public MainWindowViewModel(ISystemFolderProvider systemFolderProvider, INavigationService navigationService, IServiceProvider serviceProvider, IFileProvider fileProvider, UndoRedoManager undoRedoManager)
 		{
 			this.systemFolderProvider = systemFolderProvider;
 			this.navigationService = navigationService;
 			this.serviceProvider = serviceProvider;
+			this.fileProvider = fileProvider;
+			this.undoRedoManager = undoRedoManager;
 			navigationService.Navigated += NavigationService_Navigated;
 			navigationService.NavigatedPageLoaded += NavigationService_NavigatedPageLoaded;
 
 			SetupHomePage();
 			SetupTreeItems();
+			SetupCommands(navigationService);
 
-			GoBackCommand = new GoBackCommand(navigationService);
-			GoForwardCommand = new GoForwardCommand(navigationService);
-			RefreshCommand = new RefreshCommand(navigationService);
-			GoUpCommand = new GoUpCommand(navigationService);
-			GoHomeCommand = new GoHomeCommand(navigationService, HomePage);
+			void SetupHomePage()
+			{
+				HomePage = serviceProvider.GetService<TreePageItem>();
+				HomePage.Uri = new Uri("/Views/HomePage.xaml", UriKind.Relative);
+				HomePage.IconKey = "Home";
+				TreeItems.Add(HomePage);
+			}
+			void SetupTreeItems()
+			{
+				var funcs = new List<Func<string>>
+			{
+				systemFolderProvider.GetDesktop,
+				systemFolderProvider.GetRecent,
+				systemFolderProvider.GetDownloads,
+				systemFolderProvider.GetDocuments,
+				systemFolderProvider.GetPictures,
+				systemFolderProvider.GetMusic,
+				systemFolderProvider.GetVideos,
+			};
+				foreach (var func in funcs)
+				{
+					var path = func.Invoke();
+					SetupTreeItem(path, func.Method.Name.Replace("Get", ""));
+				}
+
+				var drivePaths = systemFolderProvider.GetLogicalDrives();
+				foreach (var drivePath in drivePaths)
+				{
+					SetupTreeItem(drivePath, "Drive");
+				}
+
+				void SetupTreeItem(string path, string iconKey)
+				{
+					var item = serviceProvider.GetService<TreeFolderItem>();
+					item.Path = path;
+					item.IconKey = iconKey;
+					TreeItems.Add(item);
+				}
+
+			}
+			void SetupCommands(INavigationService navigationService)
+			{
+				GoBackCommand = new GoBackCommand(navigationService);
+				GoForwardCommand = new GoForwardCommand(navigationService);
+				RefreshCommand = new RefreshCommand(navigationService);
+				GoUpCommand = new GoUpCommand(navigationService);
+				GoHomeCommand = new GoHomeCommand(navigationService, HomePage);
+
+			}
 		}
 
-		private void SetupHomePage()
-		{
-			HomePage = serviceProvider.GetService<TreePageItem>();
-			HomePage.Uri = new Uri("/Views/HomePage.xaml", UriKind.Relative);
-			HomePage.IconKey = "Home";
-			TreeItems.Add(HomePage);
-		}
 
 		#endregion Public Constructors
 
 		#region Public Methods
+		public bool Paste(List<string> sourcePaths, string destPath, PasteType type)
+		{
+			PasteCommand command = type switch
+			{
+				PasteType.Cut => serviceProvider.GetService<CutPasteCommand>(),
+				PasteType.Copy => serviceProvider.GetService<CopyPasteCommand>(),
+				_ => throw new NotImplementedException(),
+			};
+			command.SourcePaths = sourcePaths;
+			command.DestPath = destPath;
+			undoRedoManager.Execute(command);
+			return command.IsExecutionSuccessful;
+		}
+		public bool CanRedo(object parameter) => undoRedoManager.RedoCommand.CanExecute(parameter);
 
+		public bool CanUndo(object parameter) => undoRedoManager.UndoCommand.CanExecute(parameter);
+		public void Redo(object parameter) => undoRedoManager.RedoCommand.Execute(parameter);
+
+		public void Undo(object parameter) => undoRedoManager.UndoCommand.Execute(parameter);
 		public void Navigate(Uri uri)
 		{
 			navigationService.Navigate(uri);
@@ -137,31 +196,32 @@ namespace FileExplorer.ViewModels
 
 		#region Private Methods
 
-		private IEnumerable<Item> GetPathItems(string path)
-		{
-			if (path == null)
-			{
-				return null;
-			}
-			var parents = path.Split(IO::Path.DirectorySeparatorChar).Where(s => !string.IsNullOrEmpty(s)).ToList();
-			var paths = new string[parents.Count];
-			for (var i = 0; i < parents.Count; i++)
-			{
-				paths[i] = string.Join(IO::Path.DirectorySeparatorChar.ToString(), parents.Take(i + 1));
-			}
-			return paths.Select(path =>
-			{
-				var item = serviceProvider.GetService<Item>();
-				item.Path = path;
-				return item;
-			});
-		}
 
 		private void NavigationService_Navigated(object sender, string path)
 		{
-			Path = path;
+			CurrentPath = path;
 			PathItems = GetPathItems(path);
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PathItems)));
+			
+			IEnumerable<Item> GetPathItems(string path)
+			{
+				if (path == null)
+				{
+					return null;
+				}
+				var parents = path.Split(IO::Path.DirectorySeparatorChar).Where(s => !string.IsNullOrEmpty(s)).ToList();
+				var paths = new string[parents.Count];
+				for (var i = 0; i < parents.Count; i++)
+				{
+					paths[i] = string.Join(IO::Path.DirectorySeparatorChar.ToString(), parents.Take(i + 1));
+				}
+				return paths.Select(path =>
+				{
+					var item = serviceProvider.GetService<Item>();
+					item.Path = path;
+					return item;
+				});
+			}
 		}
 
 		private void NavigationService_NavigatedPageLoaded(object sender, EventArgs e)
@@ -170,39 +230,7 @@ namespace FileExplorer.ViewModels
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentContent)));
 		}
 
-		private void SetupTreeItems()
-		{
-			var funcs = new List<Func<string>>
-			{
-				systemFolderProvider.GetDesktop,
-				systemFolderProvider.GetRecent,
-				systemFolderProvider.GetDownloads,
-				systemFolderProvider.GetDocuments,
-				systemFolderProvider.GetPictures,
-				systemFolderProvider.GetMusic,
-				systemFolderProvider.GetVideos,
-			};
-			foreach (var func in funcs)
-			{
-				var path = func.Invoke();
-				SetupTreeItem(path, func.Method.Name.Replace("Get", ""));
-			}
 
-			var drivePaths = systemFolderProvider.GetLogicalDrives();
-			foreach (var drivePath in drivePaths)
-			{
-				SetupTreeItem(drivePath, "Drive");
-			}
-
-			void SetupTreeItem(string path, string iconKey)
-			{
-				var item = serviceProvider.GetService<TreeFolderItem>();
-				item.Path = path;
-				item.IconKey = iconKey;
-				TreeItems.Add(item);
-			}
-
-		}
 
 		#endregion Private Methods
 	}

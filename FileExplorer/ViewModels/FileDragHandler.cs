@@ -51,7 +51,9 @@ namespace FileExplorer.ViewModels
 		public void StartDrag(IDragInfo dragInfo)
 		{
 			alreadyDropped = false;
-			var paths = dragInfo.SourceItems.OfType<ListItemViewModel>().Select(vm => vm.Path).ToArray();
+			var paths = dragInfo.SourceItems.OfType<ListItemViewModel>()
+								   .Select(vm => vm.Path)
+								   .ToArray();
 			var pathCollection = new StringCollection();
 			pathCollection.AddRange(paths);
 			var dataObject = new DataObject();

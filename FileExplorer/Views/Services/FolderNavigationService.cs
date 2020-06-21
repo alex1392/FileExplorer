@@ -27,6 +27,8 @@ namespace FileExplorer.Views.Services
 
 		#region Public Events
 
+
+
 		public event EventHandler<string> Navigated;
 
 		public event EventHandler NavigatedPageLoaded;
@@ -70,18 +72,9 @@ namespace FileExplorer.Views.Services
 
 		public IEnumerable ForwardStack => InternalFrame.ForwardStack;
 
-		public Frame InternalFrame
-		{
-			get
-			{
-				//Lazy initialization of dependency
-				if (internalFrame == null)
-				{
-					internalFrame = serviceProvider.GetService<MainWindow>().FolderFrame;
-				}
-				return internalFrame;
-			}
-		}
+		public Frame InternalFrame => internalFrame
+			//Lazy initialization of dependency
+			?? (internalFrame = serviceProvider.GetService<MainWindow>().FolderFrame);
 
 		public Navigation::NavigationService InternalNavigationService
 		{

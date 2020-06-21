@@ -1,5 +1,4 @@
 ﻿using FileExplorer.Models;
-
 using GongSolutions.Wpf.DragDrop;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -10,14 +9,19 @@ using System.ComponentModel;
 
 namespace FileExplorer.ViewModels
 {
+	public enum PasteType
+	{
+		Cut,
+		Copy,
+	}
 	public class FolderPageViewModel : INotifyPropertyChanged
 	{
 		#region Private Fields
 
 		private readonly IFileProvider fileProvider;
-		private readonly FolderChildrenProvider folderChildrenProvider;
 		private readonly INavigationService navigationService;
 		private readonly IServiceProvider serviceProvider;
+		private readonly UndoRedoManager undoRedoManager;
 		private string path;
 
 		#endregion Private Fields
@@ -52,6 +56,23 @@ namespace FileExplorer.ViewModels
 				var info = fileProvider.GetFileSystemInfo(path);
 				Title = info.Name;
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Title)));
+
+				void SetupListItems(string path)
+				{
+					var (folderPaths, filePaths) = fileProvider.GetChildren(path);
+					foreach (var folderPath in folderPaths)
+					{
+						var folderItem = serviceProvider.GetService<ListFolderItemViewModel>();
+						folderItem.Path = folderPath;
+						ListItems.Add(folderItem);
+					}
+					foreach (var filePath in filePaths)
+					{
+						var fileItem = serviceProvider.GetService<ListFileItemViewModel>();
+						fileItem.Path = filePath;
+						ListItems.Add(fileItem);
+					}
+				}
 			}
 		}
 
@@ -70,12 +91,14 @@ namespace FileExplorer.ViewModels
 		{
 		}
 
-		public FolderPageViewModel(FolderChildrenProvider folderChildrenProvider, IFileProvider fileProvider, INavigationService navigationService, IServiceProvider serviceProvider, FileDropHandler fileDropHandler, FileDragHandler fileDragHandler)
+		public FolderPageViewModel(IFileProvider fileProvider, INavigationService navigationService, IServiceProvider serviceProvider, UndoRedoManager undoRedoManager, FileDropHandler fileDropHandler, FileDragHandler fileDragHandler)
 		{
-			this.folderChildrenProvider = folderChildrenProvider;
 			this.fileProvider = fileProvider;
 			this.navigationService = navigationService;
 			this.serviceProvider = serviceProvider;
+			this.undoRedoManager = undoRedoManager;
+
+			fileDropHandler.FolderPageVM = this;
 			FileDropHandler = fileDropHandler;
 			FileDragHandler = fileDragHandler;
 		}
@@ -83,7 +106,14 @@ namespace FileExplorer.ViewModels
 		#endregion Public Constructors
 
 		#region Public Methods
-
+		public void MoveFile(string sourcePath, string destPath)
+		{
+			var command = serviceProvider.GetService<MoveFileCommand>();
+			command.SourcePath = sourcePath;
+			command.DestPath = destPath;
+			undoRedoManager.Execute(command);
+		}
+		
 		public void Navigate(ListFolderItem folderItem)
 		{
 			navigationService.Navigate("FolderPage", folderItem.Path);
@@ -99,27 +129,15 @@ namespace FileExplorer.ViewModels
 			navigationService.Navigate("FolderPage", path);
 		}
 
+
 		#endregion Public Methods
 
 		#region Private Methods
 
-		private void SetupListItems(string path)
-		{
-			var (folderPaths, filePaths) = fileProvider.GetChildren(path);
-			foreach (var folderPath in folderPaths)
-			{
-				var folderItem = serviceProvider.GetService<ListFolderItemViewModel>();
-				folderItem.Path = folderPath;
-				ListItems.Add(folderItem);
-			}
-			foreach (var filePath in filePaths)
-			{
-				var fileItem = serviceProvider.GetService<ListFileItemViewModel>();
-				fileItem.Path = filePath;
-				ListItems.Add(fileItem);
-			}
-		}
+
 
 		#endregion Private Methods
 	}
+
+	
 }

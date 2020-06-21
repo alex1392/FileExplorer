@@ -5,7 +5,7 @@ namespace FileExplorer.Models
 {
 	public class GoHomeCommand : ICommand
 	{
-		private INavigationService navigationService;
+		private readonly INavigationService navigationService;
 		private readonly TreePageItem homePage;
 
 		public GoHomeCommand(INavigationService navigationService, TreePageItem homePage)
