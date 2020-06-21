@@ -92,7 +92,7 @@
 				<GridView>
 					<GridViewColumn Header="Name"
 													Width="Auto"
-													util:GridViewSort.PropertyName="Name">
+													util:GridViewSort.PropertyName="Item.Name">
 						<GridViewColumn.CellTemplate>
 							<DataTemplate DataType="{x:Type vm:ListItemViewModel}">
 								<StackPanel Orientation="Horizontal">
@@ -108,14 +108,14 @@
 					<GridViewColumn Header="Date"
 													Width="Auto"
 													DisplayMemberBinding="{Binding Item.LastModifiedTime, Converter={converter:TimeConverter}}"
-													util:GridViewSort.PropertyName="LastModifiedTime" />
+													util:GridViewSort.PropertyName="Item.LastModifiedTime" />
 					<GridViewColumn Header="Type"
 													Width="Auto"
 													DisplayMemberBinding="{Binding Item.TypeDescription}"
-													util:GridViewSort.PropertyName="TypeDescription" />
+													util:GridViewSort.PropertyName="Item.TypeDescription" />
 					<GridViewColumn Header="Size"
 													Width="Auto"
-													util:GridViewSort.PropertyName="Size">
+													util:GridViewSort.PropertyName="Item.Size">
 						<GridViewColumn.CellTemplate>
 							<DataTemplate DataType="{x:Type vm:ListFileItemViewModel}">
 								<TextBlock Text="{Binding Item.Size, Converter={converter:SizeConverter}}"
