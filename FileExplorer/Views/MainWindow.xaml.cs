@@ -21,6 +21,7 @@ namespace FileExplorer.Views
 		#region Private Fields
 
 		private readonly MainWindowViewModel vm;
+		private readonly IDialogService dialogService;
 
 		#endregion Private Fields
 
@@ -35,9 +36,10 @@ namespace FileExplorer.Views
 			this.Loaded += MainWindow_Loaded;
 		}
 
-		public MainWindow(MainWindowViewModel vm) : this()
+		public MainWindow(MainWindowViewModel vm, IDialogService dialogService) : this()
 		{
 			this.vm = vm;
+			this.dialogService = dialogService;
 			DataContext = this.vm;
 		}
 
@@ -240,21 +242,18 @@ namespace FileExplorer.Views
 		private void New(object sender, ExecutedRoutedEventArgs e)
 		{
 			var ext = e.Parameter?.ToString();
-			var fileNameInputWindow = new FileNameInputWindow
+			var filename = dialogService.ShowFileNameDialog();
+			if (filename == null)
 			{
-				Owner = this
-			};
-			if (fileNameInputWindow.ShowDialog() ?? false)
-			{
-				var filename = fileNameInputWindow.fileNameTextBox.Text;
-				// remove extension
-				var extensionIndex = filename.IndexOf('.');
-				if (extensionIndex > 0)
-				{
-					filename = filename.Remove(extensionIndex);
-				}
-				vm.New(Path.Combine(vm.CurrentPath, filename + ext));
+				return;
 			}
+			// remove extension
+			var extensionIndex = filename.IndexOf('.');
+			if (extensionIndex > 0)
+			{
+				filename = filename.Remove(extensionIndex);
+			}
+			vm.New(Path.Combine(vm.CurrentPath, filename + ext));
 		}
 
 		private void CanNew(object sender, CanExecuteRoutedEventArgs e)

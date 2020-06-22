@@ -18,6 +18,22 @@ namespace FileExplorer.Views.Services
 			return MessageBox.Show(message, caption, button);
 		}
 
+		public string ShowFileNameDialog()
+		{
+			var dialog = new FileNameInputWindow
+			{
+				Owner = App.Current.MainWindow
+			};
+			if (dialog.ShowDialog() ?? false)
+			{
+				return dialog.fileNameTextBox.Text;
+			}
+			else
+			{
+				return null;
+			}
+		}
+
 		#endregion Public Methods
 	}
 }

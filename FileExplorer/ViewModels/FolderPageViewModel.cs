@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Input;
 
 namespace FileExplorer.ViewModels
 {
@@ -19,6 +20,7 @@ namespace FileExplorer.ViewModels
 		private readonly IFileProvider fileProvider;
 		private readonly INavigationService navigationService;
 		private readonly IServiceProvider serviceProvider;
+		private readonly IDialogService dialogService;
 		private readonly UndoRedoManager undoRedoManager;
 		private string path;
 
@@ -61,6 +63,8 @@ namespace FileExplorer.ViewModels
 		public IDropTarget FileDropHandler { get; }
 		public IDragSource FileDragHandler { get; }
 
+		public ShowRenameDialogCommand ShowRenameDialogCommand { get; private set; }
+
 		#endregion Public Properties
 
 		#region Public Constructors
@@ -72,17 +76,20 @@ namespace FileExplorer.ViewModels
 		{
 		}
 
-		public FolderPageViewModel(IFileProvider fileProvider, INavigationService navigationService, IServiceProvider serviceProvider, UndoRedoManager undoRedoManager, FileDropHandler fileDropHandler, FileDragHandler fileDragHandler)
+		public FolderPageViewModel(IFileProvider fileProvider, INavigationService navigationService, IServiceProvider serviceProvider, IDialogService dialogService, UndoRedoManager undoRedoManager, FileDropHandler fileDropHandler, FileDragHandler fileDragHandler, ShowRenameDialogCommand showRenameDialogCommand)
 		{
 			this.fileProvider = fileProvider;
 			this.navigationService = navigationService;
 			this.serviceProvider = serviceProvider;
+			this.dialogService = dialogService;
 			this.undoRedoManager = undoRedoManager;
 
 			// TODO: seperate drop handler from folderpageviewmodel?
 			fileDropHandler.FolderPageVM = this;
 			FileDropHandler = fileDropHandler;
 			FileDragHandler = fileDragHandler;
+
+			ShowRenameDialogCommand = showRenameDialogCommand;
 		}
 
 		#endregion Public Constructors
