@@ -1,5 +1,7 @@
 ﻿using GongSolutions.Wpf.DragDrop;
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 
 namespace FileExplorer.ViewModels
@@ -25,25 +27,28 @@ namespace FileExplorer.ViewModels
 
 		public void Drop(IDropInfo dropInfo)
 		{
-			if (!(dropInfo.Data is DataObject data))
+			IEnumerable<string> paths;
+			if (dropInfo.Data is DataObject data &&
+				data.GetDataPresent(DataFormats.FileDrop))
 			{
-				return;
+				paths = data.GetFileDropList().OfType<string>();
 			}
-			if (!data.GetDataPresent(DataFormats.FileDrop))
+			else if (dropInfo.Data is string[] strArray)
 			{
-				return;
+				paths = strArray;
 			}
-			var paths = data.GetFileDropList();
-			foreach (var path in paths)
-			{   // if drop to a folder
-				if (dropInfo.TargetItem is ListFolderItemViewModel targetFolderVM)
-				{   // move file to the target folder
-					FolderPageVM.MoveFile(path, targetFolderVM.Path);
-				}
-				else // if drop to empty area or file item
-				{   // move file to the current folder
-					FolderPageVM.MoveFile(path, FolderPageVM.Path);
-				}
+			else
+			{
+				throw new InvalidOperationException();
+			}
+			// if drop to a folder
+			if (dropInfo.TargetItem is ListFolderItemViewModel targetFolderVM)
+			{   // move file to the target folder
+				FolderPageVM.MoveFile(paths, targetFolderVM.Path);
+			}
+			else // if drop to empty area or file item
+			{   // move file to the current folder
+				FolderPageVM.MoveFile(paths, FolderPageVM.Path);
 			}
 		}
 

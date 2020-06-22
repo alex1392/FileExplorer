@@ -5,8 +5,10 @@ using GongSolutions.Wpf.DragDrop;
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 
 namespace FileExplorer.ViewModels
 {
@@ -77,6 +79,7 @@ namespace FileExplorer.ViewModels
 			this.serviceProvider = serviceProvider;
 			this.undoRedoManager = undoRedoManager;
 
+			// TODO: seperate drop handler from folderpageviewmodel?
 			fileDropHandler.FolderPageVM = this;
 			FileDropHandler = fileDropHandler;
 			FileDragHandler = fileDragHandler;
@@ -86,10 +89,10 @@ namespace FileExplorer.ViewModels
 
 		#region Public Methods
 
-		public void MoveFile(string sourcePath, string destPath)
+		public void MoveFile(IEnumerable<string> sourcePath, string destPath)
 		{
-			var command = serviceProvider.GetService<MoveFileCommand>();
-			command.SourcePath = sourcePath;
+			var command = serviceProvider.GetService<CutPasteCommand>();
+			command.SourcePaths = sourcePath.ToList();
 			command.DestPath = destPath;
 			undoRedoManager.Execute(command);
 		}

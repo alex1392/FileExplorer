@@ -165,6 +165,19 @@ namespace FileExplorer.ViewModels
 			undoRedoManager.Execute(command);
 			return command.IsExecutionSuccessful;
 		}
+		public void New(string path)
+		{
+			var command = serviceProvider.GetService<CreateCommand>();
+			command.Path = path;
+			undoRedoManager.Execute(command);
+		}
+
+		public void Delete(List<string> paths)
+		{
+			var command = serviceProvider.GetService<DeleteCommand>();
+			command.Paths = paths;
+			undoRedoManager.Execute(command);
+		}
 
 		public bool CanRedo(object parameter) => undoRedoManager.RedoCommand.CanExecute(parameter);
 
@@ -188,6 +201,7 @@ namespace FileExplorer.ViewModels
 		{
 			navigationService.Navigate("FolderPage", item.Path);
 		}
+
 
 		public void Navigate(string path)
 		{
@@ -224,6 +238,8 @@ namespace FileExplorer.ViewModels
 				});
 			}
 		}
+
+		
 
 		private void NavigationService_NavigatedPageLoaded(object sender, EventArgs e)
 		{

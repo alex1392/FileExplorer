@@ -2,8 +2,9 @@
 
 using FileExplorer.Models;
 using FileExplorer.ViewModels;
-
+using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -78,7 +79,8 @@ namespace FileExplorer.Views
 
 		private void HistoryItem_Selected(object sender, RoutedEventArgs e)
 		{
-			if (!(sender is ComboBoxItem comboBoxItem) || !(comboBoxItem.DataContext is JournalEntry entry))
+			if (!(sender is ComboBoxItem comboBoxItem) ||
+				!(comboBoxItem.DataContext is JournalEntry entry))
 			{
 				return;
 			}
@@ -189,8 +191,13 @@ namespace FileExplorer.Views
 		{
 			Clipboard.Clear();
 			var paths = new StringCollection();
-			paths.AddRange(CurrentView.SelectedItems.OfType<ListItemViewModel>().Select(vm => vm.Path).ToArray());
+			paths.AddRange(GetSelectedPaths().ToArray());
 			Clipboard.SetFileDropList(paths);
+		}
+
+		private IEnumerable<string> GetSelectedPaths()
+		{
+			return CurrentView.SelectedItems.OfType<ListItemViewModel>().Select(vm => vm.Path);
 		}
 
 		private void Copy(object sender, ExecutedRoutedEventArgs e)
@@ -228,6 +235,41 @@ namespace FileExplorer.Views
 		private void CanPaste(object sender, CanExecuteRoutedEventArgs e)
 		{
 			e.CanExecute = Clipboard.GetFileDropList().Count > 0;
+		}
+
+		private void New(object sender, ExecutedRoutedEventArgs e)
+		{
+			var ext = e.Parameter?.ToString();
+			var fileNameInputWindow = new FileNameInputWindow
+			{
+				Owner = this
+			};
+			if (fileNameInputWindow.ShowDialog() ?? false)
+			{
+				var filename = fileNameInputWindow.fileNameTextBox.Text;
+				// remove extension
+				var extensionIndex = filename.IndexOf('.');
+				if (extensionIndex > 0)
+				{
+					filename = filename.Remove(extensionIndex);
+				}
+				vm.New(Path.Combine(vm.CurrentPath, filename + ext));
+			}
+		}
+
+		private void CanNew(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = true;
+		}
+
+		private void Delete(object sender, ExecutedRoutedEventArgs e)
+		{
+			vm.Delete(GetSelectedPaths().ToList());
+		}
+
+		private void CanDelete(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = true;
 		}
 	}
 }

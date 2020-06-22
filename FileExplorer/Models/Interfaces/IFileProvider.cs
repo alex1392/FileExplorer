@@ -32,9 +32,12 @@ namespace FileExplorer.Models
 
 		bool IsFileExists(string path);
 
-		bool Move(string sourcePath, string destPath);
+		string Move(string sourcePath, string destPath);
 
 		string GetFileName(string path);
+		string Create(string path);
+		bool DeleteToBin(string path);
+		bool RestoreFromBin(string path);
 
 		#endregion Public Methods
 	}

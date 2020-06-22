@@ -6,9 +6,9 @@ namespace FileExplorer.Models
 {
 	public class CopyPasteCommand : PasteCommand
 	{
+		private readonly List<string> CopyedPaths = new List<string>();
 		#region Public Properties
 
-		public List<string> CopyedPaths { get; set; } = new List<string>();
 
 		#endregion Public Properties
 
@@ -82,10 +82,10 @@ namespace FileExplorer.Models
 			// remove unsuccessful paths
 			foreach (var path in UnSuccessPaths)
 			{
-				SourcePaths.Remove(path);
+				CopyedPaths.Remove(path);
 			}
 			// if there's no any path successfully moved, the execution is not successful
-			IsUndoSuccessful = SourcePaths.Count > 0;
+			IsUndoSuccessful = CopyedPaths.Count > 0;
 			// refresh page if successful
 			if (IsUndoSuccessful)
 			{

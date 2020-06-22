@@ -1,0 +1,62 @@
+﻿<Window x:Class="FileExplorer.Views.FileNameInputWindow"
+				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+				xmlns:local="clr-namespace:FileExplorer.Views"
+				mc:Ignorable="d"
+				WindowStyle="None"
+				WindowStartupLocation="CenterOwner"
+				ResizeMode="NoResize"
+				BorderBrush="Black"
+				BorderThickness="1"
+				Height="200"
+				Width="400">
+	<Grid>
+		<TextBlock Text="Enter Your File Name:"
+							 Height="40"
+							 VerticalAlignment="Top"
+							 Margin="10,10,25.333,0"
+							 FontSize="20"
+							 FontWeight="Bold" />
+		<Grid Margin="25,56,25.333,84.667">
+			<TextBox Name="fileNameTextBox"
+							 Height="30"
+							 VerticalContentAlignment="Center" />
+			<TextBlock Name="watermarkTextBlock" 
+								 Text="Please type your file name without extension"
+								 VerticalAlignment="Center"
+								 IsHitTestVisible="False"
+								 Foreground="Gray"
+								 Padding="3">
+				<TextBlock.Style>
+					<Style TargetType="TextBlock">
+						<Setter Property="Visibility"
+										Value="Collapsed" />
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding Text, ElementName=fileNameTextBox}"
+													 Value="">
+								<Setter Property="Visibility"
+												Value="Visible" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</TextBlock.Style>
+			</TextBlock>
+		</Grid>
+		<Button Width="165"
+						Height="30"
+						Content="OK"
+						HorizontalAlignment="Left"
+						Margin="25,0,0,34.333"
+						VerticalAlignment="Bottom"
+						d:LayoutOverrides="Height"
+						Click="OKButton_Click"/>
+		<Button Height="30"
+						Content="Cancel"
+						Margin="203,0,25.333,34.333"
+						VerticalAlignment="Bottom"
+						d:LayoutOverrides="Height"
+						Click="CancelButton_Click"/>
+	</Grid>
+</Window>

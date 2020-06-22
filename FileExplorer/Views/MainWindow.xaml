@@ -19,22 +19,33 @@
 								 Title="MainWindow"
 								 Height="450"
 								 Width="800">
+	<Window.InputBindings>
+		<KeyBinding Command="{x:Static ApplicationCommands.Delete}"
+								Key="Delete" />
+		
+	</Window.InputBindings>
 	<Window.CommandBindings>
-		<CommandBinding Command="ApplicationCommands.Undo"
+		<CommandBinding Command="{x:Static ApplicationCommands.Undo}"
 										Executed="Undo"
 										CanExecute="CanUndo" />
-		<CommandBinding Command="ApplicationCommands.Redo"
+		<CommandBinding Command="{x:Static ApplicationCommands.Redo}"
 										Executed="Redo"
 										CanExecute="CanRedo" />
-		<CommandBinding Command="ApplicationCommands.Copy"
+		<CommandBinding Command="{x:Static ApplicationCommands.Copy}"
 										Executed="Copy"
 										CanExecute="CanCopy" />
-		<CommandBinding Command="ApplicationCommands.Cut"
+		<CommandBinding Command="{x:Static ApplicationCommands.Cut}"
 										Executed="Cut"
 										CanExecute="CanCut" />
-		<CommandBinding Command="ApplicationCommands.Paste"
+		<CommandBinding Command="{x:Static ApplicationCommands.Paste}"
 										Executed="Paste"
 										CanExecute="CanPaste" />
+		<CommandBinding Command="{x:Static ApplicationCommands.New}"
+										Executed="New"
+										CanExecute="CanNew" />
+		<CommandBinding Command="{x:Static ApplicationCommands.Delete}"
+										Executed="Delete"
+										CanExecute="CanDelete" />
 	</Window.CommandBindings>
 	<DockPanel>
 		<DockPanel Name="MenuBar"
@@ -207,6 +218,7 @@
 					<!--TODO: modify scroll bar-->
 					<ListBox Name="PathListBox"
 									 ItemsSource="{Binding PathItems}"
+									 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
 									 Height="32"
 									 MouseDown="PathListBox_MouseDown">
 						<ListBox.ItemTemplate>

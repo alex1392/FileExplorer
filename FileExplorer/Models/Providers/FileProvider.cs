@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.FileIO;
+using Shell32;
+using System;
 using System.IO;
 
 namespace FileExplorer.Models
@@ -45,32 +47,64 @@ namespace FileExplorer.Models
 		#region Public Methods
 
 		/// <summary>
+		/// Create file or folder.
+		/// </summary>
+		/// <param name="path">The path of file or folder to be created.</param>
+		/// <returns>The path of created file or folder, returns null if this operation failed. </returns>
+		public string Create(string path)
+		{
+			try
+			{
+				if (IsDirectory(path))
+				{
+					if (Directory.Exists(path))
+					{
+						path = RenamePath(path);
+					}
+					Directory.CreateDirectory(path);
+				}
+				else
+				{
+					if (File.Exists(path))
+					{
+						path = RenamePath(path);
+					}
+					File.Create(path);
+				}
+				return path;
+			}
+			catch (Exception ex)
+			{
+				dialogService.ShowMessage(ex.Message);
+			}
+			return null;
+		}
+
+
+		/// <summary>
 		/// Move file or folder.
 		/// </summary>
 		/// <param name="sourcePath">Path of file or folder to be moved.</param>
-		/// <param name="destPath">Path of the target folder.</param>
+		/// <param name="destPath">Destination path.</param>
 		/// <returns>Return bool indicates of this operation is successful.</returns>
-		public bool Move(string sourcePath, string destPath)
+		public string Move(string sourcePath, string destPath)
 		{
-			if (sourcePath == destPath)
+			if (!File.Exists(sourcePath) && 
+				!Directory.Exists(sourcePath))
 			{
-				return false;
+				throw new PathNotFoundException();
 			}
 			try
 			{
-				var name = Path.GetFileName(sourcePath);
-				Directory.Move(sourcePath, Path.Combine(destPath, name));
-				return true;
+				Directory.Move(sourcePath, destPath);
+				return destPath;
 			}
-			catch (UnauthorizedAccessException ex)
+			catch (Exception ex)
 			{
 				dialogService.ShowMessage(ex.Message);
 			}
-			catch (IOException ex)
-			{
-				dialogService.ShowMessage(ex.Message);
-			}
-			return false;
+			return null;
+			
 		}
 
 		/// <summary>
@@ -94,19 +128,6 @@ namespace FileExplorer.Models
 				throw new PathNotFoundException();
 			}
 
-			static string RenamePath(string path)
-			{
-				var i = 2;
-				var ext = Path.GetExtension(path);
-				var dir = Path.GetDirectoryName(path);
-				var name = Path.GetFileNameWithoutExtension(path);
-				while (File.Exists(path) || Directory.Exists(path))
-				{
-					path = Path.Combine(dir, $"{name} ({i}){ext}");
-					i++;
-				}
-				return path;
-			}
 
 			string CopyFolder(string sourcePath, string destPath)
 			{
@@ -118,12 +139,7 @@ namespace FileExplorer.Models
 				{
 					Directory.CreateDirectory(destPath);
 				}
-				catch (UnauthorizedAccessException ex)
-				{
-					dialogService.ShowMessage(ex.Message);
-					return null;
-				}
-				catch (IOException ex)
+				catch (Exception ex)
 				{
 					dialogService.ShowMessage(ex.Message);
 					return null;
@@ -156,11 +172,7 @@ namespace FileExplorer.Models
 					File.Copy(sourcePath, destPath);
 					return destPath;
 				}
-				catch (UnauthorizedAccessException ex)
-				{
-					dialogService.ShowMessage(ex.Message);
-				}
-				catch (IOException ex)
+				catch (Exception ex)
 				{
 					dialogService.ShowMessage(ex.Message);
 				}
@@ -187,15 +199,97 @@ namespace FileExplorer.Models
 				}
 				return true;
 			}
-			catch (UnauthorizedAccessException ex)
-			{
-				dialogService.ShowMessage(ex.Message);
-			}
-			catch (IOException ex)
+			catch (Exception ex)
 			{
 				dialogService.ShowMessage(ex.Message);
 			}
 			return false;
+		}
+
+		#region Delete/Restore with recycle bin
+
+		/// <summary>
+		/// Move file or folder to recycle bin.
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns></returns>
+		public bool DeleteToBin(string path)
+		{
+			try
+			{
+				if (IsDirectory(path))
+				{
+					FileSystem.DeleteDirectory(path, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin, UICancelOption.DoNothing);
+				}
+				else
+				{
+					FileSystem.DeleteFile(path, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+				}
+				return true;
+			}
+			catch (Exception ex)
+			{
+				dialogService.ShowMessage(ex.Message);
+			}
+			return false;
+		}
+
+		private Shell Shl;
+		private const long ssfBITBUCKET = 10;
+		private const int recycleNAME = 0;
+		private const int recyclePATH = 1;
+		public bool RestoreFromBin(string path)
+		{
+			Shl = new Shell();
+			var Recycler = Shl.NameSpace(10);
+			var recycledItems = Recycler.Items();
+			for (var i = 0; i < recycledItems.Count; i++)
+			{
+				var FI = recycledItems.Item(i);
+				var FileName = Recycler.GetDetailsOf(FI, 0);
+				if (Path.GetExtension(FileName) == "") 
+					FileName += Path.GetExtension(FI.Path);
+				//Necessary for systems with hidden file extensions.
+				var FilePath = Recycler.GetDetailsOf(FI, 1);
+				if (path == Path.Combine(FilePath, FileName))
+				{
+					// TODO: localisation??
+					if (DoVerb(FI, "ESTORE") || DoVerb(FI, "還原(&E)"))
+						return true;
+				}
+			}
+			return false;
+
+			static bool DoVerb(FolderItem Item, string Verb)
+			{
+				foreach (FolderItemVerb FIVerb in Item.Verbs())
+				{
+					if (FIVerb.Name.ToUpper().Contains(Verb.ToUpper()))
+					{
+						FIVerb.DoIt();
+						return true;
+					}
+				}
+				return false;
+			}
+		}
+		#endregion
+		private static bool IsDirectory(string path)
+		{
+			return string.IsNullOrEmpty(Path.GetExtension(path));
+		}
+		private string RenamePath(string path)
+		{
+			var i = 2;
+			var ext = Path.GetExtension(path);
+			var dir = Path.GetDirectoryName(path);
+			var name = Path.GetFileNameWithoutExtension(path);
+			while (File.Exists(path) || Directory.Exists(path))
+			{
+				path = Path.Combine(dir, $"{name} ({i}){ext}");
+				i++;
+			}
+			return path;
 		}
 
 		public (string[], string[]) GetChildren(string path)

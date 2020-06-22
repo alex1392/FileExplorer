@@ -70,10 +70,11 @@ namespace FileExplorer
 			serviceCollection.AddTransient<TreePageItem>();
 			serviceCollection.AddSingleton<FileDropHandler>();
 			serviceCollection.AddSingleton<FileDragHandler>();
-			serviceCollection.AddTransient<MoveFileCommand>();
 			serviceCollection.AddSingleton<UndoRedoManager>(sp => new UndoRedoManager(capacity: 10));
 			serviceCollection.AddTransient<CutPasteCommand>();
 			serviceCollection.AddTransient<CopyPasteCommand>();
+			serviceCollection.AddTransient<CreateCommand>();
+			serviceCollection.AddTransient<DeleteCommand>();
 		}
 
 		#endregion Private Methods

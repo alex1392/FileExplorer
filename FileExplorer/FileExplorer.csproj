@@ -56,6 +56,7 @@
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.3.1.5\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.19\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
@@ -90,6 +91,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DataVirtualization\AsyncVirtualizingCollection.cs" />
+    <Compile Include="Models\Commands\CreateCommand.cs" />
     <Compile Include="Models\UndoRedoManager.cs" />
     <Compile Include="Models\Commands\RelayCommand.cs" />
     <Compile Include="Models\Interfaces\IDialogService.cs" />
@@ -102,6 +104,7 @@
     <Compile Include="Utilities\GridViewSort.cs" />
     <Compile Include="Models\Commands\CopyPasteCommand.cs" />
     <Compile Include="Models\Commands\CutPasteCommand.cs" />
+    <Compile Include="Models\Commands\DeleteCommand.cs" />
     <Compile Include="ViewModels\FileDragHandler.cs" />
     <Compile Include="ViewModels\FolderPageViewModel.cs" />
     <Compile Include="Models\Interfaces\INavigationService.cs" />
@@ -116,7 +119,6 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Models\Commands\RefreshCommand.cs" />
     <Compile Include="ViewModels\FileDropHandler.cs" />
-    <Compile Include="Models\Commands\MoveFileCommand.cs" />
     <Compile Include="Models\Commands\PasteCommand.cs" />
     <Compile Include="Views\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\ViewTypeConverter.cs" />
@@ -129,6 +131,9 @@
     <Compile Include="DataVirtualization\VirtualizingCollection.cs" />
     <Compile Include="Models\Interfaces\ISystemFolderProvider.cs" />
     <Compile Include="Models\Providers\SystemFolderProvider.cs" />
+    <Compile Include="Views\FileNameInputWindow.xaml.cs">
+      <DependentUpon>FileNameInputWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Services\DispatcherService.cs" />
     <Compile Include="Views\Services\DialogService.cs" />
     <Compile Include="Models\Interfaces\IDispatcherService.cs" />
@@ -141,6 +146,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\Resources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FileNameInputWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -241,6 +250,17 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Home.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Shell32">
+      <Guid>{50A7E9B0-70EF-11D1-B75A-00A0C90564FE}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

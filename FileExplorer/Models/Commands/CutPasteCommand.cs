@@ -6,19 +6,23 @@ namespace FileExplorer.Models
 {
 	public class CutPasteCommand : PasteCommand
 	{
-		#region Public Constructors
+		#region Private Fields
+
+		private readonly List<(string sourcePath, string destPath)> MovedPaths = new List<(string, string)>();
 
 		public CutPasteCommand(IFileProvider fileProvider, INavigationService navigationService) : base(fileProvider, navigationService)
 		{
 		}
 
-		#endregion Public Constructors
+		#endregion Private Fields
+
 
 		#region Public Methods
 
 		public override bool CanExecute(object parameter = null)
 		{
-			return SourcePaths != null && !string.IsNullOrEmpty(DestPath);
+			return SourcePaths != null &&
+				!string.IsNullOrEmpty(DestPath);
 		}
 
 		public override void Execute(object parameter = null)
@@ -27,18 +31,24 @@ namespace FileExplorer.Models
 			{
 				throw new InvalidOperationException();
 			}
-			var UnSuccessPaths = new List<string>();
-			foreach (var path in SourcePaths)
+
+			var unsuccessPaths = new List<string>();
+			foreach (var sourcePath in SourcePaths)
 			{
-				var isSuccessful = fileProvider.Move(path, DestPath);
-				// record unsuccessful paths
-				if (!isSuccessful)
+				var filename = fileProvider.GetFileName(sourcePath);
+				var destPath = fileProvider.Move(sourcePath, Path.Combine(DestPath, filename));
+				// record paths
+				if (string.IsNullOrEmpty(destPath))
 				{
-					UnSuccessPaths.Add(path);
+					unsuccessPaths.Add(sourcePath);
+				}
+				else
+				{
+					MovedPaths.Add((sourcePath, destPath));
 				}
 			}
 			// remove unsuccessful paths
-			foreach (var path in UnSuccessPaths)
+			foreach (var path in unsuccessPaths)
 			{
 				SourcePaths.Remove(path);
 			}
@@ -57,25 +67,23 @@ namespace FileExplorer.Models
 			{
 				throw new InvalidOperationException();
 			}
-			var UnSuccessPaths = new List<string>();
-			foreach (var path in SourcePaths)
+			var unsuccessPaths = new List<(string, string)>();
+			foreach (var (sourcePath, destPath) in MovedPaths)
 			{
-				var filename = fileProvider.GetFileName(path);
-				var sourceFolder = fileProvider.GetParent(path);
-				var isSuccessful = fileProvider.Move(Path.Combine(DestPath, filename), sourceFolder);
+				var result = fileProvider.Move(destPath, sourcePath);
 				// record unsuccessful paths
-				if (!isSuccessful)
+				if (result == null)
 				{
-					UnSuccessPaths.Add(path);
+					unsuccessPaths.Add((sourcePath, destPath));
 				}
 			}
 			// remove unsuccessful paths
-			foreach (var path in UnSuccessPaths)
+			foreach (var path in unsuccessPaths)
 			{
-				SourcePaths.Remove(path);
+				MovedPaths.Remove(path);
 			}
 			// if there's no any path successfully moved, the execution is not successful
-			IsUndoSuccessful = SourcePaths.Count > 0;
+			IsUndoSuccessful = MovedPaths.Count > 0;
 			// refresh page if successful
 			if (IsUndoSuccessful)
 			{
