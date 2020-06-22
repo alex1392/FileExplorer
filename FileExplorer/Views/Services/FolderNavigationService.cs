@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using System;
 using System.Collections;
+using System.IO;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 
@@ -176,7 +177,7 @@ namespace FileExplorer.Views.Services
 				return null;
 			}
 			var path = folderPage.Path;
-			return fileProvider.GetParent(path);
+			return Path.GetDirectoryName(path);
 		}
 
 		private void InternalNavigationService_Navigated(object sender, NavigationEventArgs e)

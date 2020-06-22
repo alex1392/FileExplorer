@@ -36,7 +36,7 @@ namespace FileExplorer.Models
 			var unsuccessPaths = new List<string>();
 			foreach (var path in SourcePaths)
 			{
-				var filename = fileProvider.GetFileName(path);
+				var filename = Path.GetFileName(path);
 				var result = fileProvider.Copy(path, Path.Combine(DestPath, filename));
 				// record paths
 				if (string.IsNullOrEmpty(result))

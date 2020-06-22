@@ -352,10 +352,6 @@ namespace FileExplorer.Models
 			}
 		}
 
-		public string GetParent(string path)
-		{
-			return Path.GetDirectoryName(path);
-		}
 
 		public bool IsDirectoryExists(string path)
 		{
@@ -365,16 +361,6 @@ namespace FileExplorer.Models
 		public bool IsFileExists(string path)
 		{
 			return File.Exists(path);
-		}
-
-		public string GetFileNameWithoutExtension(string path)
-		{
-			return Path.GetFileNameWithoutExtension(path);
-		}
-
-		public string GetFileName(string path)
-		{
-			return Path.GetFileName(path);
 		}
 
 		#endregion Public Methods

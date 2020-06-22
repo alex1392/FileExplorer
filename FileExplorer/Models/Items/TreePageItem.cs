@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace FileExplorer.Models
 {
@@ -7,7 +8,6 @@ namespace FileExplorer.Models
 	{
 		#region Private Fields
 
-		private readonly IFileProvider fileProvider;
 		private Uri uri;
 
 		#endregion Private Fields
@@ -32,7 +32,7 @@ namespace FileExplorer.Models
 					return;
 				}
 				uri = value;
-				Name = fileProvider.GetFileNameWithoutExtension(uri.ToString());
+				Name = Path.GetFileNameWithoutExtension(uri.ToString());
 			}
 		}
 
@@ -40,9 +40,8 @@ namespace FileExplorer.Models
 
 		#region Public Constructors
 
-		public TreePageItem(IFileProvider fileProvider)
+		public TreePageItem()
 		{
-			this.fileProvider = fileProvider;
 		}
 
 		#endregion Public Constructors
