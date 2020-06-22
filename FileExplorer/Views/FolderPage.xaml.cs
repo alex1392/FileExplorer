@@ -4,6 +4,7 @@ using FileExplorer.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -202,13 +203,21 @@ namespace FileExplorer.Views
 
 		private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
-			if (!((sender as ListViewItem)?.DataContext is ListFolderItemViewModel folderVM))
+			if (!(sender is ListViewItem listViewItem))
 			{
 				return;
 			}
 			if (e.ChangedButton == MouseButton.Left)
 			{
-				vm.Navigate(folderVM.Item);
+				if (listViewItem.DataContext is ListFolderItemViewModel folderVM)
+				{
+					vm.Navigate(folderVM.Item);
+				}
+				else if (listViewItem.DataContext is ListFileItemViewModel fileVM)
+				{
+					// open file with default application
+					Process.Start(fileVM.Path);
+				}
 			}
 		}
 
