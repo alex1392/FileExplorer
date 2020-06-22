@@ -85,7 +85,7 @@ namespace FileExplorer.ViewModels
 		{
 		}
 
-		public MainWindowViewModel(ISystemFolderProvider systemFolderProvider, INavigationService navigationService, IServiceProvider serviceProvider, IFileProvider fileProvider, UndoRedoManager undoRedoManager)
+		public MainWindowViewModel(ISystemFolderProvider systemFolderProvider, INavigationService navigationService, IServiceProvider serviceProvider, IFileProvider fileProvider, UndoRedoManager undoRedoManager, GoBackCommand goBackCommand, GoForwardCommand goForwardCommand, GoUpCommand goUpCommand, RefreshCommand refreshCommand, GoHomeCommand goHomeCommand)
 		{
 			this.systemFolderProvider = systemFolderProvider;
 			this.navigationService = navigationService;
@@ -97,7 +97,7 @@ namespace FileExplorer.ViewModels
 
 			SetupHomePage();
 			SetupTreeItems();
-			SetupCommands(navigationService);
+			SetupCommands();
 
 			void SetupHomePage()
 			{
@@ -138,13 +138,14 @@ namespace FileExplorer.ViewModels
 					TreeItems.Add(item);
 				}
 			}
-			void SetupCommands(INavigationService navigationService)
+			void SetupCommands()
 			{
-				GoBackCommand = new GoBackCommand(navigationService);
-				GoForwardCommand = new GoForwardCommand(navigationService);
-				RefreshCommand = new RefreshCommand(navigationService);
-				GoUpCommand = new GoUpCommand(navigationService);
-				GoHomeCommand = new GoHomeCommand(navigationService, HomePage);
+				GoBackCommand = goBackCommand;
+				GoForwardCommand = goForwardCommand;
+				RefreshCommand = refreshCommand;
+				GoUpCommand = goUpCommand;
+				goHomeCommand.HomePage = HomePage;
+				GoHomeCommand = goHomeCommand;
 			}
 		}
 

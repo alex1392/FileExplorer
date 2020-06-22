@@ -75,6 +75,13 @@ namespace FileExplorer
 			serviceCollection.AddTransient<CopyPasteCommand>();
 			serviceCollection.AddTransient<CreateCommand>();
 			serviceCollection.AddTransient<DeleteCommand>();
+			
+			serviceCollection.AddSingleton<GoBackCommand>();
+			serviceCollection.AddSingleton<GoForwardCommand>();
+			serviceCollection.AddSingleton<RefreshCommand>();
+			serviceCollection.AddSingleton<GoUpCommand>();
+			serviceCollection.AddSingleton<GoHomeCommand>();
+
 		}
 
 		#endregion Private Methods

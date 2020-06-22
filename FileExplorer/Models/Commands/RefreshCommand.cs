@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace FileExplorer.Models
 {
-	internal class RefreshCommand : ICommand
+	public class RefreshCommand : ICommand
 	{
 		#region Private Fields
 

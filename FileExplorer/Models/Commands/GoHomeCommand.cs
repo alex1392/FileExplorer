@@ -8,7 +8,8 @@ namespace FileExplorer.Models
 		#region Private Fields
 
 		private readonly INavigationService navigationService;
-		private readonly TreePageItem homePage;
+
+		public TreePageItem HomePage { get; set; }
 
 		#endregion Private Fields
 
@@ -20,10 +21,9 @@ namespace FileExplorer.Models
 
 		#region Public Constructors
 
-		public GoHomeCommand(INavigationService navigationService, TreePageItem homePage)
+		public GoHomeCommand(INavigationService navigationService)
 		{
 			this.navigationService = navigationService;
-			this.homePage = homePage;
 		}
 
 		#endregion Public Constructors
@@ -32,12 +32,12 @@ namespace FileExplorer.Models
 
 		public bool CanExecute(object parameter)
 		{
-			return true;
+			return HomePage != null;
 		}
 
 		public void Execute(object parameter)
 		{
-			navigationService.Navigate(homePage.Uri);
+			navigationService.Navigate(HomePage.Uri);
 		}
 
 		#endregion Public Methods

@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace FileExplorer.Models
 {
-	internal class GoUpCommand : ICommand
+	public class GoUpCommand : ICommand
 	{
 		#region Private Fields
 
