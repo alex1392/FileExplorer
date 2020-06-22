@@ -51,6 +51,7 @@ namespace FileExplorer
 			serviceCollection.AddSingleton<IDialogService, DialogService>();
 			serviceCollection.AddSingleton<ITypeDescriptionProvider, TypeDescriptionProvider>();
 			serviceCollection.AddSingleton<IDispatcherService, DispatcherService>();
+			serviceCollection.AddTransient<IFileWatcherService, FileWatcherService>();
 
 			serviceCollection.AddSingleton<MainWindowViewModel>();
 			serviceCollection.AddSingleton<MainWindow>();

@@ -17,7 +17,9 @@ namespace FileExplorer.Views.Converters
 		#endregion Private Fields
 
 		#region Public Methods
-
+		/// <summary>
+		/// TODO: cannot use priority binding??
+		/// </summary>
 		public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 		{
 			return values[0] != DependencyProperty.UnsetValue 

@@ -141,10 +141,12 @@
     <Compile Include="Views\Services\DispatcherService.cs" />
     <Compile Include="Views\Services\DialogService.cs" />
     <Compile Include="Models\Interfaces\IDispatcherService.cs" />
+    <Compile Include="Views\Services\FileWatcherService.cs" />
     <Compile Include="Views\Services\FolderNavigationService.cs" />
     <Compile Include="Views\FolderPage.xaml.cs">
       <DependentUpon>FolderPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Interfaces\IFileWatcherService.cs" />
     <Page Include="Resources\FontAwesomeResources.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

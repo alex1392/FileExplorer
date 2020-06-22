@@ -158,6 +158,7 @@ namespace FileExplorer.Views.Services
 
 		public void Refresh()
 		{
+
 			if (Content is FolderPage folderPage &&
 				folderPage.DataContext is FolderPageViewModel vm)
 			{

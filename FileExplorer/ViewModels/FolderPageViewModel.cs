@@ -21,6 +21,7 @@ namespace FileExplorer.ViewModels
 		private readonly IServiceProvider serviceProvider;
 		private readonly IDialogService dialogService;
 		private readonly UndoRedoManager undoRedoManager;
+		private readonly IFileWatcherService fileWatcher;
 		private string path;
 
 		#endregion Private Fields
@@ -52,6 +53,9 @@ namespace FileExplorer.ViewModels
 
 				SetupListItems();
 
+				fileWatcher.Path = path;
+				fileWatcher.Start();
+
 				var info = fileProvider.GetFileSystemInfo(path);
 				Title = info.Name;
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Title)));
@@ -75,12 +79,13 @@ namespace FileExplorer.ViewModels
 		{
 		}
 
-		public FolderPageViewModel(IFileProvider fileProvider, INavigationService navigationService, IServiceProvider serviceProvider, IDialogService dialogService, UndoRedoManager undoRedoManager, FileDropHandler fileDropHandler, FileDragHandler fileDragHandler, RenameDialogCommand showRenameDialogCommand)
+		public FolderPageViewModel(IFileProvider fileProvider, INavigationService navigationService, IServiceProvider serviceProvider, IDialogService dialogService, IFileWatcherService fileWatcher, UndoRedoManager undoRedoManager, FileDropHandler fileDropHandler, FileDragHandler fileDragHandler, RenameDialogCommand showRenameDialogCommand)
 		{
 			this.fileProvider = fileProvider;
 			this.navigationService = navigationService;
 			this.serviceProvider = serviceProvider;
 			this.dialogService = dialogService;
+			this.fileWatcher = fileWatcher;
 			this.undoRedoManager = undoRedoManager;
 
 			// TODO: seperate drop handler from folderpageviewmodel?
