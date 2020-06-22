@@ -13,6 +13,7 @@
 								 xmlns:cycConverter="clr-namespace:Cyc.Mvvm.Converters;assembly=Cyc.Mvvm"
 								 xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 								 xmlns:util="clr-namespace:FileExplorer.Utilities"
+								 xmlns:navi="clr-namespace:System.Windows.Navigation;assembly=presentationframework"
 								 mc:Ignorable="d"
 								 d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel, IsDesignTimeCreatable=True}"
 								 Icon="/FileExplorer;component/Resources/Computer.ico"
@@ -22,7 +23,7 @@
 	<Window.InputBindings>
 		<KeyBinding Command="{x:Static ApplicationCommands.Delete}"
 								Key="Delete" />
-		
+
 	</Window.InputBindings>
 	<Window.CommandBindings>
 		<CommandBinding Command="{x:Static ApplicationCommands.Undo}"
@@ -84,19 +85,46 @@
 										Width="{Binding ElementName=MenuBar, Path=Height, Converter={cycConverter:MathConverter}, ConverterParameter=x*2+18}"
 										Height="{Binding ElementName=MenuBar, Path=Height}"
 										IsEditable="False"
-										ItemsSource="{Binding NavigationHistroy}"
-										SelectedItem="{Binding CurrentContent, Mode=OneWay}">
-						<ComboBox.ItemTemplate>
-							<DataTemplate>
-								<TextBlock Text="{Binding .,Converter={converter:NavigationHistroyConverter}}" />
-							</DataTemplate>
-						</ComboBox.ItemTemplate>
+										SelectedItem="{Binding RelativeSource={RelativeSource Self}, Path=Items, Mode=OneWay, Converter={converter:SelectedItemConverter}}"
+										PreviewMouseDown="NavigationComboBox_PreviewMouseDown">
+						<ComboBox.Resources>
+							<navi:JournalEntryUnifiedViewConverter x:Key="journalConverter" />
+						</ComboBox.Resources>
+						<ComboBox.ItemsSource>
+							<MultiBinding Converter="{StaticResource journalConverter}">
+								<Binding ElementName="FolderFrame"
+												 Path="BackStack" />
+								<Binding ElementName="FolderFrame"
+												 Path="ForwardStack" />
+							</MultiBinding>
+						</ComboBox.ItemsSource>
 						<ComboBox.ItemContainerStyle>
 							<Style TargetType="ComboBoxItem">
-								<EventSetter Event="Selected"
-														 Handler="HistoryItem_Selected" />
+								<Setter Property="HorizontalContentAlignment"
+												Value="Stretch" />
 							</Style>
 						</ComboBox.ItemContainerStyle>
+						<ComboBox.ItemTemplate>
+							<DataTemplate>
+								<MenuItem Command="{x:Static NavigationCommands.NavigateJournal}"
+													CommandTarget="{Binding ElementName=FolderFrame}"
+													CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+									<MenuItem.Template>
+										<ControlTemplate TargetType="MenuItem">
+											<TextBlock>
+												<TextBlock.Text>
+													<MultiBinding Converter="{converter:NavigationHistroyConverter}">
+														<Binding Path="Name" />
+														<Binding ElementName="FolderFrame"
+																		 Path="Content.Title" />
+													</MultiBinding>
+												</TextBlock.Text>
+											</TextBlock>
+										</ControlTemplate>
+									</MenuItem.Template>
+								</MenuItem>
+							</DataTemplate>
+						</ComboBox.ItemTemplate>
 					</ComboBox>
 					<StackPanel Orientation="Horizontal"
 											Visibility="Visible">

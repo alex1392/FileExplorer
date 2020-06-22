@@ -124,6 +124,7 @@
     <Compile Include="ViewModels\FileDropHandler.cs" />
     <Compile Include="Models\Commands\PasteCommand.cs" />
     <Compile Include="Views\Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Views\Converters\SelectedItemConverter.cs" />
     <Compile Include="Views\Converters\ViewTypeConverter.cs" />
     <Compile Include="Utilities\DropDownButtonBehavior.cs" />
     <Compile Include="Views\Converters\NavigationHistroyConverter.cs" />

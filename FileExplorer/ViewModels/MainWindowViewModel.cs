@@ -33,8 +33,6 @@ namespace FileExplorer.ViewModels
 
 		#region Public Properties
 
-		public object CurrentContent => navigationService.Content;
-
 		public ICommand GoBackCommand { get; private set; }
 
 		public ICommand GoForwardCommand { get; private set; }
@@ -42,32 +40,6 @@ namespace FileExplorer.ViewModels
 		public ICommand GoUpCommand { get; private set; }
 		public ICommand GoHomeCommand { get; private set; }
 		public ICommand RefreshCommand { get; private set; }
-
-		public IEnumerable<object> NavigationHistroy
-		{
-			get
-			{
-				var list = new List<object>();
-				if (navigationService.BackStack != null)
-				{
-					foreach (var item in navigationService.BackStack)
-					{
-						list.Add(item);
-					}
-				}
-				list.Reverse();
-				list.Add(navigationService.Content);
-				if (navigationService.ForwardStack != null)
-				{
-					foreach (var item in navigationService.ForwardStack)
-					{
-						list.Add(item);
-					}
-				}
-
-				return list;
-			}
-		}
 
 		public string CurrentPath { get; private set; }
 		public IEnumerable<Item> PathItems { get; private set; }
@@ -93,7 +65,6 @@ namespace FileExplorer.ViewModels
 			this.fileProvider = fileProvider;
 			this.undoRedoManager = undoRedoManager;
 			navigationService.Navigated += NavigationService_Navigated;
-			navigationService.NavigatedPageLoaded += NavigationService_NavigatedPageLoaded;
 
 			SetupHomePage();
 			SetupTreeItems();
@@ -238,12 +209,6 @@ namespace FileExplorer.ViewModels
 					return item;
 				});
 			}
-		}
-
-		private void NavigationService_NavigatedPageLoaded(object sender, EventArgs e)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NavigationHistroy)));
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentContent)));
 		}
 
 		#endregion Private Methods

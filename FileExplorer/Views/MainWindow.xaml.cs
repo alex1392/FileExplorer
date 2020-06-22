@@ -10,7 +10,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Navigation;
 
 namespace FileExplorer.Views
 {
@@ -27,7 +26,7 @@ namespace FileExplorer.Views
 		#endregion Private Fields
 
 		private PasteType pasteType;
-		private ListView CurrentView => (vm.CurrentContent as FolderPage).ItemsListView;
+		private ListView CurrentView => (FolderFrame.Content as FolderPage)?.ItemsListView;
 
 		#region Public Constructors
 
@@ -61,26 +60,6 @@ namespace FileExplorer.Views
 				return;
 			}
 			folderPage.ChangeView(menuItem.Header.ToString());
-		}
-
-		private void HistoryItem_Selected(object sender, RoutedEventArgs e)
-		{
-			if (!(sender is ComboBoxItem comboBoxItem) ||
-				!(comboBoxItem.DataContext is JournalEntry entry))
-			{
-				return;
-			}
-			var delta = NavigationComboBox.Items.IndexOf(entry) - NavigationComboBox.Items.IndexOf(vm.CurrentContent);
-			while (delta > 0)
-			{
-				vm.GoForwardCommand.Execute(null);
-				delta--;
-			}
-			while (delta < 0)
-			{
-				vm.GoBackCommand.Execute(null);
-				delta++;
-			}
 		}
 
 		private void PathItem_Selected(object sender, RoutedEventArgs e)
@@ -151,7 +130,7 @@ namespace FileExplorer.Views
 			}
 		}
 
-		#endregion Private Methods
+		
 
 		private void Undo(object sender, ExecutedRoutedEventArgs e)
 		{
@@ -254,5 +233,16 @@ namespace FileExplorer.Views
 		{
 			e.CanExecute = true;
 		}
+
+		private void NavigationComboBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+		{
+			if (!(sender is ComboBox comboBox))
+			{
+				return;
+			}
+			var binding = comboBox.GetBindingExpression(ComboBox.SelectedItemProperty);
+			binding.UpdateTarget();
+		}
+		#endregion Private Methods
 	}
 }
