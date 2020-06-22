@@ -61,8 +61,6 @@
 								Value="True" />
 				<Setter Property="ItemContainerStyle"
 								Value="{StaticResource ItemContainerStyleKey}" />
-				<Setter Property="Visibility"
-								Value="Collapsed" />
 				<Setter Property="dd:DragDrop.IsDragSource"
 								Value="True" />
 				<Setter Property="dd:DragDrop.IsDropTarget"
@@ -75,6 +73,8 @@
 								Value="{Binding FileDragHandler}" />
 				<Setter Property="dd:DragDrop.DropHandler"
 								Value="{Binding FileDropHandler}" />
+				<EventSetter Event="SelectionChanged"
+										 Handler="ListView_SelectionChanged" />
 			</Style>
 			<GroupStyle x:Key="GroupStyleKey">
 				<GroupStyle.ContainerStyle>
@@ -112,82 +112,67 @@
 					</Style>
 				</GroupStyle.ContainerStyle>
 			</GroupStyle>
+			<GridView x:Key="ListView">
+				<GridViewColumn Header="Name"
+												Width="Auto"
+												util:GridViewSort.PropertyName="Item.Name">
+					<GridViewColumn.CellTemplate>
+						<DataTemplate DataType="{x:Type vm:ListItemViewModel}">
+							<StackPanel Orientation="Horizontal">
+								<Image Source="{Binding Icon, IsAsync=True, FallbackValue={StaticResource FileIcon}, TargetNullValue={StaticResource FileIcon}}"
+											 Width="18" />
+								<TextBlock Text="{Binding Item.Name}"
+													 VerticalAlignment="Center"
+													 Margin="3" />
+							</StackPanel>
+						</DataTemplate>
+					</GridViewColumn.CellTemplate>
+				</GridViewColumn>
+				<GridViewColumn Header="Date"
+												Width="Auto"
+												DisplayMemberBinding="{Binding Item.LastModifiedTime, Converter={converter:TimeConverter}}"
+												util:GridViewSort.PropertyName="Item.LastModifiedTime" />
+				<GridViewColumn Header="Type"
+												Width="Auto"
+												DisplayMemberBinding="{Binding Item.TypeDescription}"
+												util:GridViewSort.PropertyName="Item.TypeDescription" />
+				<GridViewColumn Header="Size"
+												Width="Auto"
+												util:GridViewSort.PropertyName="Item.Size">
+					<GridViewColumn.CellTemplate>
+						<DataTemplate DataType="{x:Type vm:ListFileItemViewModel}">
+							<TextBlock Text="{Binding Item.Size, Converter={converter:SizeConverter}}"
+												 TextAlignment="Right" />
+						</DataTemplate>
+					</GridViewColumn.CellTemplate>
+				</GridViewColumn>
+			</GridView>
+			<util:PlainView x:Key="GridView">
+				<util:PlainView.ItemTemplate>
+					<DataTemplate DataType="{x:Type vm:ListItemViewModel}">
+						<StackPanel Orientation="Vertical">
+							<Image Source="{Binding Icon}"
+										 Width="30" />
+							<TextBlock Text="{Binding Item.Name}"
+												 TextAlignment="Center"
+												 Margin="3" />
+						</StackPanel>
+					</DataTemplate>
+				</util:PlainView.ItemTemplate>
+				<util:PlainView.ItemsPanel>
+					<ItemsPanelTemplate>
+						<vwp:VirtualizingWrapPanel Orientation="Vertical"
+																			 ItemSize="100,80" />
+					</ItemsPanelTemplate>
+				</util:PlainView.ItemsPanel>
+			</util:PlainView>
+			<util:PlainView x:Key="TileView">
+				
+			</util:PlainView>
 		</Grid.Resources>
 		<ListView Name="ItemsListView"
-							util:GridViewSort.AutoSort="True">
-			<ListView.ContextMenu>
-				<ContextMenu>
-					<MenuItem Header="Delete"
-										Command="{x:Static ApplicationCommands.Delete}" />
-					<MenuItem Header="Rename"
-										Command="{Binding ShowRenameDialogCommand, Converter={converter:DebugConverter}}"
-										CommandParameter="{Binding }" />
-				</ContextMenu>
-			</ListView.ContextMenu>
-			<ListView.View>
-				<GridView>
-					<GridViewColumn Header="Name"
-													Width="Auto"
-													util:GridViewSort.PropertyName="Item.Name">
-						<GridViewColumn.CellTemplate>
-							<DataTemplate DataType="{x:Type vm:ListItemViewModel}">
-								<StackPanel Orientation="Horizontal">
-									<Image Source="{Binding Icon, IsAsync=True, FallbackValue={StaticResource FileIcon}, TargetNullValue={StaticResource FileIcon}}"
-												 Width="18" />
-									<TextBlock Text="{Binding Item.Name}"
-														 VerticalAlignment="Center"
-														 Margin="3" />
-								</StackPanel>
-							</DataTemplate>
-						</GridViewColumn.CellTemplate>
-					</GridViewColumn>
-					<GridViewColumn Header="Date"
-													Width="Auto"
-													DisplayMemberBinding="{Binding Item.LastModifiedTime, Converter={converter:TimeConverter}}"
-													util:GridViewSort.PropertyName="Item.LastModifiedTime" />
-					<GridViewColumn Header="Type"
-													Width="Auto"
-													DisplayMemberBinding="{Binding Item.TypeDescription}"
-													util:GridViewSort.PropertyName="Item.TypeDescription" />
-					<GridViewColumn Header="Size"
-													Width="Auto"
-													util:GridViewSort.PropertyName="Item.Size">
-						<GridViewColumn.CellTemplate>
-							<DataTemplate DataType="{x:Type vm:ListFileItemViewModel}">
-								<TextBlock Text="{Binding Item.Size, Converter={converter:SizeConverter}}"
-													 TextAlignment="Right" />
-							</DataTemplate>
-						</GridViewColumn.CellTemplate>
-					</GridViewColumn>
-				</GridView>
-			</ListView.View>
-			<ListView.GroupStyle>
-				<StaticResourceExtension ResourceKey="GroupStyleKey" />
-			</ListView.GroupStyle>
-		</ListView>
-		<ListView Name="ItemsGridView">
-			<ListView.ItemTemplate>
-				<DataTemplate DataType="{x:Type vm:ListItemViewModel}">
-					<StackPanel Orientation="Vertical">
-						<Image Source="{Binding Icon}"
-									 Width="30"/>
-						<TextBlock Text="{Binding Item.Name}"
-											 TextAlignment="Center"
-											 Margin="3" />
-					</StackPanel>
-				</DataTemplate>
-			</ListView.ItemTemplate>
-			<ListView.ItemsPanel>
-				<ItemsPanelTemplate>
-					<vwp:VirtualizingWrapPanel Orientation="Vertical"
-																		 ItemSize="100,80"/>
-				</ItemsPanelTemplate>
-			</ListView.ItemsPanel>
-			<ListView.GroupStyle>
-				<StaticResourceExtension ResourceKey="GroupStyleKey" />
-			</ListView.GroupStyle>
-		</ListView>
-		<ListView Name="ItemsTileView">
+							util:GridViewSort.AutoSort="True"
+							View="{StaticResource ListView}">
 			<ListView.GroupStyle>
 				<StaticResourceExtension ResourceKey="GroupStyleKey" />
 			</ListView.GroupStyle>

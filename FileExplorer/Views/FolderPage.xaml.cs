@@ -50,7 +50,7 @@ namespace FileExplorer.Views
 		private string filterText;
 		private bool isGrouping;
 		private string path;
-		private ListView currentView;
+		private string currentView = "ListView";
 
 		#endregion Private Fields
 
@@ -130,9 +130,9 @@ namespace FileExplorer.Views
 			}
 		}
 
-		public ListView CurrentView
+		public string CurrentView
 		{
-			get => currentView ?? (CurrentView = ItemsListView);
+			get => currentView; 
 			set
 			{
 				if (currentView == value)
@@ -141,26 +141,11 @@ namespace FileExplorer.Views
 				}
 				currentView = value;
 
-				HideListViews();
-				currentView.Visibility = Visibility.Visible;
-
+				ItemsListView.View = ItemsListView.FindResource(currentView) as ViewBase;
+				
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentView)));
-
-				void HideListViews()
-				{
-					foreach (var view in new List<ListView>
-					{
-						ItemsListView,
-						ItemsGridView,
-						ItemsTileView,
-					})
-					{
-						view.Visibility = Visibility.Collapsed;
-					}
-				}
 			}
 		}
-
 		#endregion Public Properties
 
 		#region Public Constructors
@@ -178,6 +163,11 @@ namespace FileExplorer.Views
 		}
 
 		#endregion Public Constructors
+
+		public void ChangeView(string key)
+		{
+			CurrentView = key;
+		}
 
 		#region Private Methods
 

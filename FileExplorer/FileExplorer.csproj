@@ -92,6 +92,7 @@
     </ApplicationDefinition>
     <Compile Include="DataVirtualization\AsyncVirtualizingCollection.cs" />
     <Compile Include="Models\Commands\CreateCommand.cs" />
+    <Compile Include="Models\Commands\ShowRenameDialogCommand.cs" />
     <Compile Include="Models\UndoRedoManager.cs" />
     <Compile Include="Models\Commands\RelayCommand.cs" />
     <Compile Include="Models\Interfaces\IDialogService.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Models\Commands\CopyPasteCommand.cs" />
     <Compile Include="Models\Commands\CutPasteCommand.cs" />
     <Compile Include="Models\Commands\DeleteCommand.cs" />
+    <Compile Include="Utilities\PlainView.cs" />
     <Compile Include="ViewModels\FileDragHandler.cs" />
     <Compile Include="ViewModels\FolderPageViewModel.cs" />
     <Compile Include="Models\Interfaces\INavigationService.cs" />
@@ -121,6 +123,7 @@
     <Compile Include="ViewModels\FileDropHandler.cs" />
     <Compile Include="Models\Commands\PasteCommand.cs" />
     <Compile Include="Views\Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Views\Converters\SelectedItemConverter.cs" />
     <Compile Include="Views\Converters\ViewTypeConverter.cs" />
     <Compile Include="Utilities\DropDownButtonBehavior.cs" />
     <Compile Include="Views\Converters\NavigationHistroyConverter.cs" />
@@ -146,6 +149,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\Resources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

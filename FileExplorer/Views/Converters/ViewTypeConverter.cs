@@ -18,12 +18,8 @@ namespace FileExplorer.Views.Converters
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is ListView listView))
-			{
-				return null;
-			}
-			var type = listView.Name.Replace("Items", "").Replace("View", "");
-			return listView.TryFindResource(type + "Icon");
+			var type = value?.ToString().Replace("View", "");
+			return App.Current.MainWindow.TryFindResource(type + "Icon");
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

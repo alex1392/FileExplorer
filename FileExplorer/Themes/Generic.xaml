@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+										xmlns:util="clr-namespace:FileExplorer.Utilities"
+                    xmlns:local="clr-namespace:FileExplorer.Themes">
+	<Style x:Key="{ComponentResourceKey 
+      TypeInTargetAssembly={x:Type util:PlainView},
+      ResourceId=PlainView}"
+				 TargetType="{x:Type ListView}"
+				 BasedOn="{StaticResource {x:Type ListBox}}">
+		<Setter Property="HorizontalContentAlignment"
+						Value="Center" />
+		<Setter Property="ItemContainerStyle"
+						Value="{Binding (ListView.View).ItemContainerStyle,
+          RelativeSource={RelativeSource Self}}" />
+		<Setter Property="ItemTemplate"
+						Value="{Binding (ListView.View).ItemTemplate,
+          RelativeSource={RelativeSource Self}}" />
+		<Setter Property="ItemsPanel"
+						Value="{Binding (ListView.View).ItemsPanel, RelativeSource={RelativeSource Self}}" />
+	</Style>
+</ResourceDictionary>

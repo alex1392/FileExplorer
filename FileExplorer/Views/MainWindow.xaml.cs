@@ -26,7 +26,7 @@ namespace FileExplorer.Views
 		#endregion Private Fields
 
 		private PasteType pasteType;
-		private ListView CurrentView => (vm.CurrentContent as FolderPage).CurrentView;
+		private ListView CurrentView => (vm.CurrentContent as FolderPage).ItemsListView;
 
 		#region Public Constructors
 
@@ -52,31 +52,14 @@ namespace FileExplorer.Views
 			vm.Navigate(vm.HomePage);
 		}
 
-		private void GridViewButton_Click(object sender, RoutedEventArgs e)
+		private void ViewButton_Click(object sender, RoutedEventArgs e)
 		{
-			if (!(FolderFrame.Content is FolderPage folderPage))
+			if (!(sender is MenuItem menuItem) ||
+				!(FolderFrame.Content is FolderPage folderPage))
 			{
 				return;
 			}
-			folderPage.CurrentView = folderPage.ItemsGridView;
-		}
-
-		private void ListViewButton_Click(object sender, RoutedEventArgs e)
-		{
-			if (!(FolderFrame.Content is FolderPage folderPage))
-			{
-				return;
-			}
-			folderPage.CurrentView = folderPage.ItemsListView;
-		}
-
-		private void TileViewButton_Click(object sender, RoutedEventArgs e)
-		{
-			if (!(FolderFrame.Content is FolderPage folderPage))
-			{
-				return;
-			}
-			folderPage.CurrentView = folderPage.ItemsTileView;
+			folderPage.ChangeView(menuItem.Header.ToString());
 		}
 
 		private void HistoryItem_Selected(object sender, RoutedEventArgs e)

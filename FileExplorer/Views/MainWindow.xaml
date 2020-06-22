@@ -154,19 +154,19 @@
 							</Style>
 						</ContextMenu.Resources>
 						<MenuItem Header="ListView"
-											Click="ListViewButton_Click">
+											Click="ViewButton_Click">
 							<MenuItem.Icon>
 								<fa:ImageAwesome Icon="List" />
 							</MenuItem.Icon>
 						</MenuItem>
 						<MenuItem Header="GridView"
-											Click="GridViewButton_Click">
+											Click="ViewButton_Click">
 							<MenuItem.Icon>
 								<fa:ImageAwesome Icon="Th" />
 							</MenuItem.Icon>
 						</MenuItem>
 						<MenuItem Header="TileView"
-											Click="TileViewButton_Click">
+											Click="ViewButton_Click">
 							<MenuItem.Icon>
 								<Image Source="{StaticResource tileview_solidDrawingImage}" />
 							</MenuItem.Icon>
