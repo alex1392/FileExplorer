@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cyc.Mvvm", "Cyc\Cyc.Mvvm\Cy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileExplorerTests", "FileExplorerTests\FileExplorerTests.csproj", "{939F8BA0-E811-4BF0-9A13-308225DB3469}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfDocumentPreviewer", "FileExplorer\WpfDocumentPreviewer\WpfDocumentPreviewer.csproj", "{6A63405A-B6BB-4095-B48C-E720DE021482}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -132,6 +134,26 @@ Global
 		{939F8BA0-E811-4BF0-9A13-308225DB3469}.Release|Any CPU.Build.0 = Release|Any CPU
 		{939F8BA0-E811-4BF0-9A13-308225DB3469}.Release|x86.ActiveCfg = Release|Any CPU
 		{939F8BA0-E811-4BF0-9A13-308225DB3469}.Release|x86.Build.0 = Release|Any CPU
+		{6A63405A-B6BB-4095-B48C-E720DE021482}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A63405A-B6BB-4095-B48C-E720DE021482}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A63405A-B6BB-4095-B48C-E720DE021482}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6A63405A-B6BB-4095-B48C-E720DE021482}.Debug|x86.Build.0 = Debug|Any CPU
+		{6A63405A-B6BB-4095-B48C-E720DE021482}.Google|Any CPU.ActiveCfg = Release|Any CPU
+		{6A63405A-B6BB-4095-B48C-E720DE021482}.Google|Any CPU.Build.0 = Release|Any CPU
+		{6A63405A-B6BB-4095-B48C-E720DE021482}.Google|x86.ActiveCfg = Release|Any CPU
+		{6A63405A-B6BB-4095-B48C-E720DE021482}.Google|x86.Build.0 = Release|Any CPU
+		{6A63405A-B6BB-4095-B48C-E720DE021482}.Local|Any CPU.ActiveCfg = Release|Any CPU
+		{6A63405A-B6BB-4095-B48C-E720DE021482}.Local|Any CPU.Build.0 = Release|Any CPU
+		{6A63405A-B6BB-4095-B48C-E720DE021482}.Local|x86.ActiveCfg = Release|Any CPU
+		{6A63405A-B6BB-4095-B48C-E720DE021482}.Local|x86.Build.0 = Release|Any CPU
+		{6A63405A-B6BB-4095-B48C-E720DE021482}.Microsoft|Any CPU.ActiveCfg = Release|Any CPU
+		{6A63405A-B6BB-4095-B48C-E720DE021482}.Microsoft|Any CPU.Build.0 = Release|Any CPU
+		{6A63405A-B6BB-4095-B48C-E720DE021482}.Microsoft|x86.ActiveCfg = Release|Any CPU
+		{6A63405A-B6BB-4095-B48C-E720DE021482}.Microsoft|x86.Build.0 = Release|Any CPU
+		{6A63405A-B6BB-4095-B48C-E720DE021482}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A63405A-B6BB-4095-B48C-E720DE021482}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A63405A-B6BB-4095-B48C-E720DE021482}.Release|x86.ActiveCfg = Release|Any CPU
+		{6A63405A-B6BB-4095-B48C-E720DE021482}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

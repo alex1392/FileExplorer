@@ -251,6 +251,10 @@
       <Project>{f465ee5c-8383-4962-9141-8542702d9053}</Project>
       <Name>Cyc.Mvvm</Name>
     </ProjectReference>
+    <ProjectReference Include="WpfDocumentPreviewer\WpfDocumentPreviewer.csproj">
+      <Project>{6a63405a-b6bb-4095-b48c-e720de021482}</Project>
+      <Name>WpfDocumentPreviewer</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
