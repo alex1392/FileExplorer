@@ -84,10 +84,6 @@ namespace FileExplorer.Models
 
 		private void Undo()
 		{
-			if (!CanUndo())
-			{
-				throw new InvalidOperationException();
-			}
 			CurrentCommand.Undo();
 			// if undo is not successful
 			if (!CurrentCommand.IsUndoSuccessful)
@@ -101,10 +97,6 @@ namespace FileExplorer.Models
 
 		private void Redo()
 		{
-			if (!CanRedo())
-			{
-				throw new InvalidOperationException();
-			}
 			index++;
 			CurrentCommand.Execute(null);
 			// if redo is not successful
