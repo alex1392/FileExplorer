@@ -5,14 +5,29 @@ namespace FileExplorer.Models
 {
 	public class DeleteCommand : IUndoCommand
 	{
+		#region Private Fields
+
 		private readonly IFileProvider fileProvider;
 		private readonly INavigationService navigationService;
+
+		#endregion Private Fields
+
+		#region Public Events
+
+		public event EventHandler CanExecuteChanged;
+
+		#endregion Public Events
+
+		#region Public Properties
 
 		public bool IsExecutionSuccessful { get; private set; }
 
 		public bool IsUndoSuccessful { get; private set; }
+		public List<string> Paths { get; set; }
 
-		public event EventHandler CanExecuteChanged;
+		#endregion Public Properties
+
+		#region Public Constructors
 
 		public DeleteCommand(IFileProvider fileProvider, INavigationService navigationService)
 		{
@@ -20,7 +35,10 @@ namespace FileExplorer.Models
 			this.navigationService = navigationService;
 		}
 
-		public List<string> Paths { get; set; }
+		#endregion Public Constructors
+
+		#region Public Methods
+
 		public bool CanExecute(object parameter = null)
 		{
 			return Paths != null;
@@ -86,5 +104,7 @@ namespace FileExplorer.Models
 				navigationService.Refresh();
 			}
 		}
+
+		#endregion Public Methods
 	}
 }

@@ -16,7 +16,6 @@ namespace FileExplorer.Models
 
 		#endregion Private Fields
 
-
 		#region Public Methods
 
 		public override bool CanExecute(object parameter = null)

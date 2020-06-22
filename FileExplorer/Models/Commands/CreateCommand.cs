@@ -1,29 +1,44 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileExplorer.Models
 {
 	public class CreateCommand : IUndoCommand
 	{
+		#region Private Fields
+
 		private readonly IFileProvider fileProvider;
 		private readonly INavigationService navigationService;
+
+		#endregion Private Fields
+
+		#region Public Events
+
+		public event EventHandler CanExecuteChanged;
+
+		#endregion Public Events
+
+		#region Public Properties
 
 		public bool IsExecutionSuccessful { get; private set; }
 
 		public bool IsUndoSuccessful { get; private set; }
+		public string Path { get; set; }
 
-		public event EventHandler CanExecuteChanged;
+		public string CreatedPath { get; private set; }
+
+		#endregion Public Properties
+
+		#region Public Constructors
+
 		public CreateCommand(IFileProvider fileProvider, INavigationService navigationService)
 		{
 			this.fileProvider = fileProvider;
 			this.navigationService = navigationService;
 		}
-		public string Path { get; set; }
 
-		public string CreatedPath { get; private set; }
+		#endregion Public Constructors
+
+		#region Public Methods
 
 		public bool CanExecute(object parameter)
 		{
@@ -39,7 +54,6 @@ namespace FileExplorer.Models
 			{
 				navigationService.Refresh();
 			}
-
 		}
 
 		public void Undo()
@@ -51,5 +65,7 @@ namespace FileExplorer.Models
 				navigationService.Refresh();
 			}
 		}
+
+		#endregion Public Methods
 	}
 }

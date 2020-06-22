@@ -5,18 +5,33 @@ namespace FileExplorer.Models
 {
 	internal class RelayCommand<TParam> : ICommand
 	{
+		#region Private Fields
+
 		private readonly Action<TParam> action;
 		private readonly Func<TParam, bool> canAction;
+
+		#endregion Private Fields
+
+		#region Public Events
+
 		/// <summary>
 		/// This event will never be called.
 		/// </summary>
 		public event EventHandler CanExecuteChanged;
+
+		#endregion Public Events
+
+		#region Public Constructors
 
 		public RelayCommand(Action<TParam> action, Func<TParam, bool> canAction = null)
 		{
 			this.action = action;
 			this.canAction = canAction;
 		}
+
+		#endregion Public Constructors
+
+		#region Public Methods
 
 		public bool CanExecute(object parameter)
 		{
@@ -27,7 +42,10 @@ namespace FileExplorer.Models
 		{
 			action?.Invoke((TParam)parameter);
 		}
+
+		#endregion Public Methods
 	}
+
 	internal class RelayCommand : ICommand
 	{
 		#region Private Fields
@@ -38,6 +56,7 @@ namespace FileExplorer.Models
 		#endregion Private Fields
 
 		#region Public Events
+
 		/// <summary>
 		/// This event will never be called.
 		/// </summary>

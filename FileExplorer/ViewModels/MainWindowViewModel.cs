@@ -109,15 +109,15 @@ namespace FileExplorer.ViewModels
 			void SetupTreeItems()
 			{
 				var funcs = new List<Func<string>>
-			{
-				systemFolderProvider.GetDesktop,
-				systemFolderProvider.GetRecent,
-				systemFolderProvider.GetDownloads,
-				systemFolderProvider.GetDocuments,
-				systemFolderProvider.GetPictures,
-				systemFolderProvider.GetMusic,
-				systemFolderProvider.GetVideos,
-			};
+				{
+					systemFolderProvider.GetDesktop,
+					systemFolderProvider.GetRecent,
+					systemFolderProvider.GetDownloads,
+					systemFolderProvider.GetDocuments,
+					systemFolderProvider.GetPictures,
+					systemFolderProvider.GetMusic,
+					systemFolderProvider.GetVideos,
+				};
 				foreach (var func in funcs)
 				{
 					var path = func.Invoke();
@@ -166,6 +166,7 @@ namespace FileExplorer.ViewModels
 			undoRedoManager.Execute(command);
 			return command.IsExecutionSuccessful;
 		}
+
 		public void New(string path)
 		{
 			var command = serviceProvider.GetService<CreateCommand>();
@@ -203,7 +204,6 @@ namespace FileExplorer.ViewModels
 			navigationService.Navigate("FolderPage", item.Path);
 		}
 
-
 		public void Navigate(string path)
 		{
 			navigationService.Navigate("FolderPage", path);
@@ -239,8 +239,6 @@ namespace FileExplorer.ViewModels
 				});
 			}
 		}
-
-		
 
 		private void NavigationService_NavigatedPageLoaded(object sender, EventArgs e)
 		{

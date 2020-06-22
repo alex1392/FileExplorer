@@ -1,51 +1,23 @@
-﻿using FileExplorer.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace FileExplorer.Views
 {
-	
 	/// <summary>
 	/// Interaction logic for FileNameInputWindow.xaml
 	/// </summary>
 	public partial class FileNameInputWindow : Window
 	{
-		public class OkButtonCommand : ICommand
-		{
-			private readonly Action action;
-			private readonly Func<bool> canAction;
+		#region Public Properties
 
-			public event EventHandler CanExecuteChanged;
-			public OkButtonCommand(Action action, Func<bool> canAction = null)
-			{
-				this.action = action;
-				this.canAction = canAction;
-			}
-			public void OnCanExecuteChanged()
-			{
-				CanExecuteChanged?.Invoke(this, EventArgs.Empty);
-			}
-			public bool CanExecute(object parameter)
-			{
-				return canAction == null || canAction.Invoke();
-			}
+		public OkButtonCommand OkCommand { get; private set; }
 
-			public void Execute(object parameter)
-			{
-				action.Invoke();
-			}
-		}
+		#endregion Public Properties
+
+		#region Public Constructors
+
 		public FileNameInputWindow()
 		{
 			InitializeComponent();
@@ -53,7 +25,9 @@ namespace FileExplorer.Views
 			OkCommand = new OkButtonCommand(OK, CanOK);
 		}
 
-		public OkButtonCommand OkCommand { get; private set; }
+		#endregion Public Constructors
+
+		#region Private Methods
 
 		private void OK()
 		{
@@ -75,5 +49,56 @@ namespace FileExplorer.Views
 		{
 			OkCommand.OnCanExecuteChanged();
 		}
+
+		#endregion Private Methods
+
+		#region Public Classes
+
+		public class OkButtonCommand : ICommand
+		{
+			#region Private Fields
+
+			private readonly Action action;
+			private readonly Func<bool> canAction;
+
+			#endregion Private Fields
+
+			#region Public Events
+
+			public event EventHandler CanExecuteChanged;
+
+			#endregion Public Events
+
+			#region Public Constructors
+
+			public OkButtonCommand(Action action, Func<bool> canAction = null)
+			{
+				this.action = action;
+				this.canAction = canAction;
+			}
+
+			#endregion Public Constructors
+
+			#region Public Methods
+
+			public void OnCanExecuteChanged()
+			{
+				CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+			}
+
+			public bool CanExecute(object parameter)
+			{
+				return canAction == null || canAction.Invoke();
+			}
+
+			public void Execute(object parameter)
+			{
+				action.Invoke();
+			}
+
+			#endregion Public Methods
+		}
+
+		#endregion Public Classes
 	}
 }

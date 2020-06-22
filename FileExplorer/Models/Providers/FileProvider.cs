@@ -1,5 +1,7 @@
 ﻿using Microsoft.VisualBasic.FileIO;
+
 using Shell32;
+
 using System;
 using System.IO;
 
@@ -80,7 +82,6 @@ namespace FileExplorer.Models
 			return null;
 		}
 
-
 		/// <summary>
 		/// Move file or folder.
 		/// </summary>
@@ -89,7 +90,7 @@ namespace FileExplorer.Models
 		/// <returns>Return bool indicates of this operation is successful.</returns>
 		public string Move(string sourcePath, string destPath)
 		{
-			if (!File.Exists(sourcePath) && 
+			if (!File.Exists(sourcePath) &&
 				!Directory.Exists(sourcePath))
 			{
 				throw new PathNotFoundException();
@@ -104,7 +105,6 @@ namespace FileExplorer.Models
 				dialogService.ShowMessage(ex.Message);
 			}
 			return null;
-			
 		}
 
 		/// <summary>
@@ -127,7 +127,6 @@ namespace FileExplorer.Models
 			{
 				throw new PathNotFoundException();
 			}
-
 
 			string CopyFolder(string sourcePath, string destPath)
 			{
@@ -208,6 +207,14 @@ namespace FileExplorer.Models
 
 		#region Delete/Restore with recycle bin
 
+		private const long ssfBITBUCKET = 10;
+
+		private const int recycleNAME = 0;
+
+		private const int recyclePATH = 1;
+
+		private Shell Shl;
+
 		/// <summary>
 		/// Move file or folder to recycle bin.
 		/// </summary>
@@ -234,10 +241,6 @@ namespace FileExplorer.Models
 			return false;
 		}
 
-		private Shell Shl;
-		private const long ssfBITBUCKET = 10;
-		private const int recycleNAME = 0;
-		private const int recyclePATH = 1;
 		public bool RestoreFromBin(string path)
 		{
 			Shl = new Shell();
@@ -247,7 +250,7 @@ namespace FileExplorer.Models
 			{
 				var FI = recycledItems.Item(i);
 				var FileName = Recycler.GetDetailsOf(FI, 0);
-				if (Path.GetExtension(FileName) == "") 
+				if (Path.GetExtension(FileName) == "")
 					FileName += Path.GetExtension(FI.Path);
 				//Necessary for systems with hidden file extensions.
 				var FilePath = Recycler.GetDetailsOf(FI, 1);
@@ -273,24 +276,8 @@ namespace FileExplorer.Models
 				return false;
 			}
 		}
-		#endregion
-		private static bool IsDirectory(string path)
-		{
-			return string.IsNullOrEmpty(Path.GetExtension(path));
-		}
-		private string RenamePath(string path)
-		{
-			var i = 2;
-			var ext = Path.GetExtension(path);
-			var dir = Path.GetDirectoryName(path);
-			var name = Path.GetFileNameWithoutExtension(path);
-			while (File.Exists(path) || Directory.Exists(path))
-			{
-				path = Path.Combine(dir, $"{name} ({i}){ext}");
-				i++;
-			}
-			return path;
-		}
+
+		#endregion Delete/Restore with recycle bin
 
 		public (string[], string[]) GetChildren(string path)
 		{
@@ -352,7 +339,6 @@ namespace FileExplorer.Models
 			}
 		}
 
-
 		public bool IsDirectoryExists(string path)
 		{
 			return Directory.Exists(path);
@@ -361,6 +347,25 @@ namespace FileExplorer.Models
 		public bool IsFileExists(string path)
 		{
 			return File.Exists(path);
+		}
+
+		private static bool IsDirectory(string path)
+		{
+			return string.IsNullOrEmpty(Path.GetExtension(path));
+		}
+
+		private string RenamePath(string path)
+		{
+			var i = 2;
+			var ext = Path.GetExtension(path);
+			var dir = Path.GetDirectoryName(path);
+			var name = Path.GetFileNameWithoutExtension(path);
+			while (File.Exists(path) || Directory.Exists(path))
+			{
+				path = Path.Combine(dir, $"{name} ({i}){ext}");
+				i++;
+			}
+			return path;
 		}
 
 		#endregion Public Methods

@@ -20,11 +20,9 @@ namespace FileExplorer.Models
 
 		FileInfo GetFileInfo(string path);
 
-
 		string[] GetFiles(string path);
 
 		FileSystemInfo GetFileSystemInfo(string path);
-
 
 		bool IsDirectoryExists(string path);
 
@@ -33,7 +31,9 @@ namespace FileExplorer.Models
 		string Move(string sourcePath, string destPath);
 
 		string Create(string path);
+
 		bool DeleteToBin(string path);
+
 		bool RestoreFromBin(string path);
 
 		#endregion Public Methods

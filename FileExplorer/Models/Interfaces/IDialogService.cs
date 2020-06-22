@@ -13,6 +13,7 @@ namespace FileExplorer.Models
 		#region Public Methods
 
 		void ShowMessage(string message);
+
 		string ShowFileNameDialog();
 
 		#endregion Public Methods

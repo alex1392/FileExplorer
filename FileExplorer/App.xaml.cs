@@ -75,7 +75,7 @@ namespace FileExplorer
 			serviceCollection.AddTransient<CopyPasteCommand>();
 			serviceCollection.AddTransient<CreateCommand>();
 			serviceCollection.AddTransient<DeleteCommand>();
-			
+
 			serviceCollection.AddSingleton<GoBackCommand>();
 			serviceCollection.AddSingleton<GoForwardCommand>();
 			serviceCollection.AddSingleton<RefreshCommand>();

@@ -2,7 +2,6 @@
 using FileExplorer.ViewModels;
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -132,7 +131,7 @@ namespace FileExplorer.Views
 
 		public string CurrentView
 		{
-			get => currentView; 
+			get => currentView;
 			set
 			{
 				if (currentView == value)
@@ -142,10 +141,11 @@ namespace FileExplorer.Views
 				currentView = value;
 
 				ItemsListView.View = ItemsListView.FindResource(currentView) as ViewBase;
-				
+
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentView)));
 			}
 		}
+
 		#endregion Public Properties
 
 		#region Public Constructors
@@ -164,10 +164,14 @@ namespace FileExplorer.Views
 
 		#endregion Public Constructors
 
+		#region Public Methods
+
 		public void ChangeView(string key)
 		{
 			CurrentView = key;
 		}
+
+		#endregion Public Methods
 
 		#region Private Methods
 

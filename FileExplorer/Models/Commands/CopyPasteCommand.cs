@@ -6,11 +6,13 @@ namespace FileExplorer.Models
 {
 	public class CopyPasteCommand : PasteCommand
 	{
+		#region Private Fields
+
 		private readonly List<string> CopyedPaths = new List<string>();
-		#region Public Properties
+
+		#endregion Private Fields
 
 
-		#endregion Public Properties
 
 		#region Public Constructors
 

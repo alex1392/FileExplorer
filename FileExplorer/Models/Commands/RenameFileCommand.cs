@@ -5,8 +5,20 @@ namespace FileExplorer.Models
 {
 	public class RenameFileCommand : IUndoCommand
 	{
+		#region Private Fields
+
 		private readonly IFileProvider fileProvider;
 		private readonly INavigationService navigationService;
+
+		#endregion Private Fields
+
+		#region Public Events
+
+		public event EventHandler CanExecuteChanged;
+
+		#endregion Public Events
+
+		#region Public Properties
 
 		public bool IsExecutionSuccessful { get; private set; }
 
@@ -17,7 +29,9 @@ namespace FileExplorer.Models
 		public string ChangedName { get; set; }
 		public string DestPath { get; private set; }
 
-		public event EventHandler CanExecuteChanged;
+		#endregion Public Properties
+
+		#region Public Constructors
 
 		public RenameFileCommand(IFileProvider fileProvider, INavigationService navigationService)
 		{
@@ -25,9 +39,13 @@ namespace FileExplorer.Models
 			this.navigationService = navigationService;
 		}
 
+		#endregion Public Constructors
+
+		#region Public Methods
+
 		public bool CanExecute(object parameter)
 		{
-			return !string.IsNullOrEmpty(SourcePath) && 
+			return !string.IsNullOrEmpty(SourcePath) &&
 				!string.IsNullOrEmpty(ChangedName);
 		}
 
@@ -53,5 +71,7 @@ namespace FileExplorer.Models
 				navigationService.Refresh();
 			}
 		}
+
+		#endregion Public Methods
 	}
 }
