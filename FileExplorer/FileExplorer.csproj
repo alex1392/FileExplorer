@@ -92,7 +92,8 @@
     </ApplicationDefinition>
     <Compile Include="DataVirtualization\AsyncVirtualizingCollection.cs" />
     <Compile Include="Models\Commands\CreateCommand.cs" />
-    <Compile Include="Models\Commands\ShowRenameDialogCommand.cs" />
+    <Compile Include="Models\Commands\RenameDialogCommand.cs" />
+    <Compile Include="Models\Commands\RenameFileCommand.cs" />
     <Compile Include="Models\UndoRedoManager.cs" />
     <Compile Include="Models\Commands\RelayCommand.cs" />
     <Compile Include="Models\Interfaces\IDialogService.cs" />
@@ -123,7 +124,6 @@
     <Compile Include="ViewModels\FileDropHandler.cs" />
     <Compile Include="Models\Commands\PasteCommand.cs" />
     <Compile Include="Views\Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Views\Converters\SelectedItemConverter.cs" />
     <Compile Include="Views\Converters\ViewTypeConverter.cs" />
     <Compile Include="Utilities\DropDownButtonBehavior.cs" />
     <Compile Include="Views\Converters\NavigationHistroyConverter.cs" />

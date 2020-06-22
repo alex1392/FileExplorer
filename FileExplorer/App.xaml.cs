@@ -81,8 +81,9 @@ namespace FileExplorer
 			serviceCollection.AddSingleton<RefreshCommand>();
 			serviceCollection.AddSingleton<GoUpCommand>();
 			serviceCollection.AddSingleton<GoHomeCommand>();
+			serviceCollection.AddSingleton<RenameFileCommand>();
 
-			serviceCollection.AddSingleton<ShowRenameDialogCommand>();
+			serviceCollection.AddSingleton<RenameDialogCommand>();
 		}
 
 		#endregion Private Methods
