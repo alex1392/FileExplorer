@@ -101,7 +101,7 @@
     <Compile Include="Models\Items\ListFolderItem.cs" />
     <Compile Include="Models\Items\ListItem.cs" />
     <Compile Include="Models\Items\TreePageItem.cs" />
-    <Compile Include="Models\Providers\FolderChildrenProvider.cs" />
+    <Compile Include="Models\Services\FolderChildrenProvider.cs" />
     <Compile Include="Models\Interfaces\ITypeDescriptionProvider.cs" />
     <Compile Include="Utilities\GridViewSort.cs" />
     <Compile Include="Models\Commands\CopyPasteCommand.cs" />
@@ -133,12 +133,12 @@
     <Compile Include="Utilities\DropDownButtonBehavior.cs" />
     <Compile Include="Views\Converters\NavigationHistroyConverter.cs" />
     <Compile Include="Views\Converters\DebugConverter.cs" />
-    <Compile Include="Models\Providers\TypeDescriptionProvider.cs" />
+    <Compile Include="Models\Services\TypeDescriptionProvider.cs" />
     <Compile Include="Views\Converters\SizeConverter.cs" />
     <Compile Include="Views\Converters\TimeConverter.cs" />
     <Compile Include="DataVirtualization\VirtualizingCollection.cs" />
     <Compile Include="Models\Interfaces\ISystemFolderProvider.cs" />
-    <Compile Include="Models\Providers\SystemFolderProvider.cs" />
+    <Compile Include="Models\Services\SystemFolderProvider.cs" />
     <Compile Include="Views\FileNameInputWindow.xaml.cs">
       <DependentUpon>FileNameInputWindow.xaml</DependentUpon>
     </Compile>
@@ -182,7 +182,7 @@
     </Compile>
     <Compile Include="DataVirtualization\IItemsProvider.cs" />
     <Compile Include="Models\Items\ListFileItem.cs" />
-    <Compile Include="Models\Providers\FileProvider.cs" />
+    <Compile Include="Models\Services\FileProvider.cs" />
     <Compile Include="Models\Items\TreeFolderItem.cs" />
     <Compile Include="Views\Converters\IconConverter.cs" />
     <Compile Include="Models\Interfaces\IFileProvider.cs" />
