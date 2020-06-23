@@ -124,6 +124,7 @@
     <Compile Include="ViewModels\DragDrop\FileDropHandler.cs" />
     <Compile Include="Models\Commands\PasteCommand.cs" />
     <Compile Include="Views\Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Views\Converters\FlowDocumentConverter.cs" />
     <Compile Include="Views\Converters\PathToUriConverter.cs" />
     <Compile Include="Views\Converters\SelectedItemConverter.cs" />
     <Compile Include="Views\Converters\ViewTypeConverter.cs" />

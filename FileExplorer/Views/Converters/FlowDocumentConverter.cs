@@ -6,13 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Markup;
 
 namespace FileExplorer.Views.Converters
 {
-	public class PathToUriConverter : MarkupExtension, IValueConverter
+	public class FlowDocumentConverter : MarkupExtension, IValueConverter
 	{
-		private static readonly PathToUriConverter instance = new PathToUriConverter();
+		private static readonly FlowDocumentConverter instance = new FlowDocumentConverter();
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			var path = value?.ToString();
@@ -20,12 +21,15 @@ namespace FileExplorer.Views.Converters
 			{
 				return null;
 			}
-			var imageExt = new List<string> { ".jpg", ".jpeg", ".png", ".bmp", ".tif", ".svg" };
-			// check if the path is an image
-			if (imageExt.Contains(Path.GetExtension(path).ToLower()))
-				return new Uri(path).AbsoluteUri;
-			else
+			if (Path.GetExtension(path).ToLower() != ".txt")
+			{
 				return null;
+			}
+			var text = File.ReadAllText(path);
+			var paragraph = new Paragraph();
+			paragraph.Inlines.Add(text);
+			var doc = new FlowDocument(paragraph);
+			return doc;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

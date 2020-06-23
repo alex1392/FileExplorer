@@ -2,13 +2,17 @@
 using FileExplorer.ViewModels;
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using IO = System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
+using ListItem = FileExplorer.Models.ListItem;
 
 namespace FileExplorer.Views
 {
@@ -156,7 +160,7 @@ namespace FileExplorer.Views
 				if (selectedItemPath == value)
 				{
 					return;
-				} 
+				}
 				selectedItemPath = value;
 
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedItemPath)));
@@ -237,7 +241,7 @@ namespace FileExplorer.Views
 
 		private void ListViewItem_Selected(object sender, RoutedEventArgs e)
 		{
-			if (!(sender is ListViewItem listViewItem) || 
+			if (!(sender is ListViewItem listViewItem) ||
 				!(listViewItem.DataContext is ListItemViewModel listItemViewModel))
 			{
 				return;
