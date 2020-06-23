@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace FileExplorer.Models
@@ -28,8 +29,8 @@ namespace FileExplorer.Models
 		}
 
 		public int Capacity { get; }
-		public ICommand UndoCommand { get; private set; }
-		public ICommand RedoCommand { get; private set; }
+		public RelayCommand UndoCommand { get; private set; }
+		public RelayCommand RedoCommand { get; private set; }
 
 		#endregion Public Properties
 
@@ -71,6 +72,8 @@ namespace FileExplorer.Models
 				// remove the oldest command
 				commands.RemoveAt(0);
 			}
+			// raise canRedoChanged event
+			RedoCommand.RaiseCanExecuteChanged();
 		}
 
 		#endregion Public Methods
@@ -92,6 +95,12 @@ namespace FileExplorer.Models
 			}
 			// move the index to the previous command
 			index--;
+			// if cannot undo...
+			if (!CanUndo())
+			{
+				// raise canUndoChanged event
+				UndoCommand.RaiseCanExecuteChanged();
+			}
 		}
 
 		private void Redo()
@@ -109,6 +118,12 @@ namespace FileExplorer.Models
 					// move the index back
 					index--;
 				}
+			}
+			// if cannot redo...
+			if (!CanRedo())
+			{
+				// raise canRedoChanged event
+				RedoCommand.RaiseCanExecuteChanged();
 			}
 		}
 

@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace FileExplorer.Models
 {
-	internal class RelayCommand<TParam> : ICommand
+	public class RelayCommand<TParam> : ICommand
 	{
 		#region Private Fields
 
@@ -35,7 +35,7 @@ namespace FileExplorer.Models
 
 		public bool CanExecute(object parameter)
 		{
-			return canAction == null || canAction.Invoke((TParam)parameter);
+			return canAction?.Invoke((TParam)parameter) ?? true;
 		}
 
 		public void Execute(object parameter)
@@ -43,10 +43,18 @@ namespace FileExplorer.Models
 			action?.Invoke((TParam)parameter);
 		}
 
+		/// <summary>
+		/// Invoke <see cref="CanExecuteChanged"/> to notify controls in the view.
+		/// </summary>
+		public void OnCanExecuteChanged()
+		{
+			CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+		}
+
 		#endregion Public Methods
 	}
 
-	internal class RelayCommand : ICommand
+	public class RelayCommand : ICommand
 	{
 		#region Private Fields
 
@@ -57,9 +65,6 @@ namespace FileExplorer.Models
 
 		#region Public Events
 
-		/// <summary>
-		/// This event will never be called.
-		/// </summary>
 		public event EventHandler CanExecuteChanged;
 
 		#endregion Public Events
@@ -78,12 +83,19 @@ namespace FileExplorer.Models
 
 		public bool CanExecute(object parameter)
 		{
-			return canAction == null || canAction.Invoke();
+			return canAction?.Invoke() ?? true;
 		}
 
 		public void Execute(object parameter)
 		{
-			action.Invoke();
+			action?.Invoke();
+		}
+		/// <summary>
+		/// Invoke <see cref="CanExecuteChanged"/> to notify controls in the view.
+		/// </summary>
+		public void RaiseCanExecuteChanged()
+		{
+			CanExecuteChanged?.Invoke(this, EventArgs.Empty);
 		}
 
 		#endregion Public Methods
