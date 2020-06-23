@@ -116,7 +116,7 @@
     <Compile Include="Models\Commands\GoForwardCommand.cs" />
     <Compile Include="Models\Commands\GoUpCommand.cs" />
     <Compile Include="Models\Commands\GoHomeCommand.cs" />
-    <Compile Include="Models\Interfaces\IEditCommand.cs" />
+    <Compile Include="Models\Commands\IUndoCommand.cs" />
     <Compile Include="ViewModels\ListFileItemViewModel.cs" />
     <Compile Include="ViewModels\ListFolderItemViewModel.cs" />
     <Compile Include="ViewModels\ListItemViewModel.cs" />
