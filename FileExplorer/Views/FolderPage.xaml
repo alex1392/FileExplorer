@@ -10,6 +10,7 @@
 			xmlns:util="clr-namespace:FileExplorer.Utilities"
 			xmlns:vwp="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
 			xmlns:dd="urn:gong-wpf-dragdrop"
+			xmlns:sys="clr-namespace:System;assembly=mscorlib"
 			mc:Ignorable="d"
 			d:DataContext="{d:DesignInstance Type=vm:FolderPageViewModel, IsDesignTimeCreatable=True}"
 			d:DesignHeight="450"
@@ -83,24 +84,78 @@
 						<StackPanel Orientation="Vertical">
 							<Image Source="{Binding Icon}"
 										 Width="30" />
+							<!--textWidth(90) = itemWidth(100) - 10 -->
 							<TextBlock Text="{Binding Item.Name}"
 												 TextAlignment="Center"
 												 TextTrimming="WordEllipsis"
-												 Width="{Binding ElementName=vwp, Path=ItemSize.Width, Converter={util:MathConverter}, ConverterParameter=x-10}"
+												 Width="90" 
 												 Margin="0,3,0,0" />
 						</StackPanel>
 					</DataTemplate>
 				</util:PlainView.ItemTemplate>
 				<util:PlainView.ItemsPanel>
 					<ItemsPanelTemplate>
-						<vwp:VirtualizingWrapPanel x:Name="vwp" 
+						<vwp:VirtualizingWrapPanel x:Name="vwp"
 																			 Orientation="Vertical"
-																			 ItemSize="100,80"/>
+																			 ItemSize="100,80" />
 					</ItemsPanelTemplate>
 				</util:PlainView.ItemsPanel>
 			</util:PlainView>
 			<util:PlainView x:Key="TileView">
-
+				<util:PlainView.ItemTemplate>
+					<DataTemplate DataType="{x:Type vm:ListItemViewModel}">
+						<StackPanel Orientation="Horizontal">
+							<StackPanel.Resources>
+								<sys:Double x:Key="imageWidth">50</sys:Double>
+								<!--textWidth(95) = ItemWidth(160) - imageWidth(50) - textMargin(5) - 10 -->
+								<sys:Double x:Key="textWidth">95</sys:Double>
+							</StackPanel.Resources>
+							<Image x:Name="image"
+										 Source="{Binding Icon}"
+										 Width="{StaticResource imageWidth}"
+										 Height="{StaticResource imageWidth}" />
+							<StackPanel Orientation="Vertical">
+								<StackPanel.Resources>
+									<Style TargetType="TextBlock">
+										<Setter Property="TextAlignment"
+														Value="Left" />
+										<Setter Property="TextTrimming"
+														Value="WordEllipsis" />
+										<Setter Property="Margin"
+														Value="5,0,0,0" />
+										<Setter Property="Width"
+														Value="{StaticResource textWidth}" />
+										<Setter Property="Foreground"
+														Value="Gray" />
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Text}"
+																	 Value="">
+												<Setter Property="Visibility"
+																Value="Collapsed" />
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</StackPanel.Resources>
+								<TextBlock x:Name="nameText"
+													 Text="{Binding Item.Name}"
+													 Foreground="Black" />
+								<TextBlock x:Name="typeText"
+													 Text="{Binding Item.TypeDescription}" />
+								<TextBlock x:Name="sizeText"
+													 Text="{Binding Item.Size, Converter={converter:SizeConverter}}" />
+								<TextBlock x:Name="timeText"
+													 Text="{Binding Item.LastModifiedTime, Converter={converter:TimeConverter}}" />
+							</StackPanel>
+						</StackPanel>
+					</DataTemplate>
+				</util:PlainView.ItemTemplate>
+				<util:PlainView.ItemsPanel>
+					<ItemsPanelTemplate>
+						<vwp:VirtualizingWrapPanel x:Name="vwp"
+																			 Orientation="Vertical"
+																			 ItemSize="160,80" />
+					</ItemsPanelTemplate>
+				</util:PlainView.ItemsPanel>
 			</util:PlainView>
 		</Grid.Resources>
 		<ListView Name="ItemsListView"
