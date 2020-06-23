@@ -85,14 +85,17 @@
 										 Width="30" />
 							<TextBlock Text="{Binding Item.Name}"
 												 TextAlignment="Center"
-												 Margin="3" />
+												 TextTrimming="WordEllipsis"
+												 Width="{Binding ElementName=vwp, Path=ItemSize.Width, Converter={util:MathConverter}, ConverterParameter=x-10}"
+												 Margin="0,3,0,0" />
 						</StackPanel>
 					</DataTemplate>
 				</util:PlainView.ItemTemplate>
 				<util:PlainView.ItemsPanel>
 					<ItemsPanelTemplate>
-						<vwp:VirtualizingWrapPanel Orientation="Vertical"
-																			 ItemSize="100,80" />
+						<vwp:VirtualizingWrapPanel x:Name="vwp" 
+																			 Orientation="Vertical"
+																			 ItemSize="100,80"/>
 					</ItemsPanelTemplate>
 				</util:PlainView.ItemsPanel>
 			</util:PlainView>
