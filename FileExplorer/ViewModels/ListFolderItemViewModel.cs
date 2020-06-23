@@ -9,10 +9,12 @@ namespace FileExplorer.ViewModels
 {
 	public class ListFolderItemViewModel : ListItemViewModel
 	{
+		private readonly IResourceProvider resourceProvider;
 		#region Public Constructors
 
-		public ListFolderItemViewModel(IServiceProvider serviceProvider, IDispatcherService dispatcherService) : base(serviceProvider, dispatcherService)
+		public ListFolderItemViewModel(IServiceProvider serviceProvider, IDispatcherService dispatcherService, IResourceProvider resourceProvider) : base(serviceProvider, dispatcherService)
 		{
+			this.resourceProvider = resourceProvider;
 		}
 
 		#endregion Public Constructors
@@ -25,7 +27,7 @@ namespace FileExplorer.ViewModels
 			dispatcherService.Invoke(() =>
 			{
 				// image source must be created at the main thread
-				source = App.Current.TryFindResource("FolderIcon") as ImageSource;
+				source = resourceProvider.TryFindResource("FolderIcon") as ImageSource;
 			});
 			return source;
 		}

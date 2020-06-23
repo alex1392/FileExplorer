@@ -117,6 +117,7 @@
     <Compile Include="Models\Commands\GoUpCommand.cs" />
     <Compile Include="Models\Commands\GoHomeCommand.cs" />
     <Compile Include="Models\Commands\IUndoCommand.cs" />
+    <Compile Include="Models\Interfaces\IResourceProvider.cs" />
     <Compile Include="ViewModels\ListFileItemViewModel.cs" />
     <Compile Include="ViewModels\ListFolderItemViewModel.cs" />
     <Compile Include="ViewModels\ListItemViewModel.cs" />
@@ -150,6 +151,7 @@
       <DependentUpon>FolderPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Interfaces\IFileWatcherService.cs" />
+    <Compile Include="Views\Services\ResourceProvider.cs" />
     <Page Include="Resources\FontAwesomeResources.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
