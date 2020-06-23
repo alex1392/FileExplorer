@@ -14,11 +14,13 @@
 								 xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 								 xmlns:util="clr-namespace:FileExplorer.Utilities"
 								 xmlns:navi="clr-namespace:System.Windows.Navigation;assembly=presentationframework"
+								 xmlns:preview="clr-namespace:WpfDocumentPreviewer;assembly=WpfDocumentPreviewer"
 								 mc:Ignorable="d"
 								 d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel, IsDesignTimeCreatable=True}"
 								 Icon="/FileExplorer;component/Resources/Computer.ico"
 								 Title="MainWindow"
 								 Height="450"
+								 Name="mainWindow"
 								 Width="800">
 	<Window.InputBindings>
 		<KeyBinding Command="{x:Static ApplicationCommands.Delete}"
@@ -48,7 +50,7 @@
 										Executed="Delete"
 										CanExecute="CanDelete" />
 	</Window.CommandBindings>
-	<DockPanel>
+	<DockPanel x:Name="mainDockPanel">
 		<DockPanel Name="MenuBar"
 							 DockPanel.Dock="Top"
 							 Height="32">
@@ -147,12 +149,15 @@
 				</Button>
 			</StackPanel>
 			<ToggleButton Name="PreviewToggleButton"
-										DockPanel.Dock="Right">
+										DockPanel.Dock="Right"
+										IsChecked="True"
+										Click="PreviewToggleButton_Click">
 				<fa:ImageAwesome Icon="Binoculars" />
 			</ToggleButton>
 			<ToggleButton Name="TreeViewToggleButton"
 										DockPanel.Dock="Right"
-										IsChecked="True">
+										IsChecked="True"
+										Click="TreeViewToggleButton_Click">
 				<Image Source="/Resources/treeview.png" />
 			</ToggleButton>
 			<ToggleButton Name="GroupToggleButton"
@@ -279,33 +284,84 @@
 				</Grid>
 			</Border>
 		</DockPanel>
-		<TreeView DockPanel.Dock="Left"
-							ItemsSource="{Binding TreeItems}"
-							Visibility="{Binding ElementName=TreeViewToggleButton, Path=IsChecked, Converter={converter:BoolToVisibilityConverter}}"
-							Width="150">
-			<TreeView.ItemTemplate>
-				<HierarchicalDataTemplate DataType="{x:Type model:ITreeItem}"
-																	ItemsSource="{Binding SubFolders}">
-					<StackPanel Orientation="Horizontal">
-						<Image Source="{Binding .,Converter={converter:IconConverter}}"
-									 Width="18" />
-						<TextBlock Text="{Binding Name}"
-											 VerticalAlignment="Center"
-											 Margin="3" />
-					</StackPanel>
-				</HierarchicalDataTemplate>
-			</TreeView.ItemTemplate>
-			<TreeView.ItemContainerStyle>
-				<Style TargetType="TreeViewItem">
-					<EventSetter Event="Selected"
-											 Handler="TreeViewItem_Selected" />
-					<EventSetter Event="Expanded"
-											 Handler="TreeViewItem_Expanded" />
-				</Style>
-			</TreeView.ItemContainerStyle>
-		</TreeView>
-		<Frame Name="FolderFrame"
-					 NavigationUIVisibility="Hidden" />
+		<Grid SizeChanged="Grid_SizeChanged">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Name="TreeViewGridColumn"
+													Width="auto">
+					<ColumnDefinition.MaxWidth>
+						<MultiBinding Converter="{cycConverter:MathConverter}"
+													ConverterParameter="x-y-z">
+							<Binding ElementName="mainDockPanel"
+											 Path="ActualWidth" />
+							<Binding ElementName="ItemViewGridColumn"
+											 Path="MinWidth" />
+							<Binding ElementName="PreviewGridColumn"
+											 Path="ActualWidth" />
+						</MultiBinding>
+					</ColumnDefinition.MaxWidth>
+				</ColumnDefinition>
+				<ColumnDefinition Name="ItemViewGridColumn"
+													Width="*"
+													MinWidth="300" />
+				<ColumnDefinition Name="PreviewGridColumn"
+													Width="auto">
+					<ColumnDefinition.MaxWidth>
+						<MultiBinding Converter="{cycConverter:MathConverter}"
+													ConverterParameter="x-y-z">
+							<Binding ElementName="mainDockPanel"
+											 Path="ActualWidth" />
+							<Binding ElementName="ItemViewGridColumn"
+											 Path="MinWidth" />
+							<Binding ElementName="TreeViewGridColumn"
+											 Path="ActualWidth" />
+						</MultiBinding>
+					</ColumnDefinition.MaxWidth>
+				</ColumnDefinition>
+			</Grid.ColumnDefinitions>
+			<TreeView Name="FolderTreeView" 
+								Grid.Column="0"
+								DockPanel.Dock="Left"
+								ItemsSource="{Binding TreeItems}"
+								Visibility="{Binding ElementName=TreeViewToggleButton, Path=IsChecked, Converter={converter:BoolToVisibilityConverter}}">
+				<TreeView.ItemTemplate>
+					<HierarchicalDataTemplate DataType="{x:Type model:ITreeItem}"
+																		ItemsSource="{Binding SubFolders}">
+						<StackPanel Orientation="Horizontal">
+							<Image Source="{Binding .,Converter={converter:IconConverter}}"
+										 Width="18" />
+							<TextBlock Text="{Binding Name}"
+												 VerticalAlignment="Center"
+												 Margin="3" />
+						</StackPanel>
+					</HierarchicalDataTemplate>
+				</TreeView.ItemTemplate>
+				<TreeView.ItemContainerStyle>
+					<Style TargetType="TreeViewItem">
+						<EventSetter Event="Selected"
+												 Handler="TreeViewItem_Selected" />
+						<EventSetter Event="Expanded"
+												 Handler="TreeViewItem_Expanded" />
+					</Style>
+				</TreeView.ItemContainerStyle>
+			</TreeView>
+			<GridSplitter Grid.Column="0"
+										Width="3"/>
+			<Frame Name="FolderFrame"
+						 Grid.Column="1"
+						 NavigationUIVisibility="Hidden" />
+			<GridSplitter Grid.Column="1"
+										Width="3"/>
+			<ScrollViewer Grid.Column="2"
+										Background="White"
+										HorizontalContentAlignment="Stretch"
+										HorizontalAlignment="Stretch"
+										Visibility="{Binding ElementName=PreviewToggleButton, Path=IsChecked, Converter={converter:BoolToVisibilityConverter}}"
+										VerticalScrollBarVisibility="Auto"
+										HorizontalScrollBarVisibility="Auto">
+				<Image Name="previewImage"
+							 Source="{Binding ElementName=FolderFrame, Path=Content.SelectedItemPath, Converter={converter:PathToUriConverter}}" />
+			</ScrollViewer>
+		</Grid>
 
 	</DockPanel>
 

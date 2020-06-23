@@ -146,6 +146,24 @@ namespace FileExplorer.Views
 			}
 		}
 
+		private string selectedItemPath;
+
+		public string SelectedItemPath
+		{
+			get { return selectedItemPath; }
+			set
+			{
+				if (selectedItemPath == value)
+				{
+					return;
+				} 
+				selectedItemPath = value;
+
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedItemPath)));
+			}
+		}
+
+
 		#endregion Public Properties
 
 		#region Public Constructors
@@ -216,5 +234,15 @@ namespace FileExplorer.Views
 		}
 
 		#endregion Private Methods
+
+		private void ListViewItem_Selected(object sender, RoutedEventArgs e)
+		{
+			if (!(sender is ListViewItem listViewItem) || 
+				!(listViewItem.DataContext is ListItemViewModel listItemViewModel))
+			{
+				return;
+			}
+			SelectedItemPath = listItemViewModel.Path;
+		}
 	}
 }

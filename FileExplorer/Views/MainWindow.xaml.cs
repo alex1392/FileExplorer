@@ -2,7 +2,7 @@
 
 using FileExplorer.Models;
 using FileExplorer.ViewModels;
-
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
@@ -10,6 +10,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Navigation;
 
 namespace FileExplorer.Views
 {
@@ -22,11 +23,15 @@ namespace FileExplorer.Views
 
 		private readonly MainWindowViewModel vm;
 		private readonly IDialogService dialogService;
+		private PasteType pasteType;
 
 		#endregion Private Fields
 
-		private PasteType pasteType;
+		#region Private Properties
+
 		private ListView CurrentView => (FolderFrame.Content as FolderPage)?.ItemsListView;
+
+		#endregion Private Properties
 
 		#region Public Constructors
 
@@ -130,7 +135,15 @@ namespace FileExplorer.Views
 			}
 		}
 
-		
+		private void NavigationComboBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+		{
+			if (!(sender is ComboBox comboBox))
+			{
+				return;
+			}
+			var binding = comboBox.GetBindingExpression(ComboBox.SelectedItemProperty);
+			binding.UpdateTarget();
+		}
 
 		private void Undo(object sender, ExecutedRoutedEventArgs e)
 		{
@@ -150,19 +163,6 @@ namespace FileExplorer.Views
 		private void CanUndo(object sender, CanExecuteRoutedEventArgs e)
 		{
 			e.CanExecute = vm.CanUndo(e.Parameter);
-		}
-
-		private void SetClipBoard()
-		{
-			Clipboard.Clear();
-			var paths = new StringCollection();
-			paths.AddRange(GetSelectedPaths().ToArray());
-			Clipboard.SetFileDropList(paths);
-		}
-
-		private IEnumerable<string> GetSelectedPaths()
-		{
-			return CurrentView.SelectedItems.OfType<ListItemViewModel>().Select(vm => vm.Path);
 		}
 
 		private void Copy(object sender, ExecutedRoutedEventArgs e)
@@ -234,15 +234,34 @@ namespace FileExplorer.Views
 			e.CanExecute = true;
 		}
 
-		private void NavigationComboBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+		private void SetClipBoard()
 		{
-			if (!(sender is ComboBox comboBox))
-			{
-				return;
-			}
-			var binding = comboBox.GetBindingExpression(ComboBox.SelectedItemProperty);
-			binding.UpdateTarget();
+			Clipboard.Clear();
+			var paths = new StringCollection();
+			paths.AddRange(GetSelectedPaths().ToArray());
+			Clipboard.SetFileDropList(paths);
 		}
+
+		private IEnumerable<string> GetSelectedPaths()
+		{
+			return CurrentView.SelectedItems.OfType<ListItemViewModel>().Select(vm => vm.Path);
+		}
+
 		#endregion Private Methods
+
+		private void PreviewToggleButton_Click(object sender, RoutedEventArgs e)
+		{
+			PreviewGridColumn.Width = GridLength.Auto;
+		}
+
+		private void TreeViewToggleButton_Click(object sender, RoutedEventArgs e)
+		{
+			TreeViewGridColumn.Width = GridLength.Auto;
+		}
+
+		private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
+		{
+
+		}
 	}
 }
