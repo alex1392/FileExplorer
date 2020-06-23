@@ -10,7 +10,6 @@
 								 xmlns:fd="clr-namespace:Cyc.FluentDesign;assembly=Cyc.FluentDesign"
 								 xmlns:fa="http://schemas.fontawesome.io/icons/"
 								 xmlns:sys="clr-namespace:System;assembly=mscorlib"
-								 xmlns:cycConverter="clr-namespace:Cyc.Mvvm.Converters;assembly=Cyc.Mvvm"
 								 xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 								 xmlns:util="clr-namespace:FileExplorer.Utilities"
 								 xmlns:navi="clr-namespace:System.Windows.Navigation;assembly=presentationframework"
@@ -83,7 +82,7 @@
 									Background="White">
 				<Grid>
 					<ComboBox Name="NavigationComboBox"
-										Width="{Binding ElementName=MenuBar, Path=Height, Converter={cycConverter:MathConverter}, ConverterParameter=x*2+18}"
+										Width="{Binding ElementName=MenuBar, Path=Height, Converter={util:MathConverter}, ConverterParameter=x*2+18}"
 										Height="{Binding ElementName=MenuBar, Path=Height}"
 										IsEditable="False"
 										SelectedItem="{Binding RelativeSource={RelativeSource Self}, Path=Items, Mode=OneWay, Converter={converter:SelectedItemConverter}}"
@@ -288,7 +287,7 @@
 				<ColumnDefinition Name="TreeViewGridColumn"
 													Width="auto">
 					<ColumnDefinition.MaxWidth>
-						<MultiBinding Converter="{cycConverter:MathConverter}"
+						<MultiBinding Converter="{util:MathConverter}"
 													ConverterParameter="x-y-z">
 							<Binding ElementName="mainDockPanel"
 											 Path="ActualWidth" />
@@ -305,7 +304,7 @@
 				<ColumnDefinition Name="PreviewGridColumn"
 													Width="auto">
 					<ColumnDefinition.MaxWidth>
-						<MultiBinding Converter="{cycConverter:MathConverter}"
+						<MultiBinding Converter="{util:MathConverter}"
 													ConverterParameter="x-y-z">
 							<Binding ElementName="mainDockPanel"
 											 Path="ActualWidth" />
