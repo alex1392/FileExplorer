@@ -66,7 +66,7 @@ namespace FileExplorer.ViewModels
 		public IDropTarget FileDropHandler { get; }
 		public IDragSource FileDragHandler { get; }
 
-		public RenameDialogCommand RenameFileCommand { get; private set; }
+		public RenameDialogCommand RenameDialogCommand { get; private set; }
 
 		#endregion Public Properties
 
@@ -79,7 +79,7 @@ namespace FileExplorer.ViewModels
 		{
 		}
 
-		public FolderPageViewModel(IFileProvider fileProvider, INavigationService navigationService, IServiceProvider serviceProvider, IDialogService dialogService, IFileWatcherService fileWatcher, UndoRedoManager undoRedoManager, FileDropHandler fileDropHandler, FileDragHandler fileDragHandler, RenameDialogCommand showRenameDialogCommand)
+		public FolderPageViewModel(IFileProvider fileProvider, INavigationService navigationService, IServiceProvider serviceProvider, IDialogService dialogService, IFileWatcherService fileWatcher, UndoRedoManager undoRedoManager, FileDropHandler fileDropHandler, FileDragHandler fileDragHandler, RenameDialogCommand renameDialogCommand)
 		{
 			this.fileProvider = fileProvider;
 			this.navigationService = navigationService;
@@ -92,7 +92,7 @@ namespace FileExplorer.ViewModels
 			FileDropHandler = fileDropHandler;
 			FileDragHandler = fileDragHandler;
 
-			RenameFileCommand = showRenameDialogCommand;
+			RenameDialogCommand = renameDialogCommand;
 		}
 
 		#endregion Public Constructors

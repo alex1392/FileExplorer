@@ -51,6 +51,11 @@ namespace FileExplorer.Models
 			{
 				return;
 			}
+			if (string.IsNullOrEmpty(filename))
+			{
+				dialogService.ShowMessage("File Name shouldn't be empty.");
+				return;
+			}
 			var command = serviceProvider.GetService<RenameFileCommand>();
 			command.SourcePath = sourcePath;
 			command.ChangedName = filename;

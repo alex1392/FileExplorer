@@ -18,7 +18,7 @@
 			x:Name="mainPage"
 			Title="{Binding Title}">
 	<Page.InputBindings>
-		<KeyBinding Command="{Binding RenameFileCommand}"
+		<KeyBinding Command="{Binding RenameDialogCommand}"
 								CommandParameter="{Binding ElementName=ItemsListView, Path=SelectedItem.Path}"
 								Key="F2">
 		</KeyBinding>
@@ -40,7 +40,7 @@
 				<MenuItem Header="Delete"
 									Command="{x:Static ApplicationCommands.Delete}" />
 				<MenuItem Header="Rename"
-									Command="{Binding DataContext.RenameFileCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+									Command="{Binding DataContext.RenameDialogCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
 									CommandParameter="{Binding Path}" />
 			</ContextMenu>
 			<GridView x:Key="ListView">
