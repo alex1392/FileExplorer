@@ -46,8 +46,8 @@ namespace FileExplorer.Models
 			{
 				return;
 			}
-			var filename = dialogService.ShowFileNameDialog();
-			if (filename == null)
+			var (result, filename) = dialogService.ShowFileNameDialog();
+			if (!result)
 			{
 				return;
 			}

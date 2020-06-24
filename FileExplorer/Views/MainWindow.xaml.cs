@@ -205,10 +205,15 @@ namespace FileExplorer.Views
 		private void New(object sender, ExecutedRoutedEventArgs e)
 		{
 			var ext = e.Parameter?.ToString();
-			var filename = dialogService.ShowFileNameDialog();
-			if (filename == null)
+			var (result,filename) = dialogService.ShowFileNameDialog();
+			if (!result)
 			{
 				return;
+			}
+			if (string.IsNullOrEmpty(filename))
+			{
+				// set default filename
+				filename = ext == null ? "New Folder" : "New File";
 			}
 			// remove extension
 			var extensionIndex = filename.IndexOf('.');
