@@ -26,31 +26,18 @@ namespace FileExplorer.Models
 
 		public override void Execute(object parameter = null)
 		{
-			if (!CanExecute())
-			{
-				throw new InvalidOperationException();
-			}
-
-			var unsuccessPaths = new List<string>();
-			foreach (var sourcePath in SourcePaths)
+			SourcePaths.RemoveAll(sourcePath =>
 			{
 				var filename = Path.GetFileName(sourcePath);
 				var destPath = fileProvider.Move(sourcePath, Path.Combine(DestPath, filename));
-				// record paths
-				if (string.IsNullOrEmpty(destPath))
-				{
-					unsuccessPaths.Add(sourcePath);
-				}
-				else
+				var successful = !string.IsNullOrEmpty(destPath);
+				if (successful)
 				{
 					MovedPaths.Add((sourcePath, destPath));
 				}
-			}
-			// remove unsuccessful paths
-			foreach (var path in unsuccessPaths)
-			{
-				SourcePaths.Remove(path);
-			}
+				return !successful;
+
+			});
 			// if there's no any path successfully moved, the execution is not successful
 			IsExecutionSuccessful = SourcePaths.Count > 0;
 			// refresh page if successful
@@ -62,25 +49,12 @@ namespace FileExplorer.Models
 
 		public override void Undo()
 		{
-			if (!CanExecute())
+			MovedPaths.RemoveAll(path =>
 			{
-				throw new InvalidOperationException();
-			}
-			var unsuccessPaths = new List<(string, string)>();
-			foreach (var (sourcePath, destPath) in MovedPaths)
-			{
-				var result = fileProvider.Move(destPath, sourcePath);
-				// record unsuccessful paths
-				if (result == null)
-				{
-					unsuccessPaths.Add((sourcePath, destPath));
-				}
-			}
-			// remove unsuccessful paths
-			foreach (var path in unsuccessPaths)
-			{
-				MovedPaths.Remove(path);
-			}
+				var (sourcePath, destPath) = path;
+				var successful = fileProvider.Move(destPath, sourcePath) != null;
+				return !successful;
+			});
 			// if there's no any path successfully moved, the execution is not successful
 			IsUndoSuccessful = MovedPaths.Count > 0;
 			// refresh page if successful

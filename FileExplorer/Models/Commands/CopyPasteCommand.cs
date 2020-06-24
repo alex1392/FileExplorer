@@ -31,30 +31,17 @@ namespace FileExplorer.Models
 
 		public override void Execute(object parameter)
 		{
-			if (!CanExecute())
-			{
-				throw new InvalidOperationException();
-			}
-			var unsuccessPaths = new List<string>();
-			foreach (var path in SourcePaths)
+			SourcePaths.RemoveAll(path =>
 			{
 				var filename = Path.GetFileName(path);
-				var result = fileProvider.Copy(path, Path.Combine(DestPath, filename));
-				// record paths
-				if (string.IsNullOrEmpty(result))
+				var destPath = fileProvider.Copy(path, Path.Combine(DestPath, filename));
+				var successful = !string.IsNullOrEmpty(destPath);
+				if (successful)
 				{
-					unsuccessPaths.Add(path);
+					CopyedPaths.Add(destPath);
 				}
-				else
-				{
-					CopyedPaths.Add(result);
-				}
-			}
-			// remove unsuccessful paths
-			foreach (var path in unsuccessPaths)
-			{
-				SourcePaths.Remove(path);
-			}
+				return !successful;
+			});
 			// if there's no any path successfully moved, the execution is not successful
 			IsExecutionSuccessful = SourcePaths.Count > 0;
 			// refresh page if successful
@@ -66,26 +53,12 @@ namespace FileExplorer.Models
 
 		public override void Undo()
 		{
-			if (!CanExecute())
-			{
-				throw new InvalidOperationException();
-			}
-			var UnSuccessPaths = new List<string>();
-			foreach (var path in CopyedPaths)
+			CopyedPaths.RemoveAll(path =>
 			{
 				// delete copyed file
 				var isSuccessful = fileProvider.Delete(path);
-				// record unsuccessful paths
-				if (!isSuccessful)
-				{
-					UnSuccessPaths.Add(path);
-				}
-			}
-			// remove unsuccessful paths
-			foreach (var path in UnSuccessPaths)
-			{
-				CopyedPaths.Remove(path);
-			}
+				return !isSuccessful;
+			});
 			// if there's no any path successfully moved, the execution is not successful
 			IsUndoSuccessful = CopyedPaths.Count > 0;
 			// refresh page if successful

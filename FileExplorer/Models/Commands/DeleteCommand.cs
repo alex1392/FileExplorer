@@ -46,25 +46,8 @@ namespace FileExplorer.Models
 
 		public void Execute(object parameter)
 		{
-			if (!CanExecute())
-			{
-				throw new InvalidOperationException();
-			}
-			var unsuccessPaths = new List<string>();
-			foreach (var path in Paths)
-			{
-				var isSuccessful = fileProvider.DeleteToBin(path);
-				// record paths
-				if (!isSuccessful)
-				{
-					unsuccessPaths.Add(path);
-				}
-			}
-			// remove unsuccessful paths
-			foreach (var path in unsuccessPaths)
-			{
-				Paths.Remove(path);
-			}
+			// delete every path in Paths to bin, if is not successful, remove the path from Paths.
+			Paths.RemoveAll(path => !fileProvider.DeleteToBin(path));
 			// if there's no any path successfully moved, the execution is not successful
 			IsExecutionSuccessful = Paths.Count > 0;
 			// refresh page if successful
@@ -76,26 +59,8 @@ namespace FileExplorer.Models
 
 		public void Undo()
 		{
-			if (!CanExecute())
-			{
-				throw new InvalidOperationException();
-			}
-			var UnSuccessPaths = new List<string>();
-			foreach (var path in Paths)
-			{
-				// delete copyed file
-				var isSuccessful = fileProvider.RestoreFromBin(path);
-				// record unsuccessful paths
-				if (!isSuccessful)
-				{
-					UnSuccessPaths.Add(path);
-				}
-			}
-			// remove unsuccessful paths
-			foreach (var path in UnSuccessPaths)
-			{
-				Paths.Remove(path);
-			}
+			// restore every path in Paths, if is not successful, remove the path from Paths
+			Paths.RemoveAll(path => !fileProvider.RestoreFromBin(path));
 			// if there's no any path successfully moved, the execution is not successful
 			IsUndoSuccessful = Paths.Count > 0;
 			// refresh page if successful
