@@ -79,11 +79,6 @@ namespace FileExplorer
 			serviceCollection.AddTransient<CreateCommand>();
 			serviceCollection.AddTransient<DeleteCommand>();
 
-			serviceCollection.AddSingleton<GoBackCommand>();
-			serviceCollection.AddSingleton<GoForwardCommand>();
-			serviceCollection.AddSingleton<RefreshCommand>();
-			serviceCollection.AddSingleton<GoUpCommand>();
-			serviceCollection.AddSingleton<GoHomeCommand>();
 			serviceCollection.AddSingleton<RenameFileCommand>();
 
 			serviceCollection.AddSingleton<RenameDialogCommand>();

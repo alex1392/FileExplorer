@@ -33,13 +33,11 @@ namespace FileExplorer.ViewModels
 
 		#region Public Properties
 
-		public ICommand GoBackCommand { get; private set; }
-
-		public ICommand GoForwardCommand { get; private set; }
-
-		public ICommand GoUpCommand { get; private set; }
-		public ICommand GoHomeCommand { get; private set; }
-		public ICommand RefreshCommand { get; private set; }
+		public RelayCommand GoBackCommand { get; private set; }
+		public RelayCommand GoForwardCommand { get; private set; }
+		public RelayCommand GoUpCommand { get; private set; }
+		public RelayCommand GoHomeCommand { get; private set; }
+		public RelayCommand RefreshCommand { get; private set; }
 
 		public string CurrentPath { get; private set; }
 		public IEnumerable<Item> PathItems { get; private set; }
@@ -57,7 +55,7 @@ namespace FileExplorer.ViewModels
 		{
 		}
 
-		public MainWindowViewModel(ISystemFolderProvider systemFolderProvider, INavigationService navigationService, IServiceProvider serviceProvider, IFileProvider fileProvider, UndoRedoManager undoRedoManager, GoBackCommand goBackCommand, GoForwardCommand goForwardCommand, GoUpCommand goUpCommand, RefreshCommand refreshCommand, GoHomeCommand goHomeCommand)
+		public MainWindowViewModel(ISystemFolderProvider systemFolderProvider, INavigationService navigationService, IServiceProvider serviceProvider, IFileProvider fileProvider, UndoRedoManager undoRedoManager)
 		{
 			this.systemFolderProvider = systemFolderProvider;
 			this.navigationService = navigationService;
@@ -111,12 +109,27 @@ namespace FileExplorer.ViewModels
 			}
 			void SetupCommands()
 			{
-				GoBackCommand = goBackCommand;
-				GoForwardCommand = goForwardCommand;
-				RefreshCommand = refreshCommand;
-				GoUpCommand = goUpCommand;
-				goHomeCommand.HomePage = HomePage;
-				GoHomeCommand = goHomeCommand;
+				GoBackCommand = new RelayCommand(
+					() => navigationService.GoBack(), 
+					() => navigationService.CanGoBack);
+				GoForwardCommand = new RelayCommand(
+					() => navigationService.GoForward(), 
+					() => navigationService.CanGoForward);
+				GoUpCommand = new RelayCommand(
+					() => navigationService.GoUp(), 
+					() => navigationService.CanGoUp);
+				navigationService.Navigated += (_, _) =>
+				{
+					GoBackCommand.RaiseCanExecuteChanged();
+					GoForwardCommand.RaiseCanExecuteChanged();
+					GoUpCommand.RaiseCanExecuteChanged();
+				};
+
+				RefreshCommand = new RelayCommand(
+					() => navigationService.Refresh());
+				GoHomeCommand = new RelayCommand(
+					() => navigationService.Navigate(HomePage.Uri),
+					() => HomePage != null);
 			}
 		}
 

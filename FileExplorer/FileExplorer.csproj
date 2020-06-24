@@ -112,17 +112,12 @@
     <Compile Include="ViewModels\DragDrop\FileDragHandler.cs" />
     <Compile Include="ViewModels\FolderPageViewModel.cs" />
     <Compile Include="Models\Interfaces\INavigationService.cs" />
-    <Compile Include="Models\Commands\GoBackCommand.cs" />
-    <Compile Include="Models\Commands\GoForwardCommand.cs" />
-    <Compile Include="Models\Commands\GoUpCommand.cs" />
-    <Compile Include="Models\Commands\GoHomeCommand.cs" />
     <Compile Include="Models\Commands\IUndoCommand.cs" />
     <Compile Include="Models\Interfaces\IResourceProvider.cs" />
     <Compile Include="ViewModels\ListFileItemViewModel.cs" />
     <Compile Include="ViewModels\ListFolderItemViewModel.cs" />
     <Compile Include="ViewModels\ListItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="Models\Commands\RefreshCommand.cs" />
     <Compile Include="ViewModels\DragDrop\FileDropHandler.cs" />
     <Compile Include="Models\Commands\PasteCommand.cs" />
     <Compile Include="Views\Converters\BoolToVisibilityConverter.cs" />
