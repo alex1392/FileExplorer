@@ -1,28 +1,43 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace FileExplorer.Models
 {
+	public struct ParamCommand
+	{
+		public static readonly ParamCommand Empty = new ParamCommand();
+		
+		public ParamCommand(IUndoCommand command, object parameter)
+		{
+			Command = command ?? throw new ArgumentNullException(nameof(command));
+			Parameter = parameter ?? throw new ArgumentNullException(nameof(parameter));
+		}
+
+		public IUndoCommand Command { get; private set; }
+		public object Parameter { get; private set; }
+		
+	}
 	public class UndoRedoManager
 	{
 		#region Private Fields
-
-		private readonly List<IUndoCommand> commands = new List<IUndoCommand>();
+		private readonly List<ParamCommand> commands = new List<ParamCommand>();
 		private int index = -1;
 
 		#endregion Private Fields
 
 		#region Public Properties
 
-		public IUndoCommand CurrentCommand
+		public ParamCommand CurrentCommand
 		{
 			get
 			{
 				if (commands.Count == 0 || index < 0 || index >= commands.Count)
 				{
-					return null;
+					return ParamCommand.Empty;
 				}
 				return commands[index];
 			}
@@ -48,13 +63,14 @@ namespace FileExplorer.Models
 
 		#region Public Methods
 
-		public IEnumerable<IUndoCommand> GetUndoEnumerble() => commands.Take(index + 1);
+		public IEnumerable<ParamCommand> GetUndoEnumerble() => commands.Take(index + 1);
 
-		public IEnumerable<IUndoCommand> GetRedoEnumerable() => commands.Skip(index + 1);
+		public IEnumerable<ParamCommand> GetRedoEnumerable() => commands.Skip(index + 1);
 
-		public void Execute(IUndoCommand newCommand)
+		public void Execute(IUndoCommand newCommand, object parameter = null)
 		{
-			newCommand.Execute(null);
+			// execute new command
+			newCommand.Execute(parameter);
 			// if new command is not successfully executed, don't add it into list
 			if (!newCommand.IsExecutionSuccessful)
 			{
@@ -62,8 +78,8 @@ namespace FileExplorer.Models
 			}
 			// remove redo commands
 			commands.RemoveRange(index + 1, commands.Count - (index + 1));
-			// add new command to list
-			commands.Add(newCommand);
+			// add new command and its parameter to list
+			commands.Add(new ParamCommand(newCommand, parameter));
 			// move index forward
 			index++;
 			// if number of command is larger than the capacity of the list
@@ -86,9 +102,10 @@ namespace FileExplorer.Models
 
 		private void Undo()
 		{
-			CurrentCommand.Undo();
+			// execute undo
+			CurrentCommand.Command.Undo();
 			// if undo is not successful
-			if (!CurrentCommand.IsUndoSuccessful)
+			if (!CurrentCommand.Command.IsUndoSuccessful)
 			{
 				// remove the current command
 				commands.Remove(CurrentCommand);
@@ -105,10 +122,12 @@ namespace FileExplorer.Models
 
 		private void Redo()
 		{
+			// move the index to the next command
 			index++;
-			CurrentCommand.Execute(null);
+			// execute redo with stored parameter
+			CurrentCommand.Command.Execute(CurrentCommand.Parameter);
 			// if redo is not successful
-			if (!CurrentCommand.IsExecutionSuccessful)
+			if (!CurrentCommand.Command.IsExecutionSuccessful)
 			{
 				// remove the current command
 				commands.Remove(CurrentCommand);
