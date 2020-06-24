@@ -25,11 +25,18 @@ namespace FileExplorer.Views.Converters
 			{
 				return null;
 			}
-			var text = File.ReadAllText(path);
-			var paragraph = new Paragraph();
-			paragraph.Inlines.Add(text);
-			var doc = new FlowDocument(paragraph);
-			return doc;
+			try
+			{
+				var text = File.ReadAllText(path);
+				var paragraph = new Paragraph();
+				paragraph.Inlines.Add(text);
+				var doc = new FlowDocument(paragraph);
+				return doc;
+			}
+			catch (Exception)
+			{
+				return null;
+			}
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
