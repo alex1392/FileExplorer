@@ -14,7 +14,7 @@ namespace FileExplorer.Models
 		public ParamCommand(IUndoCommand command, object parameter)
 		{
 			Command = command ?? throw new ArgumentNullException(nameof(command));
-			Parameter = parameter ?? throw new ArgumentNullException(nameof(parameter));
+			Parameter = parameter;
 		}
 
 		public IUndoCommand Command { get; private set; }
