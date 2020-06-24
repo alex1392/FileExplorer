@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Input;
 
 using IO = System.IO;
 
@@ -110,13 +109,13 @@ namespace FileExplorer.ViewModels
 			void SetupCommands()
 			{
 				GoBackCommand = new RelayCommand(
-					() => navigationService.GoBack(), 
+					() => navigationService.GoBack(),
 					() => navigationService.CanGoBack);
 				GoForwardCommand = new RelayCommand(
-					() => navigationService.GoForward(), 
+					() => navigationService.GoForward(),
 					() => navigationService.CanGoForward);
 				GoUpCommand = new RelayCommand(
-					() => navigationService.GoUp(), 
+					() => navigationService.GoUp(),
 					() => navigationService.CanGoUp);
 				navigationService.Navigated += (_, _) =>
 				{
@@ -137,6 +136,7 @@ namespace FileExplorer.ViewModels
 
 		#region Public Methods
 
+		#region Editting Methods
 		public bool Paste(List<string> sourcePaths, string destPath, PasteType type)
 		{
 			PasteCommand command = type switch
@@ -153,25 +153,81 @@ namespace FileExplorer.ViewModels
 
 		public void New(string path)
 		{
-			var command = serviceProvider.GetService<CreateCommand>();
-			command.Path = path;
-			undoRedoManager.Execute(command);
+			string createdPath = null;
+			var createCommand = new UndoCommand(New, UndoNew, CanNew);
+			undoRedoManager.Execute(createCommand);
+
+			bool New()
+			{
+				createdPath = fileProvider.Create(path);
+				var result = createdPath != null;
+				if (result)
+				{
+					navigationService.Refresh();
+				}
+				return result;
+			}
+			bool UndoNew()
+			{
+				var result = fileProvider.Delete(createdPath);
+				if (result)
+				{
+					navigationService.Refresh();
+				}
+				return result;
+			}
+			bool CanNew()
+			{
+				return path != null;
+			}
 		}
 
-		public void Delete(List<string> paths)
+		public void Delete(List<string> Paths)
 		{
-			var command = serviceProvider.GetService<DeleteCommand>();
-			command.Paths = paths;
-			undoRedoManager.Execute(command);
+			var deleteCommand = new UndoCommand(Delete, UndoDelete, CanDelete);
+			undoRedoManager.Execute(deleteCommand);
+
+			bool Delete()
+			{
+				// delete every path in Paths to bin, if is not successful, remove the path from Paths.
+				Paths.RemoveAll(path => !fileProvider.DeleteToBin(path));
+				// if there's no any path successfully moved, the execution is not successful
+				var result = Paths.Count > 0;
+				// refresh page if successful
+				if (result)
+				{
+					navigationService.Refresh();
+				}
+				return result;
+			}
+
+			bool UndoDelete()
+			{
+				// restore every path in Paths, if is not successful, remove the path from Paths
+				Paths.RemoveAll(path => !fileProvider.RestoreFromBin(path));
+				// if there's no any path successfully moved, the execution is not successful
+				var result = Paths.Count > 0;
+				// refresh page if successful
+				if (result)
+				{
+					navigationService.Refresh();
+				}
+				return result;
+			}
+
+			bool CanDelete()
+			{
+				return Paths != null;
+			}
 		}
 
 		public bool CanRedo(object parameter) => undoRedoManager.RedoCommand.CanExecute(parameter);
-
 		public bool CanUndo(object parameter) => undoRedoManager.UndoCommand.CanExecute(parameter);
-
 		public void Redo(object parameter) => undoRedoManager.RedoCommand.Execute(parameter);
-
 		public void Undo(object parameter) => undoRedoManager.UndoCommand.Execute(parameter);
+		#endregion
+
+		#region Navigation Methods
 
 		public void Navigate(Uri uri)
 		{
@@ -192,6 +248,8 @@ namespace FileExplorer.ViewModels
 		{
 			navigationService.Navigate("FolderPage", path);
 		}
+
+		#endregion
 
 		#endregion Public Methods
 
