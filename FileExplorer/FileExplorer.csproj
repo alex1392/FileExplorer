@@ -94,6 +94,7 @@
     <Compile Include="Models\Commands\CreateCommand.cs" />
     <Compile Include="Models\Commands\RenameDialogCommand.cs" />
     <Compile Include="Models\Commands\RenameFileCommand.cs" />
+    <Compile Include="Models\Commands\UndoCommand.cs" />
     <Compile Include="Models\UndoRedoManager.cs" />
     <Compile Include="Models\Commands\RelayCommand.cs" />
     <Compile Include="Models\Interfaces\IDialogService.cs" />
