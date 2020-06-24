@@ -3,6 +3,7 @@
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -30,17 +31,31 @@ namespace FileExplorer.ViewModels
 			Item.Path = Path;
 		}
 
+		protected override async Task GetIconAsync()
+		{
+			await Task.Run(async () =>
+			{
+				//await Task.Delay(1000).ConfigureAwait(false);
+				return Drawing::Icon.ExtractAssociatedIcon(Path);
+			}).ContinueWith(task =>
+			{
+				// image source must be created at main thread
+				// however, sometimes the exception may not occurs, perhaps the imaging method uses certain caching method?
+				Icon = Imaging.CreateBitmapSourceFromHIcon(task.Result.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+			}, 
+			// force the continuation task executing on the main thread
+			// this is only valid when the task is originated on the main thread
+			TaskScheduler.FromCurrentSynchronizationContext());
+		}
+
+		[Obsolete]
 		protected override ImageSource GetIcon()
 		{
+			Task.Delay(1000).Wait();
 			var icon = Drawing::Icon.ExtractAssociatedIcon(Path);
-			ImageSource source = null;
-			dispatcherService.Invoke(() =>
-			{
-				// image source must be created at the main thread
-				source = Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-			});
-			return source;
+			return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
 		}
+
 
 		#endregion Protected Methods
 	}

@@ -2,6 +2,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace FileExplorer.ViewModels
@@ -30,7 +31,30 @@ namespace FileExplorer.ViewModels
 
 		#region Public Properties
 
-		public ImageSource Icon => icon ?? (icon = GetIcon());
+		public virtual ImageSource Icon
+		{
+			get
+			{
+				if (icon == null)
+				{
+					// fire and forget
+					GetIconAsync();
+				}
+				return icon /*?? (icon = GetIcon())*/;
+			}
+
+			protected set
+			{
+				if (icon == value)
+				{
+					return;
+				}
+				icon = value;
+				RaisePropertyChanged(nameof(Icon));
+			}
+		}
+
+		
 
 		public string Path
 		{
@@ -70,8 +94,14 @@ namespace FileExplorer.ViewModels
 		#region Protected Methods
 
 		protected abstract void SetItem();
-
+		[Obsolete("Seems like setting IsAsync in binding is buggy..., use GetIconAsync instead.")]
 		protected abstract ImageSource GetIcon();
+		protected abstract Task GetIconAsync();
+
+		protected virtual void RaisePropertyChanged(string propertyName)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
 
 		#endregion Protected Methods
 	}
