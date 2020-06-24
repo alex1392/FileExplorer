@@ -32,6 +32,11 @@ namespace FileExplorer.Views.Services
 			Dispatcher.Invoke(action);
 		}
 
+		public TResult Invoke<TResult>(Func<TResult> func)
+		{
+			return Dispatcher.Invoke(func);
+		}
+
 		#endregion Public Methods
 	}
 }
