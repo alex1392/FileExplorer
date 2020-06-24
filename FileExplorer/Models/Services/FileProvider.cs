@@ -191,12 +191,17 @@ namespace FileExplorer.Models
 				if (File.Exists(path))
 				{
 					File.Delete(path);
+					return true;
 				}
 				else if (Directory.Exists(path))
 				{
 					Directory.Delete(path, recursive: true);
+					return true;
 				}
-				return true;
+				else
+				{
+					return false;
+				}
 			}
 			catch (Exception ex)
 			{
