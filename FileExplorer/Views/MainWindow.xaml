@@ -17,9 +17,10 @@
 								 d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel, IsDesignTimeCreatable=True}"
 								 Icon="/FileExplorer;component/Resources/Computer.ico"
 								 Title="MainWindow"
+								 WindowStartupLocation="CenterScreen"
 								 Height="450"
-								 Name="mainWindow"
-								 Width="800">
+								 Width="800"
+								 Name="mainWindow">
 	<Window.CommandBindings>
 		<CommandBinding Command="{x:Static ApplicationCommands.Undo}"
 										Executed="Undo"
