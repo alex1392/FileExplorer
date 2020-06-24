@@ -88,8 +88,7 @@ namespace FileExplorer.ViewModels
 			this.fileWatcher = fileWatcher;
 			this.undoRedoManager = undoRedoManager;
 
-			// TODO: seperate drop handler from folderpageviewmodel?
-			fileDropHandler.FolderPageVM = this;
+			fileDropHandler.CurrentFolderPath = Path;
 			FileDropHandler = fileDropHandler;
 			FileDragHandler = fileDragHandler;
 
@@ -99,29 +98,6 @@ namespace FileExplorer.ViewModels
 		#endregion Public Constructors
 
 		#region Public Methods
-
-		public void MoveFile(IEnumerable<string> sourcePath, string destPath)
-		{
-			var command = serviceProvider.GetService<CutPasteCommand>();
-			command.SourcePaths = sourcePath.ToList();
-			command.DestPath = destPath;
-			undoRedoManager.Execute(command);
-		}
-
-		public void Navigate(ListFolderItem folderItem)
-		{
-			navigationService.Navigate("FolderPage", folderItem.Path);
-		}
-
-		public void Navigate(Item pathItem)
-		{
-			navigationService.Navigate("FolderPage", pathItem.Path);
-		}
-
-		public void Navigate(string path)
-		{
-			navigationService.Navigate("FolderPage", path);
-		}
 
 		public void SetupListItems()
 		{
@@ -144,9 +120,5 @@ namespace FileExplorer.ViewModels
 		#endregion Public Methods
 	}
 
-	public enum PasteType
-	{
-		Cut,
-		Copy,
-	}
+	
 }

@@ -20,11 +20,6 @@
 								 Height="450"
 								 Name="mainWindow"
 								 Width="800">
-	<Window.InputBindings>
-		<KeyBinding Command="{x:Static ApplicationCommands.Delete}"
-								Key="Delete" />
-
-	</Window.InputBindings>
 	<Window.CommandBindings>
 		<CommandBinding Command="{x:Static ApplicationCommands.Undo}"
 										Executed="Undo"
@@ -282,7 +277,7 @@
 				</Grid>
 			</Border>
 		</DockPanel>
-		<Grid SizeChanged="Grid_SizeChanged">
+		<Grid>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Name="TreeViewGridColumn"
 													Width="auto">

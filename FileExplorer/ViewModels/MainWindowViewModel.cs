@@ -16,11 +16,8 @@ namespace FileExplorer.ViewModels
 	{
 		#region Private Fields
 
-		private readonly INavigationService navigationService;
 		private readonly IServiceProvider serviceProvider;
-		private readonly IFileProvider fileProvider;
-		private readonly UndoRedoManager undoRedoManager;
-		private readonly ISystemFolderProvider systemFolderProvider;
+		private IEnumerable<Item> pathItems;
 
 		#endregion Private Fields
 
@@ -39,7 +36,19 @@ namespace FileExplorer.ViewModels
 		public RelayCommand RefreshCommand { get; private set; }
 
 		public string CurrentPath { get; private set; }
-		public IEnumerable<Item> PathItems { get; private set; }
+		public IEnumerable<Item> PathItems
+		{
+			get => pathItems; 
+			private set
+			{
+				if (value == pathItems)
+				{
+					return;
+				}
+				pathItems = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PathItems)));
+			}
+		}
 		public ObservableCollection<ITreeItem> TreeItems { get; private set; } = new ObservableCollection<ITreeItem>();
 		public TreePageItem HomePage { get; private set; }
 
@@ -54,13 +63,9 @@ namespace FileExplorer.ViewModels
 		{
 		}
 
-		public MainWindowViewModel(ISystemFolderProvider systemFolderProvider, INavigationService navigationService, IServiceProvider serviceProvider, IFileProvider fileProvider, UndoRedoManager undoRedoManager)
+		public MainWindowViewModel(ISystemFolderProvider systemFolderProvider, INavigationService navigationService, IServiceProvider serviceProvider)
 		{
-			this.systemFolderProvider = systemFolderProvider;
-			this.navigationService = navigationService;
 			this.serviceProvider = serviceProvider;
-			this.fileProvider = fileProvider;
-			this.undoRedoManager = undoRedoManager;
 			navigationService.Navigated += NavigationService_Navigated;
 
 			SetupHomePage();
@@ -134,132 +139,12 @@ namespace FileExplorer.ViewModels
 
 		#endregion Public Constructors
 
-		#region Public Methods
-
-		#region Editting Methods
-		public bool Paste(List<string> sourcePaths, string destPath, PasteType type)
-		{
-			PasteCommand command = type switch
-			{
-				PasteType.Cut => serviceProvider.GetService<CutPasteCommand>(),
-				PasteType.Copy => serviceProvider.GetService<CopyPasteCommand>(),
-				_ => throw new NotImplementedException(),
-			};
-			command.SourcePaths = sourcePaths;
-			command.DestPath = destPath;
-			undoRedoManager.Execute(command);
-			return command.IsExecutionSuccessful;
-		}
-
-		public void New(string path)
-		{
-			string createdPath = null;
-			var createCommand = new UndoCommand(New, UndoNew, CanNew);
-			undoRedoManager.Execute(createCommand);
-
-			bool New()
-			{
-				createdPath = fileProvider.Create(path);
-				var result = createdPath != null;
-				if (result)
-				{
-					navigationService.Refresh();
-				}
-				return result;
-			}
-			bool UndoNew()
-			{
-				var result = fileProvider.Delete(createdPath);
-				if (result)
-				{
-					navigationService.Refresh();
-				}
-				return result;
-			}
-			bool CanNew()
-			{
-				return path != null;
-			}
-		}
-
-		public void Delete(List<string> Paths)
-		{
-			var deleteCommand = new UndoCommand(Delete, UndoDelete, CanDelete);
-			undoRedoManager.Execute(deleteCommand);
-
-			bool Delete()
-			{
-				// delete every path in Paths to bin, if is not successful, remove the path from Paths.
-				Paths.RemoveAll(path => !fileProvider.DeleteToBin(path));
-				// if there's no any path successfully moved, the execution is not successful
-				var result = Paths.Count > 0;
-				// refresh page if successful
-				if (result)
-				{
-					navigationService.Refresh();
-				}
-				return result;
-			}
-
-			bool UndoDelete()
-			{
-				// restore every path in Paths, if is not successful, remove the path from Paths
-				Paths.RemoveAll(path => !fileProvider.RestoreFromBin(path));
-				// if there's no any path successfully moved, the execution is not successful
-				var result = Paths.Count > 0;
-				// refresh page if successful
-				if (result)
-				{
-					navigationService.Refresh();
-				}
-				return result;
-			}
-
-			bool CanDelete()
-			{
-				return Paths != null;
-			}
-		}
-
-		public bool CanRedo(object parameter) => undoRedoManager.RedoCommand.CanExecute(parameter);
-		public bool CanUndo(object parameter) => undoRedoManager.UndoCommand.CanExecute(parameter);
-		public void Redo(object parameter) => undoRedoManager.RedoCommand.Execute(parameter);
-		public void Undo(object parameter) => undoRedoManager.UndoCommand.Execute(parameter);
-		#endregion
-
-		#region Navigation Methods
-
-		public void Navigate(Uri uri)
-		{
-			navigationService.Navigate(uri);
-		}
-
-		public void Navigate(TreePageItem treePageItem)
-		{
-			navigationService.Navigate(treePageItem.Uri);
-		}
-
-		public void Navigate(Item item)
-		{
-			navigationService.Navigate("FolderPage", item.Path);
-		}
-
-		public void Navigate(string path)
-		{
-			navigationService.Navigate("FolderPage", path);
-		}
-
-		#endregion
-
-		#endregion Public Methods
-
 		#region Private Methods
 
 		private void NavigationService_Navigated(object sender, string path)
 		{
 			CurrentPath = path;
 			PathItems = GetPathItems(path);
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PathItems)));
 
 			IEnumerable<Item> GetPathItems(string path)
 			{

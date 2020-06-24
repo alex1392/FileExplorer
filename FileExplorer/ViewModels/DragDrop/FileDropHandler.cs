@@ -1,4 +1,5 @@
-﻿using GongSolutions.Wpf.DragDrop;
+﻿using FileExplorer.Models;
+using GongSolutions.Wpf.DragDrop;
 
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,17 @@ namespace FileExplorer.ViewModels
 {
 	public class FileDropHandler : IDropTarget
 	{
+		private readonly EditManager editManager;
 		#region Public Properties
 
-		public FolderPageViewModel FolderPageVM { get; set; }
+		public string CurrentFolderPath { get; set; }
 
 		#endregion Public Properties
+
+		public FileDropHandler(EditManager editManager)
+		{
+			this.editManager = editManager;
+		}
 
 		#region Public Methods
 
@@ -45,11 +52,11 @@ namespace FileExplorer.ViewModels
 			// if drop to a folder
 			if (dropInfo.TargetItem is ListFolderItemViewModel targetFolderVM)
 			{   // move file to the target folder
-				FolderPageVM.MoveFile(paths, targetFolderVM.Path);
+				editManager.Move(paths, targetFolderVM.Path);
 			}
 			else // if drop to empty area or file item
 			{   // move file to the current folder
-				FolderPageVM.MoveFile(paths, FolderPageVM.Path);
+				editManager.Move(paths, CurrentFolderPath);
 			}
 		}
 

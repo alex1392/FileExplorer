@@ -82,6 +82,8 @@ namespace FileExplorer
 			serviceCollection.AddSingleton<RenameFileCommand>();
 
 			serviceCollection.AddSingleton<RenameDialogCommand>();
+
+			serviceCollection.AddSingleton<EditManager>();
 		}
 
 		#endregion Private Methods

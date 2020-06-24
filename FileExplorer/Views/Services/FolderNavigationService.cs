@@ -138,7 +138,7 @@ namespace FileExplorer.Views.Services
 			var page = pageKey switch
 			{
 				// TODO: make a key registry ??
-				"FolderPage" => serviceProvider.GetService<FolderPage>(),
+				nameof(FolderPage) => serviceProvider.GetService<FolderPage>(),
 				_ => throw new InvalidOperationException("Cannot recognize given pageKey.")
 			};
 			// check if destination path is exist

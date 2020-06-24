@@ -23,6 +23,9 @@ namespace FileExplorer.Views
 
 		private readonly MainWindowViewModel vm;
 		private readonly IDialogService dialogService;
+		private readonly INavigationService navigationService;
+		private readonly UndoRedoManager undoRedoManager;
+		private readonly EditManager editManager;
 		private PasteType pasteType;
 
 		#endregion Private Fields
@@ -41,20 +44,24 @@ namespace FileExplorer.Views
 			this.Loaded += MainWindow_Loaded;
 		}
 
-		public MainWindow(MainWindowViewModel vm, IDialogService dialogService) : this()
+		public MainWindow(MainWindowViewModel vm, IDialogService dialogService, INavigationService navigationService, UndoRedoManager undoRedoManager, EditManager editManager) : this()
 		{
 			this.vm = vm;
 			this.dialogService = dialogService;
+			this.navigationService = navigationService;
+			this.undoRedoManager = undoRedoManager;
+			this.editManager = editManager;
 			DataContext = this.vm;
 		}
 
 		#endregion Public Constructors
 
 		#region Private Methods
+		#region Events
 
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
 		{
-			vm.Navigate(vm.HomePage);
+			navigationService.Navigate(vm.HomePage.Uri);
 		}
 
 		private void ViewButton_Click(object sender, RoutedEventArgs e)
@@ -77,7 +84,7 @@ namespace FileExplorer.Views
 			{
 				return;
 			}
-			vm.Navigate(item);
+			navigationService.Navigate(nameof(FolderPage), item.Path);
 		}
 
 		private void PathListBox_MouseDown(object sender, MouseButtonEventArgs e)
@@ -98,7 +105,7 @@ namespace FileExplorer.Views
 		{
 			if (e.Key == Key.Enter)
 			{
-				vm.Navigate(PathTextBox.Text);
+				navigationService.Navigate(nameof(FolderPage), PathTextBox.Text);
 			}
 		}
 
@@ -122,11 +129,11 @@ namespace FileExplorer.Views
 				// load the subfolders for the tree view item to expand
 				folderItem.LoadSubFolders();
 				// Navigate to the selected folder
-				vm.Navigate(folderItem);
+				navigationService.Navigate(nameof(FolderPage), folderItem.Path);
 			}
 			else if (treeItem is TreePageItem pageItem)
 			{
-				vm.Navigate(pageItem);
+				navigationService.Navigate(pageItem.Uri);
 			}
 			// avoid recursive event propagation
 			if (e != null)
@@ -145,25 +152,31 @@ namespace FileExplorer.Views
 			binding.UpdateTarget();
 		}
 
-		private void Undo(object sender, ExecutedRoutedEventArgs e)
+		private void PreviewToggleButton_Click(object sender, RoutedEventArgs e)
 		{
-			vm.Undo(e.Parameter);
+			PreviewGridColumn.Width = GridLength.Auto;
 		}
 
-		private void Redo(object sender, ExecutedRoutedEventArgs e)
+		private void TreeViewToggleButton_Click(object sender, RoutedEventArgs e)
 		{
-			vm.Redo(e.Parameter);
+			TreeViewGridColumn.Width = GridLength.Auto;
 		}
 
-		private void CanRedo(object sender, CanExecuteRoutedEventArgs e)
-		{
-			e.CanExecute = vm.CanRedo(e.Parameter);
-		}
+		#endregion
 
-		private void CanUndo(object sender, CanExecuteRoutedEventArgs e)
-		{
-			e.CanExecute = vm.CanUndo(e.Parameter);
-		}
+		#region CommandBindings
+
+		private void Undo(object sender, ExecutedRoutedEventArgs e) 
+			=> undoRedoManager.UndoCommand.Execute(e.Parameter);
+
+		private void Redo(object sender, ExecutedRoutedEventArgs e) 
+			=> undoRedoManager.RedoCommand.Execute(e.Parameter);
+
+		private void CanRedo(object sender, CanExecuteRoutedEventArgs e) 
+			=> e.CanExecute = undoRedoManager.RedoCommand.CanExecute(e.Parameter);
+
+		private void CanUndo(object sender, CanExecuteRoutedEventArgs e) 
+			=> e.CanExecute = undoRedoManager.UndoCommand.CanExecute(e.Parameter);
 
 		private void Copy(object sender, ExecutedRoutedEventArgs e)
 		{
@@ -190,7 +203,7 @@ namespace FileExplorer.Views
 		private void Paste(object sender, ExecutedRoutedEventArgs e)
 		{
 			var sourcePaths = Clipboard.GetFileDropList().OfType<string>().ToList();
-			var isSuccessful = vm.Paste(sourcePaths, vm.CurrentPath, pasteType);
+			var isSuccessful = editManager.Paste(sourcePaths, vm.CurrentPath, pasteType);
 			if (isSuccessful)
 			{
 				Clipboard.Clear();
@@ -221,7 +234,7 @@ namespace FileExplorer.Views
 			{
 				filename = filename.Remove(extensionIndex);
 			}
-			vm.New(Path.Combine(vm.CurrentPath, filename + ext));
+			editManager.New(Path.Combine(vm.CurrentPath, filename + ext));
 		}
 
 		private void CanNew(object sender, CanExecuteRoutedEventArgs e)
@@ -231,7 +244,7 @@ namespace FileExplorer.Views
 
 		private void Delete(object sender, ExecutedRoutedEventArgs e)
 		{
-			vm.Delete(GetSelectedPaths().ToList());
+			editManager.Delete(GetSelectedPaths().ToList());
 		}
 
 		private void CanDelete(object sender, CanExecuteRoutedEventArgs e)
@@ -239,6 +252,7 @@ namespace FileExplorer.Views
 			e.CanExecute = true;
 		}
 
+		#endregion
 		private void SetClipBoard()
 		{
 			Clipboard.Clear();
@@ -254,19 +268,5 @@ namespace FileExplorer.Views
 
 		#endregion Private Methods
 
-		private void PreviewToggleButton_Click(object sender, RoutedEventArgs e)
-		{
-			PreviewGridColumn.Width = GridLength.Auto;
-		}
-
-		private void TreeViewToggleButton_Click(object sender, RoutedEventArgs e)
-		{
-			TreeViewGridColumn.Width = GridLength.Auto;
-		}
-
-		private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
-		{
-
-		}
 	}
 }

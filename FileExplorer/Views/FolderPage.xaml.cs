@@ -49,6 +49,7 @@ namespace FileExplorer.Views
 		#region Private Fields
 
 		private readonly FolderPageViewModel vm;
+		private readonly INavigationService navigationService;
 		private ICollectionView collectionView;
 		private string filterText;
 		private bool isGrouping;
@@ -178,9 +179,10 @@ namespace FileExplorer.Views
 			Loaded += FolderPage_Loaded;
 		}
 
-		public FolderPage(FolderPageViewModel vm) : this()
+		public FolderPage(FolderPageViewModel vm, INavigationService navigationService) : this()
 		{
 			this.vm = vm;
+			this.navigationService = navigationService;
 			DataContext = this.vm;
 		}
 
@@ -227,7 +229,7 @@ namespace FileExplorer.Views
 			{
 				if (listViewItem.DataContext is ListFolderItemViewModel folderVM)
 				{
-					vm.Navigate(folderVM.Item);
+					navigationService.Navigate(nameof(FolderPage), folderVM.Path);
 				}
 				else if (listViewItem.DataContext is ListFileItemViewModel fileVM)
 				{
