@@ -53,7 +53,7 @@
 						Margin="25,0,0,34.333"
 						VerticalAlignment="Bottom"
 						d:LayoutOverrides="Height"
-						Command="{Binding OKCommand}"/>
+						Command="{Binding OkCommand}"/>
 		<Button Height="30"
 						Content="Cancel"
 						Margin="203,0,25.333,34.333"
