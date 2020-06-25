@@ -167,16 +167,16 @@ namespace FileExplorer.Views
 
 		#region CommandBindings
 
-		private void Undo(object sender, ExecutedRoutedEventArgs e) 
+		private void Undo(object sender, ExecutedRoutedEventArgs e)
 			=> undoRedoManager.UndoCommand.Execute(e.Parameter);
 
-		private void Redo(object sender, ExecutedRoutedEventArgs e) 
+		private void Redo(object sender, ExecutedRoutedEventArgs e)
 			=> undoRedoManager.RedoCommand.Execute(e.Parameter);
 
-		private void CanRedo(object sender, CanExecuteRoutedEventArgs e) 
+		private void CanRedo(object sender, CanExecuteRoutedEventArgs e)
 			=> e.CanExecute = undoRedoManager.RedoCommand.CanExecute(e.Parameter);
 
-		private void CanUndo(object sender, CanExecuteRoutedEventArgs e) 
+		private void CanUndo(object sender, CanExecuteRoutedEventArgs e)
 			=> e.CanExecute = undoRedoManager.UndoCommand.CanExecute(e.Parameter);
 
 		private void Copy(object sender, ExecutedRoutedEventArgs e)
@@ -219,7 +219,7 @@ namespace FileExplorer.Views
 		private void New(object sender, ExecutedRoutedEventArgs e)
 		{
 			var ext = e.Parameter?.ToString();
-			var (result,filename) = dialogService.ShowFileNameDialog();
+			var (result, filename) = dialogService.ShowFileNameDialog();
 			if (!result)
 			{
 				return;
@@ -253,8 +253,43 @@ namespace FileExplorer.Views
 			e.CanExecute = true;
 		}
 
+		private void BrowseBack(object sender, ExecutedRoutedEventArgs e)
+		{
+			navigationService.GoBackCompleted += NavigationService_GoBackCompleted;
+			navigationService.GoBack();
+
+			void NavigationService_GoBackCompleted(object sender, EventArgs e)
+			{
+				navigationService.Refresh();
+				navigationService.GoBackCompleted -= NavigationService_GoBackCompleted;
+			}
+		}
+
+		private void CanBrowseBack(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = navigationService.CanGoBack;
+		}
+
+		private void BrowseForward(object sender, ExecutedRoutedEventArgs e)
+		{
+			navigationService.GoForwardCompleted += NavigationService_GoForwardCompleted;
+			navigationService.GoForward();
+			
+			void NavigationService_GoForwardCompleted(object sender, EventArgs e)
+			{
+				navigationService.Refresh();
+				navigationService.GoForwardCompleted -= NavigationService_GoForwardCompleted;
+			}
+		}
+
+		private void CanBrowseForward(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = navigationService.CanGoForward;
+		}
+
 		#endregion
-		
+
+
 		private void SetClipBoard()
 		{
 			Clipboard.Clear();
@@ -269,39 +304,5 @@ namespace FileExplorer.Views
 		}
 
 		#endregion Private Methods
-
-		private void BrowseBack(object sender, ExecutedRoutedEventArgs e)
-		{
-			navigationService.GoBackCompleted += NavigationService_GoBackCompleted;
-			navigationService.GoBack();
-		}
-
-		private void NavigationService_GoBackCompleted(object sender, EventArgs e)
-		{
-			navigationService.Refresh();
-			navigationService.GoBackCompleted -= NavigationService_GoBackCompleted;
-		}
-
-		private void CanBrowseBack(object sender, CanExecuteRoutedEventArgs e)
-		{
-			e.CanExecute = navigationService.CanGoBack;
-		}
-
-		private void BrowseForward(object sender, ExecutedRoutedEventArgs e)
-		{
-			navigationService.GoForwardCompleted += NavigationService_GoForwardCompleted;
-			navigationService.GoForward();
-		}
-
-		private void NavigationService_GoForwardCompleted(object sender, EventArgs e)
-		{
-			navigationService.Refresh();
-			navigationService.GoForwardCompleted -= NavigationService_GoForwardCompleted;
-		}
-
-		private void CanBrowseForward(object sender, CanExecuteRoutedEventArgs e)
-		{
-			e.CanExecute = navigationService.CanGoForward;
-		}
 	}
 }
