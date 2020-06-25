@@ -339,13 +339,20 @@
 				</TreeView.ItemContainerStyle>
 			</TreeView>
 			<GridSplitter Grid.Column="0"
-										Width="3"
 										Visibility="{Binding ElementName=TreeViewToggleButton, Path=IsChecked, Converter={converter:BoolToVisibilityConverter}}" />
 			<Frame Name="FolderFrame"
 						 Grid.Column="1"
-						 NavigationUIVisibility="Hidden" />
+						 NavigationUIVisibility="Hidden">
+				<Frame.CommandBindings>
+					<CommandBinding Command="{x:Static NavigationCommands.BrowseBack}"
+													Executed="BrowseBack"
+													CanExecute="CanBrowseBack" />
+					<CommandBinding Command="{x:Static NavigationCommands.BrowseForward}"
+													Executed="BrowseForward"
+													CanExecute="CanBrowseForward" />
+				</Frame.CommandBindings>
+			</Frame>
 			<GridSplitter Grid.Column="1"
-										Width="3"
 										Visibility="{Binding ElementName=PreviewToggleButton, Path=IsChecked, Converter={converter:BoolToVisibilityConverter}}" />
 			<Grid Grid.Column="2"
 						Visibility="{Binding ElementName=PreviewToggleButton, Path=IsChecked, Converter={converter:BoolToVisibilityConverter}}"

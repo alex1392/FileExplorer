@@ -57,6 +57,7 @@ namespace FileExplorer.Views
 		#endregion Public Constructors
 
 		#region Private Methods
+
 		#region Events
 
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -253,6 +254,7 @@ namespace FileExplorer.Views
 		}
 
 		#endregion
+		
 		private void SetClipBoard()
 		{
 			Clipboard.Clear();
@@ -268,5 +270,38 @@ namespace FileExplorer.Views
 
 		#endregion Private Methods
 
+		private void BrowseBack(object sender, ExecutedRoutedEventArgs e)
+		{
+			navigationService.GoBackCompleted += NavigationService_GoBackCompleted;
+			navigationService.GoBack();
+		}
+
+		private void NavigationService_GoBackCompleted(object sender, EventArgs e)
+		{
+			navigationService.Refresh();
+			navigationService.GoBackCompleted -= NavigationService_GoBackCompleted;
+		}
+
+		private void CanBrowseBack(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = navigationService.CanGoBack;
+		}
+
+		private void BrowseForward(object sender, ExecutedRoutedEventArgs e)
+		{
+			navigationService.GoForwardCompleted += NavigationService_GoForwardCompleted;
+			navigationService.GoForward();
+		}
+
+		private void NavigationService_GoForwardCompleted(object sender, EventArgs e)
+		{
+			navigationService.Refresh();
+			navigationService.GoForwardCompleted -= NavigationService_GoForwardCompleted;
+		}
+
+		private void CanBrowseForward(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = navigationService.CanGoForward;
+		}
 	}
 }
