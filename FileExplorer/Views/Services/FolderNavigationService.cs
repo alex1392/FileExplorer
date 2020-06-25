@@ -31,21 +31,12 @@ namespace FileExplorer.Views.Services
 
 		public event EventHandler NavigatedPageLoaded;
 
+		public event EventHandler GoBackCompleted;
+		public event EventHandler GoForwardCompleted;
+
 		#endregion Public Events
 
 		#region Public Properties
-
-		public bool CanGoUp
-		{
-			get
-			{
-				if (GetParentPath() == null)
-				{
-					return false;
-				}
-				return true;
-			}
-		}
 
 		/// <summary>
 		/// Get or set the current content
@@ -82,12 +73,11 @@ namespace FileExplorer.Views.Services
 			}
 		}
 
+		public IEnumerable ForwardStack => InternalFrame.ForwardStack;
 		public IEnumerable BackStack => InternalFrame.BackStack;
 		public bool CanGoBack => InternalNavigationService.CanGoBack;
-
 		public bool CanGoForward => InternalNavigationService.CanGoForward;
-		public IEnumerable ForwardStack => InternalFrame.ForwardStack;
-
+		public bool CanGoUp => GetParentPath() != null;
 		#endregion Public Properties
 
 		#region Public Constructors
@@ -105,28 +95,32 @@ namespace FileExplorer.Views.Services
 
 		public void GoBack()
 		{
-			if (!InternalNavigationService.CanGoBack)
-			{
-				return;
-			}
+			InternalNavigationService.Navigated += InternalGoBackCompleted;
 			InternalNavigationService.GoBack();
+
+			void InternalGoBackCompleted(object sender, NavigationEventArgs e)
+			{
+				GoBackCompleted?.Invoke(this, EventArgs.Empty);
+				InternalNavigationService.Navigated -= InternalGoBackCompleted;
+			}
 		}
+
 
 		public void GoForward()
 		{
-			if (!InternalNavigationService.CanGoForward)
-			{
-				return;
-			}
+			InternalNavigationService.Navigated += InternalGoForwardCompleted;
 			InternalNavigationService.GoForward();
+
+			void InternalGoForwardCompleted(object sender, NavigationEventArgs e)
+			{
+				GoForwardCompleted?.Invoke(this, EventArgs.Empty);
+				InternalNavigationService.Navigated -= InternalGoForwardCompleted;
+			}
 		}
+
 
 		public void GoUp()
 		{
-			if (!CanGoUp)
-			{
-				return;
-			}
 			var parentPath = GetParentPath();
 			var parentFolderPage = serviceProvider.GetService<FolderPage>();
 			parentFolderPage.Path = parentPath;
