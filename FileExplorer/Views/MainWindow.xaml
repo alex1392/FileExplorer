@@ -43,6 +43,7 @@
 		<CommandBinding Command="{x:Static ApplicationCommands.Delete}"
 										Executed="Delete"
 										CanExecute="CanDelete" />
+		
 	</Window.CommandBindings>
 	<DockPanel x:Name="mainDockPanel">
 		<DockPanel Name="MenuBar"
@@ -312,6 +313,12 @@
 					</ColumnDefinition.MaxWidth>
 				</ColumnDefinition>
 			</Grid.ColumnDefinitions>
+			<Grid.Resources>
+				<Style TargetType="GridSplitter">
+					<Setter Property="Width"
+									Value="3" />
+				</Style>
+			</Grid.Resources>
 			<TreeView Name="FolderTreeView"
 								Grid.Column="0"
 								DockPanel.Dock="Left"
