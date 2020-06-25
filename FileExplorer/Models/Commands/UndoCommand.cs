@@ -4,9 +4,29 @@ namespace FileExplorer.Models
 {
 	public class UndoCommand : IUndoCommand
 	{
+		#region Private Fields
+
 		private readonly Func<bool> action;
 		private readonly Func<bool> undoAction;
 		private readonly Func<bool> canAction;
+
+		#endregion Private Fields
+
+		#region Public Events
+
+		public event EventHandler CanExecuteChanged;
+
+		#endregion Public Events
+
+		#region Public Properties
+
+		public bool IsExecutionSuccessful { get; private set; }
+
+		public bool IsUndoSuccessful { get; private set; }
+
+		#endregion Public Properties
+
+		#region Public Constructors
 
 		public UndoCommand(Func<bool> action, Func<bool> undoAction, Func<bool> canAction = null)
 		{
@@ -15,11 +35,9 @@ namespace FileExplorer.Models
 			this.canAction = canAction;
 		}
 
-		public bool IsExecutionSuccessful { get; private set; }
+		#endregion Public Constructors
 
-		public bool IsUndoSuccessful { get; private set; }
-
-		public event EventHandler CanExecuteChanged;
+		#region Public Methods
 
 		public bool CanExecute(object parameter)
 		{
@@ -35,13 +53,35 @@ namespace FileExplorer.Models
 		{
 			IsUndoSuccessful = undoAction.Invoke();
 		}
+
+		#endregion Public Methods
 	}
 
 	public class UndoCommand<TParam> : IUndoCommand
 	{
+		#region Private Fields
+
 		private readonly Func<TParam, bool> action;
 		private readonly Func<bool> undoAction;
 		private readonly Func<TParam, bool> canAction;
+
+		#endregion Private Fields
+
+		#region Public Events
+
+		public event EventHandler CanExecuteChanged;
+
+		#endregion Public Events
+
+		#region Public Properties
+
+		public bool IsExecutionSuccessful { get; private set; }
+
+		public bool IsUndoSuccessful { get; private set; }
+
+		#endregion Public Properties
+
+		#region Public Constructors
 
 		public UndoCommand(Func<TParam, bool> action, Func<bool> undoAction, Func<TParam, bool> canAction = null)
 		{
@@ -50,11 +90,9 @@ namespace FileExplorer.Models
 			this.canAction = canAction;
 		}
 
-		public bool IsExecutionSuccessful { get; private set; }
+		#endregion Public Constructors
 
-		public bool IsUndoSuccessful { get; private set; }
-
-		public event EventHandler CanExecuteChanged;
+		#region Public Methods
 
 		public bool CanExecute(object parameter)
 		{
@@ -70,5 +108,7 @@ namespace FileExplorer.Models
 		{
 			IsUndoSuccessful = undoAction.Invoke();
 		}
+
+		#endregion Public Methods
 	}
 }

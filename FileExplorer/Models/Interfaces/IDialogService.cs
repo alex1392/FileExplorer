@@ -14,7 +14,7 @@ namespace FileExplorer.Models
 
 		void ShowMessage(string message);
 
-		(bool,string) ShowFileNameDialog();
+		(bool, string) ShowFileNameDialog();
 
 		#endregion Public Methods
 	}

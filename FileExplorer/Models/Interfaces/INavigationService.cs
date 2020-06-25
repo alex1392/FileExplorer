@@ -13,7 +13,9 @@ namespace FileExplorer.Models
 		event EventHandler<string> Navigated;
 
 		event EventHandler NavigatedPageLoaded;
+
 		event EventHandler GoBackCompleted;
+
 		event EventHandler GoForwardCompleted;
 
 		#endregion Public Events

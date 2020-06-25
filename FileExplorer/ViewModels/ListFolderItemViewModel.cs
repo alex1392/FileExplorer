@@ -10,7 +10,11 @@ namespace FileExplorer.ViewModels
 {
 	public class ListFolderItemViewModel : ListItemViewModel
 	{
+		#region Private Fields
+
 		private readonly IResourceProvider resourceProvider;
+
+		#endregion Private Fields
 
 		#region Public Constructors
 
@@ -38,7 +42,7 @@ namespace FileExplorer.ViewModels
 		protected override ImageSource GetIcon()
 		{
 			Task.Delay(1000).Wait();
-			return resourceProvider.TryFindResource("FolderIcon") as ImageSource; 
+			return resourceProvider.TryFindResource("FolderIcon") as ImageSource;
 		}
 
 		protected override void SetItem()

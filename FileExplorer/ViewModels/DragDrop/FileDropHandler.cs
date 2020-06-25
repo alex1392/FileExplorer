@@ -1,4 +1,5 @@
 ﻿using FileExplorer.Models;
+
 using GongSolutions.Wpf.DragDrop;
 
 using System;
@@ -10,17 +11,26 @@ namespace FileExplorer.ViewModels
 {
 	public class FileDropHandler : IDropTarget
 	{
+		#region Private Fields
+
 		private readonly EditManager editManager;
+
+		#endregion Private Fields
+
 		#region Public Properties
 
 		public string CurrentFolderPath { get; set; }
 
 		#endregion Public Properties
 
+		#region Public Constructors
+
 		public FileDropHandler(EditManager editManager)
 		{
 			this.editManager = editManager;
 		}
+
+		#endregion Public Constructors
 
 		#region Public Methods
 

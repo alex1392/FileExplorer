@@ -5,10 +5,8 @@ using GongSolutions.Wpf.DragDrop;
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 
 namespace FileExplorer.ViewModels
 {
@@ -119,6 +117,4 @@ namespace FileExplorer.ViewModels
 
 		#endregion Public Methods
 	}
-
-	
 }

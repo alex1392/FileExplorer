@@ -18,7 +18,7 @@ namespace FileExplorer.Views.Services
 			return MessageBox.Show(message, caption, button);
 		}
 
-		public (bool,string) ShowFileNameDialog()
+		public (bool, string) ShowFileNameDialog()
 		{
 			var dialog = new FileNameInputWindow
 			{

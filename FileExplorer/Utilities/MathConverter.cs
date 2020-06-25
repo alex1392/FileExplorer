@@ -12,7 +12,8 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace FileExplorer.Utilities {
+namespace FileExplorer.Utilities
+{
 	/// <summary>
 	/// Value converter that performs arithmetic calculations over its argument(s)
 	/// </summary>
@@ -24,9 +25,21 @@ namespace FileExplorer.Utilities {
 	/// Arguments of multi value converter may be referred as x,y,z,t (first-fourth argument), or a,b,c,d, or [0], [1], [2], [3], [4], ...
 	/// The converter supports arithmetic expressions of arbitrary complexity, including nested subexpressions
 	/// </remarks>
-	public class MathConverter : MarkupExtension, IValueConverter, IMultiValueConverter {
+	public class MathConverter : MarkupExtension, IValueConverter, IMultiValueConverter
+	{
+		#region Public Fields
+
 		public static readonly MathConverter Instance = new MathConverter();
+
+		#endregion Public Fields
+
+		#region Private Fields
+
 		private Dictionary<string, IExpression> _storedExpressions = new Dictionary<string, IExpression>();
+
+		#endregion Private Fields
+
+		#region Public Methods
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
@@ -40,7 +53,8 @@ namespace FileExplorer.Utilities {
 
 		public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 		{
-			try {
+			try
+			{
 				var result = Parse(parameter.ToString()).Eval(values);
 				if (targetType == typeof(decimal))
 					return result;
@@ -55,7 +69,9 @@ namespace FileExplorer.Utilities {
 				if (targetType == typeof(double?))
 					return (double?)result;
 				throw new ArgumentException(String.Format("Unsupported target type {0}", targetType.FullName));
-			} catch (Exception ex) {
+			}
+			catch (Exception ex)
+			{
 				ProcessException(ex);
 			}
 
@@ -71,15 +87,25 @@ namespace FileExplorer.Utilities {
 		{
 			return Instance;
 		}
+
+		#endregion Public Methods
+
+		#region Protected Methods
+
 		protected virtual void ProcessException(Exception ex)
 		{
 			Console.WriteLine(ex.Message);
 		}
 
+		#endregion Protected Methods
+
+		#region Private Methods
+
 		private IExpression Parse(string s)
 		{
 			IExpression result = null;
-			if (!_storedExpressions.TryGetValue(s, out result)) {
+			if (!_storedExpressions.TryGetValue(s, out result))
+			{
 				result = new Parser().Parse(s);
 				_storedExpressions[s] = result;
 			}
@@ -87,32 +113,67 @@ namespace FileExplorer.Utilities {
 			return result;
 		}
 
-		private interface IExpression {
+		#endregion Private Methods
+
+		#region Private Interfaces
+
+		private interface IExpression
+		{
+			#region Public Methods
+
 			decimal Eval(object[] args);
+
+			#endregion Public Methods
 		}
 
-		private class Constant : IExpression {
+		#endregion Private Interfaces
+
+		#region Private Classes
+
+		private class Constant : IExpression
+		{
+			#region Private Fields
+
 			private decimal _value;
+
+			#endregion Private Fields
+
+			#region Public Constructors
 
 			public Constant(string text)
 			{
-				if (!decimal.TryParse(text, out _value)) {
+				if (!decimal.TryParse(text, out _value))
+				{
 					throw new ArgumentException(String.Format("'{0}' is not a valid number", text));
 				}
 			}
+
+			#endregion Public Constructors
+
+			#region Public Methods
 
 			public decimal Eval(object[] args)
 			{
 				return _value;
 			}
+
+			#endregion Public Methods
 		}
 
-		private class Variable : IExpression {
+		private class Variable : IExpression
+		{
+			#region Private Fields
+
 			private int _index;
+
+			#endregion Private Fields
+
+			#region Public Constructors
 
 			public Variable(string text)
 			{
-				if (!int.TryParse(text, out _index) || _index < 0) {
+				if (!int.TryParse(text, out _index) || _index < 0)
+				{
 					throw new ArgumentException(String.Format("'{0}' is not a valid parameter index", text));
 				}
 			}
@@ -122,76 +183,124 @@ namespace FileExplorer.Utilities {
 				_index = n;
 			}
 
+			#endregion Public Constructors
+
+			#region Public Methods
+
 			public decimal Eval(object[] args)
 			{
-				if (_index >= args.Length) {
+				if (_index >= args.Length)
+				{
 					throw new ArgumentException(String.Format("MathConverter: parameter index {0} is out of range. {1} parameter(s) supplied", _index, args.Length));
 				}
 
 				return System.Convert.ToDecimal(args[_index]);
 			}
+
+			#endregion Public Methods
 		}
 
-		private class BinaryOperation : IExpression {
+		private class BinaryOperation : IExpression
+		{
+			#region Private Fields
+
 			private Func<decimal, decimal, decimal> _operation;
 			private IExpression _left;
 			private IExpression _right;
+
+			#endregion Private Fields
+
+			#region Public Constructors
 
 			public BinaryOperation(char operation, IExpression left, IExpression right)
 			{
 				_left = left;
 				_right = right;
-				switch (operation) {
+				switch (operation)
+				{
 					case '+':
 						_operation = (a, b) => (a + b);
 						break;
+
 					case '-':
 						_operation = (a, b) => (a - b);
 						break;
+
 					case '*':
 						_operation = (a, b) => (a * b);
 						break;
+
 					case '/':
 						_operation = (a, b) => (a / b);
 						break;
+
 					default:
 						throw new ArgumentException("Invalid operation " + operation);
 				}
 			}
 
+			#endregion Public Constructors
+
+			#region Public Methods
+
 			public decimal Eval(object[] args)
 			{
 				return _operation(_left.Eval(args), _right.Eval(args));
 			}
+
+			#endregion Public Methods
 		}
 
-		private class Negate : IExpression {
+		private class Negate : IExpression
+		{
+			#region Private Fields
+
 			private IExpression _param;
+
+			#endregion Private Fields
+
+			#region Public Constructors
 
 			public Negate(IExpression param)
 			{
 				_param = param;
 			}
 
+			#endregion Public Constructors
+
+			#region Public Methods
+
 			public decimal Eval(object[] args)
 			{
 				return -_param.Eval(args);
 			}
+
+			#endregion Public Methods
 		}
 
-		private class Parser {
+		private class Parser
+		{
+			#region Private Fields
+
 			private string text;
 			private int pos;
 
+			#endregion Private Fields
+
+			#region Public Methods
+
 			public IExpression Parse(string text)
 			{
-				try {
+				try
+				{
 					pos = 0;
 					this.text = text;
 					var result = ParseExpression();
 					RequireEndOfText();
 					return result;
-				} catch (Exception ex) {
+				}
+				catch (Exception ex)
+				{
 					var msg =
 						String.Format("MathConverter: error parsing expression '{0}'. {1} at position {2}", text, ex.Message, pos);
 
@@ -199,21 +308,29 @@ namespace FileExplorer.Utilities {
 				}
 			}
 
+			#endregion Public Methods
+
+			#region Private Methods
+
 			private IExpression ParseExpression()
 			{
 				var left = ParseTerm();
 
-				while (true) {
+				while (true)
+				{
 					if (pos >= text.Length)
 						return left;
 
 					var c = text[pos];
 
-					if (c == '+' || c == '-') {
+					if (c == '+' || c == '-')
+					{
 						++pos;
 						var right = ParseTerm();
 						left = new BinaryOperation(c, left, right);
-					} else {
+					}
+					else
+					{
 						return left;
 					}
 				}
@@ -223,17 +340,21 @@ namespace FileExplorer.Utilities {
 			{
 				var left = ParseFactor();
 
-				while (true) {
+				while (true)
+				{
 					if (pos >= text.Length)
 						return left;
 
 					var c = text[pos];
 
-					if (c == '*' || c == '/') {
+					if (c == '*' || c == '/')
+					{
 						++pos;
 						var right = ParseFactor();
 						left = new BinaryOperation(c, left, right);
-					} else {
+					}
+					else
+					{
 						return left;
 					}
 				}
@@ -247,12 +368,14 @@ namespace FileExplorer.Utilities {
 
 				var c = text[pos];
 
-				if (c == '+') {
+				if (c == '+')
+				{
 					++pos;
 					return ParseFactor();
 				}
 
-				if (c == '-') {
+				if (c == '-')
+				{
 					++pos;
 					return new Negate(ParseFactor());
 				}
@@ -266,7 +389,8 @@ namespace FileExplorer.Utilities {
 				if (c == 't' || c == 'd')
 					return CreateVariable(3);
 
-				if (c == '(') {
+				if (c == '(')
+				{
 					++pos;
 					var expression = ParseExpression();
 					SkipWhiteSpace();
@@ -275,7 +399,8 @@ namespace FileExplorer.Utilities {
 					return expression;
 				}
 
-				if (c == '[') {
+				if (c == '[')
+				{
 					++pos;
 					var end = text.IndexOf(']', pos);
 					if (end < 0) { --pos; throw new ArgumentException("Unmatched '['"); }
@@ -288,11 +413,14 @@ namespace FileExplorer.Utilities {
 
 				const string decimalRegEx = @"(\d+\.?\d*|\d*\.?\d+)";
 				var match = Regex.Match(text.Substring(pos), decimalRegEx);
-				if (match.Success) {
+				if (match.Success)
+				{
 					pos += match.Length;
 					SkipWhiteSpace();
 					return new Constant(match.Value);
-				} else {
+				}
+				else
+				{
 					throw new ArgumentException(String.Format("Unexpeted character '{0}'", c));
 				}
 			}
@@ -312,7 +440,8 @@ namespace FileExplorer.Utilities {
 
 			private void Require(char c)
 			{
-				if (pos >= text.Length || text[pos] != c) {
+				if (pos >= text.Length || text[pos] != c)
+				{
 					throw new ArgumentException("Expected '" + c + "'");
 				}
 
@@ -321,10 +450,15 @@ namespace FileExplorer.Utilities {
 
 			private void RequireEndOfText()
 			{
-				if (pos != text.Length) {
+				if (pos != text.Length)
+				{
 					throw new ArgumentException("Unexpected character '" + text[pos] + "'");
 				}
 			}
+
+			#endregion Private Methods
 		}
+
+		#endregion Private Classes
 	}
 }

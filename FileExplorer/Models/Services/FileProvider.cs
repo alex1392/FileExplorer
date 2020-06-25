@@ -1,4 +1,5 @@
 ﻿using IWshRuntimeLibrary;
+
 using Microsoft.VisualBasic.FileIO;
 
 using Shell32;
@@ -6,6 +7,7 @@ using Shell32;
 using System;
 using System.Diagnostics;
 using System.IO;
+
 using File = System.IO.File;
 
 namespace FileExplorer.Models
@@ -357,25 +359,6 @@ namespace FileExplorer.Models
 			return File.Exists(path);
 		}
 
-		private static bool IsDirectory(string path)
-		{
-			return string.IsNullOrEmpty(Path.GetExtension(path));
-		}
-
-		private string RenamePath(string path)
-		{
-			var i = 2;
-			var ext = Path.GetExtension(path);
-			var dir = Path.GetDirectoryName(path);
-			var name = Path.GetFileNameWithoutExtension(path);
-			while (File.Exists(path) || Directory.Exists(path))
-			{
-				path = Path.Combine(dir, $"{name} ({i}){ext}");
-				i++;
-			}
-			return path;
-		}
-
 		public void OpenFile(string path)
 		{
 			var proc = new Process
@@ -402,6 +385,25 @@ namespace FileExplorer.Models
 			var shell = new WshShell(); //Create a new WshShell Interface
 			var link = (IWshShortcut)shell.CreateShortcut(path); //Link the interface to our shortcut
 			return link.TargetPath;
+		}
+
+		private static bool IsDirectory(string path)
+		{
+			return string.IsNullOrEmpty(Path.GetExtension(path));
+		}
+
+		private string RenamePath(string path)
+		{
+			var i = 2;
+			var ext = Path.GetExtension(path);
+			var dir = Path.GetDirectoryName(path);
+			var name = Path.GetFileNameWithoutExtension(path);
+			while (File.Exists(path) || Directory.Exists(path))
+			{
+				path = Path.Combine(dir, $"{name} ({i}){ext}");
+				i++;
+			}
+			return path;
 		}
 
 		#endregion Public Methods

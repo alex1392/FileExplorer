@@ -1,22 +1,25 @@
 ﻿using FileExplorer.Models;
+
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileExplorer.Views.Services
 {
 	public class FileWatcherService : IFileWatcherService, IDisposable
 	{
+		#region Private Fields
+
 		private readonly FileSystemWatcher watcher = new FileSystemWatcher();
 		private readonly INavigationService navigationService;
 		private readonly IDispatcherService dispatcherService;
 
+		#endregion Private Fields
+
+		#region Public Properties
+
 		public string Path
 		{
-			get => watcher.Path; 
+			get => watcher.Path;
 			set
 			{
 				if (value == watcher.Path)
@@ -26,6 +29,10 @@ namespace FileExplorer.Views.Services
 				watcher.Path = value;
 			}
 		}
+
+		#endregion Public Properties
+
+		#region Public Constructors
 
 		public FileWatcherService(INavigationService navigationService, IDispatcherService dispatcherService)
 		{
@@ -37,19 +44,29 @@ namespace FileExplorer.Views.Services
 			this.dispatcherService = dispatcherService;
 		}
 
+		#endregion Public Constructors
+
+		#region Public Methods
+
 		public void Start()
 		{
 			watcher.EnableRaisingEvents = true;
-		}
-
-		private void Refresh(object sender, EventArgs e)
-		{
-			dispatcherService.Invoke(() => navigationService.Refresh());
 		}
 
 		public void Dispose()
 		{
 			watcher.Dispose();
 		}
+
+		#endregion Public Methods
+
+		#region Private Methods
+
+		private void Refresh(object sender, EventArgs e)
+		{
+			dispatcherService.Invoke(() => navigationService.Refresh());
+		}
+
+		#endregion Private Methods
 	}
 }

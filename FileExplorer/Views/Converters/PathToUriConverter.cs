@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Markup;
 
@@ -12,7 +9,14 @@ namespace FileExplorer.Views.Converters
 {
 	public class PathToUriConverter : MarkupExtension, IValueConverter
 	{
+		#region Private Fields
+
 		private static readonly PathToUriConverter instance = new PathToUriConverter();
+
+		#endregion Private Fields
+
+		#region Public Methods
+
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			var path = value?.ToString();
@@ -37,5 +41,7 @@ namespace FileExplorer.Views.Converters
 		{
 			return instance;
 		}
+
+		#endregion Public Methods
 	}
 }

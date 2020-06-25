@@ -52,7 +52,7 @@ namespace FileExplorer
 			serviceCollection.AddSingleton<ITypeDescriptionProvider, TypeDescriptionProvider>();
 			serviceCollection.AddSingleton<IDispatcherService, DispatcherService>();
 			serviceCollection.AddSingleton<IResourceProvider, ResourceProvider>();
-			
+
 			serviceCollection.AddTransient<IFileWatcherService, FileWatcherService>();
 
 			serviceCollection.AddSingleton<MainWindowViewModel>();

@@ -1,14 +1,11 @@
 ﻿using FileExplorer.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileExplorer.Views.Services
 {
 	public class ResourceProvider : IResourceProvider
 	{
+		#region Public Methods
+
 		public object FindResource(string resourceKey)
 		{
 			return App.Current.FindResource(resourceKey);
@@ -18,5 +15,7 @@ namespace FileExplorer.Views.Services
 		{
 			return App.Current.TryFindResource(resourceKey);
 		}
+
+		#endregion Public Methods
 	}
 }

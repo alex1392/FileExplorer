@@ -4,11 +4,12 @@ using FileExplorer.ViewModels;
 using System;
 using System.ComponentModel;
 using System.Globalization;
-using IO = System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+
+using IO = System.IO;
 using ListItem = FileExplorer.Models.ListItem;
 
 namespace FileExplorer.Views
@@ -70,6 +71,8 @@ namespace FileExplorer.Views
 		#endregion Private Properties
 
 		#region Public Properties
+
+		private string selectedItemPath;
 
 		public string FilterText
 		{
@@ -149,8 +152,6 @@ namespace FileExplorer.Views
 			}
 		}
 
-		private string selectedItemPath;
-
 		public string SelectedItemPath
 		{
 			get { return selectedItemPath; }
@@ -165,7 +166,6 @@ namespace FileExplorer.Views
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedItemPath)));
 			}
 		}
-
 
 		#endregion Public Properties
 
@@ -255,12 +255,9 @@ namespace FileExplorer.Views
 
 					// if not, open the shortcut by shell
 					fileProvider.OpenFile(path);
-
 				}
 			}
 		}
-
-		#endregion Private Methods
 
 		private void ListViewItem_Selected(object sender, RoutedEventArgs e)
 		{
@@ -271,5 +268,7 @@ namespace FileExplorer.Views
 			}
 			SelectedItemPath = listItemViewModel.Path;
 		}
+
+		#endregion Private Methods
 	}
 }

@@ -54,8 +54,6 @@ namespace FileExplorer.ViewModels
 			}
 		}
 
-		
-
 		public string Path
 		{
 			get { return path; }
@@ -94,8 +92,10 @@ namespace FileExplorer.ViewModels
 		#region Protected Methods
 
 		protected abstract void SetItem();
+
 		[Obsolete("Seems like setting IsAsync in binding is buggy..., use GetIconAsync instead.")]
 		protected abstract ImageSource GetIcon();
+
 		protected abstract Task GetIconAsync();
 
 		protected virtual void RaisePropertyChanged(string propertyName)

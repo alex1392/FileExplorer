@@ -2,6 +2,7 @@
 
 using FileExplorer.Models;
 using FileExplorer.ViewModels;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -10,7 +11,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Navigation;
 
 namespace FileExplorer.Views
 {
@@ -163,7 +163,7 @@ namespace FileExplorer.Views
 			TreeViewGridColumn.Width = GridLength.Auto;
 		}
 
-		#endregion
+		#endregion Events
 
 		#region CommandBindings
 
@@ -274,7 +274,7 @@ namespace FileExplorer.Views
 		{
 			navigationService.GoForwardCompleted += NavigationService_GoForwardCompleted;
 			navigationService.GoForward();
-			
+
 			void NavigationService_GoForwardCompleted(object sender, EventArgs e)
 			{
 				navigationService.Refresh();
@@ -287,8 +287,7 @@ namespace FileExplorer.Views
 			e.CanExecute = navigationService.CanGoForward;
 		}
 
-		#endregion
-
+		#endregion CommandBindings
 
 		private void SetClipBoard()
 		{

@@ -32,6 +32,7 @@ namespace FileExplorer.Views.Services
 		public event EventHandler NavigatedPageLoaded;
 
 		public event EventHandler GoBackCompleted;
+
 		public event EventHandler GoForwardCompleted;
 
 		#endregion Public Events
@@ -73,11 +74,12 @@ namespace FileExplorer.Views.Services
 			}
 		}
 
+		public bool CanGoUp => GetParentPath() != null;
 		public IEnumerable ForwardStack => InternalFrame.ForwardStack;
 		public IEnumerable BackStack => InternalFrame.BackStack;
 		public bool CanGoBack => InternalNavigationService.CanGoBack;
 		public bool CanGoForward => InternalNavigationService.CanGoForward;
-		public bool CanGoUp => GetParentPath() != null;
+
 		#endregion Public Properties
 
 		#region Public Constructors
@@ -105,7 +107,6 @@ namespace FileExplorer.Views.Services
 			}
 		}
 
-
 		public void GoForward()
 		{
 			InternalNavigationService.Navigated += InternalGoForwardCompleted;
@@ -117,7 +118,6 @@ namespace FileExplorer.Views.Services
 				InternalNavigationService.Navigated -= InternalGoForwardCompleted;
 			}
 		}
-
 
 		public void GoUp()
 		{
@@ -152,7 +152,6 @@ namespace FileExplorer.Views.Services
 
 		public void Refresh()
 		{
-
 			if (Content is FolderPage folderPage &&
 				folderPage.DataContext is FolderPageViewModel vm)
 			{

@@ -1,29 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace FileExplorer.Models
 {
-	public struct ParamCommand
-	{
-		public static readonly ParamCommand Empty = new ParamCommand();
-		
-		public ParamCommand(IUndoCommand command, object parameter)
-		{
-			Command = command ?? throw new ArgumentNullException(nameof(command));
-			Parameter = parameter;
-		}
-
-		public IUndoCommand Command { get; private set; }
-		public object Parameter { get; private set; }
-		
-	}
 	public class UndoRedoManager
 	{
 		#region Private Fields
+
 		private readonly List<ParamCommand> commands = new List<ParamCommand>();
 		private int index = -1;
 
@@ -147,5 +131,32 @@ namespace FileExplorer.Models
 		}
 
 		#endregion Private Methods
+	}
+
+	public struct ParamCommand
+	{
+		#region Public Fields
+
+		public static readonly ParamCommand Empty = new ParamCommand();
+
+		#endregion Public Fields
+
+		#region Public Properties
+
+		public IUndoCommand Command { get; private set; }
+
+		public object Parameter { get; private set; }
+
+		#endregion Public Properties
+
+		#region Public Constructors
+
+		public ParamCommand(IUndoCommand command, object parameter)
+		{
+			Command = command ?? throw new ArgumentNullException(nameof(command));
+			Parameter = parameter;
+		}
+
+		#endregion Public Constructors
 	}
 }

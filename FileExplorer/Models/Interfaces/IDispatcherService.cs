@@ -7,6 +7,7 @@ namespace FileExplorer.Models
 		#region Public Methods
 
 		void Invoke(Action action);
+
 		TResult Invoke<TResult>(Func<TResult> func);
 
 		#endregion Public Methods

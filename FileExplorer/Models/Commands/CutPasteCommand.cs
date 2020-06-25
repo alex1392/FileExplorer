@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace FileExplorer.Models
@@ -36,7 +35,6 @@ namespace FileExplorer.Models
 					MovedPaths.Add((sourcePath, destPath));
 				}
 				return !successful;
-
 			});
 			// if there's no any path successfully moved, the execution is not successful
 			IsExecutionSuccessful = SourcePaths.Count > 0;

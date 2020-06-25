@@ -36,9 +36,10 @@ namespace FileExplorer.ViewModels
 		public RelayCommand RefreshCommand { get; private set; }
 
 		public string CurrentPath { get; private set; }
+
 		public IEnumerable<Item> PathItems
 		{
-			get => pathItems; 
+			get => pathItems;
 			private set
 			{
 				if (value == pathItems)
@@ -49,6 +50,7 @@ namespace FileExplorer.ViewModels
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PathItems)));
 			}
 		}
+
 		public ObservableCollection<ITreeItem> TreeItems { get; private set; } = new ObservableCollection<ITreeItem>();
 		public TreePageItem HomePage { get; private set; }
 

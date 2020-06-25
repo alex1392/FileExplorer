@@ -42,7 +42,7 @@ namespace FileExplorer.ViewModels
 				// image source must be created at main thread
 				// however, sometimes the exception may not occurs, perhaps the imaging method uses certain caching method?
 				Icon = Imaging.CreateBitmapSourceFromHIcon(task.Result.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-			}, 
+			},
 			// force the continuation task executing on the main thread
 			// this is only valid when the task is originated on the main thread
 			TaskScheduler.FromCurrentSynchronizationContext());
@@ -55,7 +55,6 @@ namespace FileExplorer.ViewModels
 			var icon = Drawing::Icon.ExtractAssociatedIcon(Path);
 			return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
 		}
-
 
 		#endregion Protected Methods
 	}

@@ -1,23 +1,23 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace FileExplorer.Models
 {
-	public enum PasteType
-	{
-		Cut,
-		Copy,
-	}
 	public class EditManager
 	{
+		#region Private Fields
+
 		private readonly IServiceProvider serviceProvider;
 		private readonly IFileProvider fileProvider;
 		private readonly INavigationService navigationService;
 		private readonly UndoRedoManager undoRedoManager;
+
+		#endregion Private Fields
+
+		#region Public Constructors
 
 		public EditManager(IServiceProvider serviceProvider, IFileProvider fileProvider, INavigationService navigationService, UndoRedoManager undoRedoManager)
 		{
@@ -26,6 +26,11 @@ namespace FileExplorer.Models
 			this.navigationService = navigationService;
 			this.undoRedoManager = undoRedoManager;
 		}
+
+		#endregion Public Constructors
+
+		#region Public Methods
+
 		public bool Paste(List<string> sourcePaths, string destPath, PasteType type)
 		{
 			PasteCommand command = type switch
@@ -117,5 +122,13 @@ namespace FileExplorer.Models
 			command.DestPath = destPath;
 			undoRedoManager.Execute(command);
 		}
+
+		#endregion Public Methods
+	}
+
+	public enum PasteType
+	{
+		Cut,
+		Copy,
 	}
 }

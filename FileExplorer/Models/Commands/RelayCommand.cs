@@ -90,6 +90,7 @@ namespace FileExplorer.Models
 		{
 			action?.Invoke();
 		}
+
 		/// <summary>
 		/// Invoke <see cref="CanExecuteChanged"/> to notify controls in the view.
 		/// </summary>
@@ -100,6 +101,4 @@ namespace FileExplorer.Models
 
 		#endregion Public Methods
 	}
-
-	
 }

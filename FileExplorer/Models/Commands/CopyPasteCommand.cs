@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace FileExplorer.Models
@@ -11,8 +10,6 @@ namespace FileExplorer.Models
 		private readonly List<string> CopyedPaths = new List<string>();
 
 		#endregion Private Fields
-
-
 
 		#region Public Constructors
 
