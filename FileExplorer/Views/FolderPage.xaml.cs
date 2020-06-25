@@ -2,15 +2,12 @@
 using FileExplorer.ViewModels;
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
 using IO = System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using ListItem = FileExplorer.Models.ListItem;
 
@@ -50,6 +47,7 @@ namespace FileExplorer.Views
 
 		private readonly FolderPageViewModel vm;
 		private readonly INavigationService navigationService;
+		private readonly IFileProvider fileProvider;
 		private ICollectionView collectionView;
 		private string filterText;
 		private bool isGrouping;
@@ -179,10 +177,11 @@ namespace FileExplorer.Views
 			Loaded += FolderPage_Loaded;
 		}
 
-		public FolderPage(FolderPageViewModel vm, INavigationService navigationService) : this()
+		public FolderPage(FolderPageViewModel vm, INavigationService navigationService, IFileProvider fileProvider) : this()
 		{
 			this.vm = vm;
 			this.navigationService = navigationService;
+			this.fileProvider = fileProvider;
 			DataContext = this.vm;
 		}
 
@@ -233,8 +232,30 @@ namespace FileExplorer.Views
 				}
 				else if (listViewItem.DataContext is ListFileItemViewModel fileVM)
 				{
-					// open file with default application
-					Process.Start(fileVM.Path);
+					var path = fileVM.Path;
+					var ext = IO::Path.GetExtension(path);
+					// determine if the file is a shortcut
+					if (ext.ToLower() != ".lnk")
+					{
+						// if not, open file with default application
+						fileProvider.OpenFile(fileVM.Path);
+						return;
+					}
+
+					// if so, retrieve the target path from the shortcut
+					var targetPath = fileProvider.GetShortcutTargetPath(path);
+
+					// check if the target path is a folder or a file
+					if (fileProvider.IsDirectoryExists(targetPath))
+					{
+						// if so, redirect to the folder
+						navigationService.Navigate(nameof(FolderPage), targetPath);
+						return;
+					}
+
+					// if not, open the shortcut by shell
+					fileProvider.OpenFile(path);
+
 				}
 			}
 		}

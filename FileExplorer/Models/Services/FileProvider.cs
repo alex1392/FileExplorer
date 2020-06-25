@@ -1,9 +1,12 @@
-﻿using Microsoft.VisualBasic.FileIO;
+﻿using IWshRuntimeLibrary;
+using Microsoft.VisualBasic.FileIO;
 
 using Shell32;
 
 using System;
+using System.Diagnostics;
 using System.IO;
+using File = System.IO.File;
 
 namespace FileExplorer.Models
 {
@@ -371,6 +374,34 @@ namespace FileExplorer.Models
 				i++;
 			}
 			return path;
+		}
+
+		public void OpenFile(string path)
+		{
+			var proc = new Process
+			{
+				StartInfo = new ProcessStartInfo
+				{
+					FileName = path,
+					UseShellExecute = true,
+					ErrorDialog = true,
+				}
+			};
+			try
+			{
+				proc.Start();
+			}
+			catch (Exception)
+			{
+				// do nothing, as the process would have already show error dialog to the user
+			}
+		}
+
+		public string GetShortcutTargetPath(string path)
+		{
+			var shell = new WshShell(); //Create a new WshShell Interface
+			var link = (IWshShortcut)shell.CreateShortcut(path); //Link the interface to our shortcut
+			return link.TargetPath;
 		}
 
 		#endregion Public Methods

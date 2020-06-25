@@ -35,6 +35,8 @@ namespace FileExplorer.Models
 		bool DeleteToBin(string path);
 
 		bool RestoreFromBin(string path);
+		void OpenFile(string path);
+		string GetShortcutTargetPath(string path);
 
 		#endregion Public Methods
 	}
