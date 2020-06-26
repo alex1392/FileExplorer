@@ -20,8 +20,6 @@ namespace FileExplorer.Views.Services
 		private readonly IFileProvider fileProvider;
 		private readonly IDialogService dialogService;
 		private readonly IServiceProvider serviceProvider;
-		private Frame internalFrame;
-		private Navigation::NavigationService internalNavigationService;
 		private MainWindow mainWindow;
 
 		#endregion Private Fields
@@ -42,9 +40,7 @@ namespace FileExplorer.Views.Services
 
 		#region Public Properties
 
-		/// <summary>
-		/// Get or set the current content
-		/// </summary>
+		/// <inheritdoc/>
 		public object Content
 		{
 			get => InternalNavigationService?.Content;
@@ -60,30 +56,9 @@ namespace FileExplorer.Views.Services
 		}
 
 
-		public Frame InternalFrame
-		{
-			get
-			{
-				return (MainWindow.mainTabControl.SelectedItem as TabContentUserControl)?.FolderFrame;
-			}
-		}
+		private Frame InternalFrame => (MainWindow.mainTabControl.SelectedItem as TabContentUserControl)?.FolderFrame;
 
-		public Navigation::NavigationService InternalNavigationService
-		{
-			get
-			{
-				var internalNavigationService = InternalFrame?.NavigationService;
-				// TODO: modify event registration
-				if (internalNavigationService != null)
-				{
-					// prevent duplicated registration of the event
-					internalNavigationService.Navigated -= InternalNavigationService_Navigated;
-					// propagate navigated event
-					internalNavigationService.Navigated += InternalNavigationService_Navigated;
-				}
-				return internalNavigationService;
-			}
-		}
+		private Navigation::NavigationService InternalNavigationService => InternalFrame?.NavigationService;
 
 		public bool CanGoUp => GetParentPath() != null;
 		public IEnumerable ForwardStack => InternalFrame?.ForwardStack;
@@ -199,5 +174,11 @@ namespace FileExplorer.Views.Services
 		}
 
 		#endregion Private Methods
+
+		internal void AddFrame(Frame folderFrame)
+		{
+			// propagate navigated event
+			folderFrame.NavigationService.Navigated += InternalNavigationService_Navigated;
+		}
 	}
 }
