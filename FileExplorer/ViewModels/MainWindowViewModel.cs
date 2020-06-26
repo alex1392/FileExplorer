@@ -1,5 +1,5 @@
 ﻿using FileExplorer.Models;
-
+using FileExplorer.Views;
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
@@ -14,18 +14,20 @@ namespace FileExplorer.ViewModels
 {
 	public class MainWindowViewModel : INotifyPropertyChanged
 	{
+		private readonly IServiceProvider serviceProvider;
+
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		public ObservableCollection<object> TabItems { get; private set; } = new ObservableCollection<object>();
 
 		public MainWindowViewModel()
 		{
-			SetupTabItem();
 
-			void SetupTabItem()
-			{
+		}
 
-			}
+		public MainWindowViewModel(IServiceProvider serviceProvider)
+		{
+			this.serviceProvider = serviceProvider;
+
 		}
 	}
 }

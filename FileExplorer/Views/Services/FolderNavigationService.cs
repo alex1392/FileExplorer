@@ -22,8 +22,11 @@ namespace FileExplorer.Views.Services
 		private readonly IServiceProvider serviceProvider;
 		private Frame internalFrame;
 		private Navigation::NavigationService internalNavigationService;
+		private MainWindow mainWindow;
 
 		#endregion Private Fields
+		private MainWindow MainWindow => mainWindow
+			?? (mainWindow = serviceProvider.GetService<MainWindow>());
 
 		#region Public Events
 
@@ -44,10 +47,11 @@ namespace FileExplorer.Views.Services
 		/// </summary>
 		public object Content
 		{
-			get => InternalNavigationService.Content;
+			get => InternalNavigationService?.Content;
 			set
 			{
-				if (InternalNavigationService.Content == value)
+				if (InternalNavigationService == null ||
+					InternalNavigationService.Content == value)
 				{
 					return;
 				}
@@ -55,18 +59,25 @@ namespace FileExplorer.Views.Services
 			}
 		}
 
-		public Frame InternalFrame => internalFrame
-			//Lazy initialization of dependency
-			/*?? (internalFrame = serviceProvider.GetService<MainWindow>().FolderFrame)*/;
+
+		public Frame InternalFrame
+		{
+			get
+			{
+				return (MainWindow.mainTabControl.SelectedItem as TabContentUserControl)?.FolderFrame;
+			}
+		}
 
 		public Navigation::NavigationService InternalNavigationService
 		{
 			get
 			{
-				// Lazy initialization of dependency
-				if (internalNavigationService == null)
+				var internalNavigationService = InternalFrame?.NavigationService;
+				// TODO: modify event registration
+				if (internalNavigationService != null)
 				{
-					//internalNavigationService = serviceProvider.GetService<MainWindow>().FolderFrame.NavigationService;
+					// prevent duplicated registration of the event
+					internalNavigationService.Navigated -= InternalNavigationService_Navigated;
 					// propagate navigated event
 					internalNavigationService.Navigated += InternalNavigationService_Navigated;
 				}
@@ -75,10 +86,10 @@ namespace FileExplorer.Views.Services
 		}
 
 		public bool CanGoUp => GetParentPath() != null;
-		public IEnumerable ForwardStack => InternalFrame.ForwardStack;
-		public IEnumerable BackStack => InternalFrame.BackStack;
-		public bool CanGoBack => InternalNavigationService.CanGoBack;
-		public bool CanGoForward => InternalNavigationService.CanGoForward;
+		public IEnumerable ForwardStack => InternalFrame?.ForwardStack;
+		public IEnumerable BackStack => InternalFrame?.BackStack;
+		public bool CanGoBack => InternalNavigationService?.CanGoBack ?? false;
+		public bool CanGoForward => InternalNavigationService?.CanGoForward ?? false;
 
 		#endregion Public Properties
 

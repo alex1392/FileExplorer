@@ -62,6 +62,9 @@ namespace FileExplorer
 			serviceCollection.AddTransient<FolderPageViewModel>();
 			serviceCollection.AddTransient<FolderChildrenProvider>();
 
+			serviceCollection.AddTransient<TabContentUserControl>();
+			serviceCollection.AddTransient<TabContentViewModel>();
+
 			serviceCollection.AddTransient<Item>();
 			serviceCollection.AddTransient<ListFileItem>();
 			serviceCollection.AddTransient<ListFolderItem>();
@@ -69,7 +72,6 @@ namespace FileExplorer
 
 			serviceCollection.AddTransient<ListFileItemViewModel>();
 			serviceCollection.AddTransient<ListFolderItemViewModel>();
-			serviceCollection.AddTransient<TabContentViewModel>();
 
 			serviceCollection.AddTransient<TreePageItem>();
 			serviceCollection.AddSingleton<FileDropHandler>();

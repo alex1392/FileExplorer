@@ -2,7 +2,7 @@
 
 using FileExplorer.Models;
 using FileExplorer.ViewModels;
-
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -22,6 +22,7 @@ namespace FileExplorer.Views
 		#region Private Fields
 
 		private readonly MainWindowViewModel vm;
+		private readonly IServiceProvider serviceProvider;
 		#endregion Private Fields
 
 		#region Private Properties
@@ -36,17 +37,27 @@ namespace FileExplorer.Views
 		public MainWindow()
 		{
 			InitializeComponent();
+			Loaded += MainWindow_Loaded;
 		}
 
-		public MainWindow(MainWindowViewModel vm) : this()
+		public MainWindow(MainWindowViewModel vm, IServiceProvider serviceProvider) : this()
 		{
 			this.vm = vm;
+			this.serviceProvider = serviceProvider;
 			DataContext = this.vm;
+		}
+
+		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+		{
+			mainTabControl.Items.Add(serviceProvider.GetService<TabContentUserControl>());
+			mainTabControl.Items.Add(serviceProvider.GetService<TabContentUserControl>());
+			mainTabControl.Items.Add(serviceProvider.GetService<TabContentUserControl>());
+			mainTabControl.SelectedIndex = 0;
 		}
 
 		#endregion Public Constructors
 
-		
+
 
 		#region Events
 

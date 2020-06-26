@@ -23,18 +23,12 @@
 								 Width="800"
 								 Name="mainWindow">
 
-	<TabControl Name="mainTabControl"
-							ItemsSource="{Binding TabItems}">
+	<TabControl Name="mainTabControl">
 		<TabControl.ItemTemplate>
 			<DataTemplate>
-				<TextBlock Text="{Binding Title}" />
+				<TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabItem}, Path=Content.CurrentFolder}" />
 			</DataTemplate>
 		</TabControl.ItemTemplate>
-		<TabControl.ContentTemplate>
-			<DataTemplate>
-				<ContentPresenter Content="{Binding }" />
-			</DataTemplate>
-		</TabControl.ContentTemplate>
 	</TabControl>
 
 </fd:RevealWindow>
