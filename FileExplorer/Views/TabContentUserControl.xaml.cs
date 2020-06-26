@@ -53,6 +53,7 @@ namespace FileExplorer.Views
 		public TabContentUserControl()
 		{
 			InitializeComponent();
+			Loaded += TabContentUserControl_Loaded;
 		}
 
 		public TabContentUserControl(TabContentViewModel vm, IDialogService dialogService, INavigationService navigationService, UndoRedoManager undoRedoManager, EditManager editManager) : this()
@@ -68,12 +69,20 @@ namespace FileExplorer.Views
 			{
 				folderNavigationService.AddFrame(FolderFrame);
 			}
+
+			
 		}
 
 		#endregion Public Constructors
 
 		#region Private Methods
-
+		private void TabContentUserControl_Loaded(object sender, RoutedEventArgs e)
+		{
+			if (navigationService.Content == null)
+			{
+				navigationService.Navigate(vm.HomePage.Uri);
+			}
+		}
 		private void NavigationService_NavigatedPageLoaded(object sender, EventArgs e)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentFolder)));
