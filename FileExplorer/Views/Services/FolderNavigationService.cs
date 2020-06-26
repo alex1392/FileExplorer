@@ -57,7 +57,7 @@ namespace FileExplorer.Views.Services
 
 		public Frame InternalFrame => internalFrame
 			//Lazy initialization of dependency
-			?? (internalFrame = serviceProvider.GetService<MainWindow>().FolderFrame);
+			/*?? (internalFrame = serviceProvider.GetService<MainWindow>().FolderFrame)*/;
 
 		public Navigation::NavigationService InternalNavigationService
 		{
@@ -66,7 +66,7 @@ namespace FileExplorer.Views.Services
 				// Lazy initialization of dependency
 				if (internalNavigationService == null)
 				{
-					internalNavigationService = serviceProvider.GetService<MainWindow>().FolderFrame.NavigationService;
+					//internalNavigationService = serviceProvider.GetService<MainWindow>().FolderFrame.NavigationService;
 					// propagate navigated event
 					internalNavigationService.Navigated += InternalNavigationService_Navigated;
 				}

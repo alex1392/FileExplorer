@@ -149,6 +149,10 @@
     </Compile>
     <Compile Include="Models\Interfaces\IFileWatcherService.cs" />
     <Compile Include="Views\Services\ResourceProvider.cs" />
+    <Compile Include="Views\TabContentUserControl.xaml.cs">
+      <DependentUpon>TabContentUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\TabContentViewModel.cs" />
     <Page Include="Resources\FontAwesomeResources.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -192,6 +196,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\FolderPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TabContentUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

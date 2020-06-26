@@ -47,12 +47,12 @@ namespace FileExplorer
 			serviceCollection.AddSingleton<IFileProvider, FileProvider>();
 			serviceCollection.AddSingleton<ISystemFolderProvider, SystemFolderProvider>();
 
-			serviceCollection.AddSingleton<INavigationService, FolderNavigationService>();
 			serviceCollection.AddSingleton<IDialogService, DialogService>();
 			serviceCollection.AddSingleton<ITypeDescriptionProvider, TypeDescriptionProvider>();
 			serviceCollection.AddSingleton<IDispatcherService, DispatcherService>();
 			serviceCollection.AddSingleton<IResourceProvider, ResourceProvider>();
 
+			serviceCollection.AddSingleton<INavigationService, FolderNavigationService>();
 			serviceCollection.AddTransient<IFileWatcherService, FileWatcherService>();
 
 			serviceCollection.AddSingleton<MainWindowViewModel>();
@@ -69,6 +69,7 @@ namespace FileExplorer
 
 			serviceCollection.AddTransient<ListFileItemViewModel>();
 			serviceCollection.AddTransient<ListFolderItemViewModel>();
+			serviceCollection.AddTransient<TabContentViewModel>();
 
 			serviceCollection.AddTransient<TreePageItem>();
 			serviceCollection.AddSingleton<FileDropHandler>();
