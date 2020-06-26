@@ -22,13 +22,43 @@
 								 Height="450"
 								 Width="800"
 								 Name="mainWindow">
-
-	<TabControl Name="mainTabControl">
-		<TabControl.ItemTemplate>
-			<DataTemplate>
-				<TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabItem}, Path=Content.CurrentFolder}" />
-			</DataTemplate>
-		</TabControl.ItemTemplate>
-	</TabControl>
+	<Window.Resources>
+		<sys:Double x:Key="TabWidth">100</sys:Double>
+		<sys:Double x:Key="TabHeight">20</sys:Double>
+		<sys:Double x:Key="AddTabButtonHeight">15</sys:Double>
+	</Window.Resources>
+	<Grid>
+		<TabControl Name="mainTabControl">
+			<TabControl.ItemTemplate>
+				<DataTemplate>
+					<DockPanel Width="{StaticResource TabWidth}"
+										 Height="{StaticResource TabHeight}">
+						<Button Name="CloseTabButton" 
+										DockPanel.Dock="Right"
+										Background="Transparent"
+										BorderBrush="Transparent"
+										Width="15"
+										Height="15"
+										Click="CloseTabButton_Click">
+							<fa:ImageAwesome Icon="Times" />
+						</Button>
+						<TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabItem}, Path=Content.CurrentFolder}"
+											 TextTrimming="WordEllipsis" />
+					</DockPanel>
+				</DataTemplate>
+			</TabControl.ItemTemplate>
+		</TabControl>
+		<Button Name="AddTabButton"
+						Width="15"
+						Height="{StaticResource AddTabButtonHeight}"
+						Margin="{Binding ElementName=mainTabControl, Path=., Converter={converter:AddTabButtonMarginConverter}}"
+						Background="Transparent"
+						BorderBrush="Transparent"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"
+						Click="AddTabButton_Click">
+			<fa:ImageAwesome Icon="Plus" />
+		</Button>
+	</Grid>
 
 </fd:RevealWindow>
