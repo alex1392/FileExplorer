@@ -69,8 +69,6 @@ namespace FileExplorer.Views
 			{
 				folderNavigationService.AddFrame(FolderFrame);
 			}
-
-			
 		}
 
 		#endregion Public Constructors
@@ -287,14 +285,7 @@ namespace FileExplorer.Views
 
 		private void BrowseBack(object sender, ExecutedRoutedEventArgs e)
 		{
-			navigationService.GoBackCompleted += NavigationService_GoBackCompleted;
 			navigationService.GoBack();
-
-			void NavigationService_GoBackCompleted(object sender, EventArgs e)
-			{
-				navigationService.Refresh();
-				navigationService.GoBackCompleted -= NavigationService_GoBackCompleted;
-			}
 		}
 
 		private void CanBrowseBack(object sender, CanExecuteRoutedEventArgs e)
@@ -304,14 +295,7 @@ namespace FileExplorer.Views
 
 		private void BrowseForward(object sender, ExecutedRoutedEventArgs e)
 		{
-			navigationService.GoForwardCompleted += NavigationService_GoForwardCompleted;
 			navigationService.GoForward();
-
-			void NavigationService_GoForwardCompleted(object sender, EventArgs e)
-			{
-				navigationService.Refresh();
-				navigationService.GoForwardCompleted -= NavigationService_GoForwardCompleted;
-			}
 		}
 
 		private void CanBrowseForward(object sender, CanExecuteRoutedEventArgs e)

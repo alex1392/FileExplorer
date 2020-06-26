@@ -1,5 +1,5 @@
 ﻿using Cyc.FluentDesign;
-
+using FileExplorer.Models;
 using FileExplorer.ViewModels;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +22,7 @@ namespace FileExplorer.Views
 
 		private readonly MainWindowViewModel vm;
 		private readonly IServiceProvider serviceProvider;
+		private readonly INavigationService navigationService;
 
 		#endregion Private Fields
 
@@ -41,11 +42,17 @@ namespace FileExplorer.Views
 			Loaded += MainWindow_Loaded;
 		}
 
-		public MainWindow(MainWindowViewModel vm, IServiceProvider serviceProvider) : this()
+		public MainWindow(MainWindowViewModel vm, IServiceProvider serviceProvider, INavigationService navigationService) : this()
 		{
 			this.vm = vm;
 			this.serviceProvider = serviceProvider;
+			this.navigationService = navigationService;
 			DataContext = this.vm;
+
+			navigationService.GoBackCompleted += (_, _) =>
+				navigationService.Refresh();
+			navigationService.GoForwardCompleted += (_, _) => 
+				navigationService.Refresh();
 		}
 
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
