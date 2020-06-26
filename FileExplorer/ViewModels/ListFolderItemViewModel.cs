@@ -31,7 +31,7 @@ namespace FileExplorer.ViewModels
 		{
 			await Task.Run(async () =>
 			{
-				//await Task.Delay(1000).ConfigureAwait(false);
+				await Task.Delay(0).ConfigureAwait(false);
 
 				// Doesn't need to call this line on main thread, since the resource is already created in xaml, which was on the main thread. Here it simply retrieves that resource.
 				Icon = resourceProvider.TryFindResource("FolderIcon") as ImageSource;

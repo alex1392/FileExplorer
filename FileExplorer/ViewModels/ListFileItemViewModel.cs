@@ -35,7 +35,7 @@ namespace FileExplorer.ViewModels
 		{
 			await Task.Run(async () =>
 			{
-				//await Task.Delay(1000).ConfigureAwait(false);
+				await Task.Delay(0).ConfigureAwait(false);
 				return Drawing::Icon.ExtractAssociatedIcon(Path);
 			}).ContinueWith(task =>
 			{
