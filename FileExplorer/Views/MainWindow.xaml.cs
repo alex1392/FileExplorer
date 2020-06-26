@@ -1,17 +1,14 @@
 ﻿using Cyc.FluentDesign;
 
-using FileExplorer.Models;
 using FileExplorer.ViewModels;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Input;
 using System.Windows.Media;
 
 namespace FileExplorer.Views
@@ -25,14 +22,16 @@ namespace FileExplorer.Views
 
 		private readonly MainWindowViewModel vm;
 		private readonly IServiceProvider serviceProvider;
+
 		#endregion Private Fields
 
-		#region Private Properties
 
 
-		#endregion Private Properties
+		#region Public Properties
 
 		public object CurrentTab => mainTabControl.SelectedItem;
+
+		#endregion Public Properties
 
 		#region Public Constructors
 
@@ -61,15 +60,11 @@ namespace FileExplorer.Views
 			BindingOperations.GetBindingExpression(AddTabButton, FrameworkElement.MarginProperty).UpdateTarget();
 		}
 
-
-
 		#endregion Public Constructors
 
-		#region Events
 
 
-
-		#endregion Events
+		#region Private Methods
 
 		private void CloseTabButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -95,5 +90,7 @@ namespace FileExplorer.Views
 			mainTabControl.Items.Add(serviceProvider.GetService<TabContentUserControl>());
 			mainTabControl.SelectedIndex = mainTabControl.Items.Count - 1;
 		}
+
+		#endregion Private Methods
 	}
 }

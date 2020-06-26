@@ -22,7 +22,7 @@ namespace FileExplorer.Views.Converters
 			{
 				return null;
 			}
-
+			// TODO: get actual width from tabItem
 			return new Thickness((tabControl.Items.Count - 1) * 112 + 116 + 3, 5.5, 0, 0);
 		}
 
