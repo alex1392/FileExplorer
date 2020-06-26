@@ -50,8 +50,6 @@ namespace FileExplorer.Views
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
 		{
 			mainTabControl.Items.Add(serviceProvider.GetService<TabContentUserControl>());
-			mainTabControl.Items.Add(serviceProvider.GetService<TabContentUserControl>());
-			mainTabControl.Items.Add(serviceProvider.GetService<TabContentUserControl>());
 			mainTabControl.SelectedIndex = 0;
 		}
 
